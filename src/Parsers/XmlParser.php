@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Sjpereira\AzureStoragePhpSdk\Parsers;
 
-use DOMDocument;
 use Sjpereira\AzureStoragePhpSdk\Parsers\Contracts\Parser;
 
 class XmlParser implements Parser
@@ -21,10 +20,10 @@ class XmlParser implements Parser
 
         $array = (array) json_decode(json_encode($source) ?: '', true);
 
-        array_walk_recursive($array, function(&$item) {
+        array_walk_recursive($array, function (&$item) {
             $item = $item === [] ? null : $item;
         });
-        
+
         return $array;
     }
 }

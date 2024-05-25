@@ -12,7 +12,7 @@ readonly class Container
 
     public function __construct(array $container)
     {
-        $this->name     = $container['Name'] ?? ''; // TODO: throw exception if name does not exist
+        $this->name       = $container['Name'] ?? ''; // TODO: throw exception if name does not exist
         $this->properties = new Properties($container['Properties'] ?? []);
     }
 }
