@@ -3,33 +3,7 @@
     "description": "Integrate with Azure's cloud storage services",
     "type": "library",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Sjpereira\\AzureStoragePhpSdk\\": "src/",
-            "Sjpereira\\Tests\\": "tests/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Silvio Pereira",
-            "email": "sjpereira2000@gmail.com"
-        },
-        {
-            "name": "Gabriel de Ramos",
-            "email": "gabrielramos791@gmail.com"
-        },
-        {
-            "name": "Erlon Sodre",
-            "email": "erlonsodre@gmail.com"
-        }
-    ],
     "scripts": {
-        "post-install-cmd": [
-            "Sjpereira\\AzureStoragePhpSdk\\Installer::postInstall"
-        ],
-        "post-update-cmd": [
-            "Sjpereira\\AzureStoragePhpSdk\\Installer::postUpdate"
-        ],
         "fix": [
             "./vendor/bin/pint"
         ],
@@ -40,12 +14,30 @@
             "./vendor/bin/pest"
         ]
     },
-    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.3",
+        "guzzlehttp/guzzle": "^7.8"
+    },
     "require-dev": {
         "laravel/pint": "^1.16",
         "phpstan/phpstan": "^1.11",
         "pestphp/pest": "^2.34"
     },
+    "authors": [
+        { "name": "Silvio Pereira", "email": "sjpereira2000@gmail.com" },
+        { "name": "Gabriel de Ramos", "email": "gabrielramos791@gmail.com" },
+        { "name": "Erlon Sodre", "email": "erlonsodre@gmail.com" }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sjpereira\\AzureStoragePhpSdk\\": "src/",
+            "Sjpereira\\Tests\\": "tests/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "minimum-stability": "stable",
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true
