@@ -29,11 +29,7 @@ class Account
             /** @var DOMDocument $parsed */
             $parsed = $this->parser->parse($response);
 
-            print_r($parsed->getElementsByTagName('Container')[0]->getElementsByTagName('Name')[0]->nodeValue);
-
-            die;
-
-            return new Containers($parsed->getElementsByTagName('Container') ?? []);
+            return new Containers($parsed['Containers']['Container'] ?? []);
         } catch (RequestException $e) {
             throw $e; // TODO: Create Custom Exception
         }

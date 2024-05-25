@@ -33,9 +33,9 @@ readonly class Properties
         $this->leaseStatus                           = $property['LeaseStatus'] ?? '';
         $this->leaseState                            = $property['LeaseState'] ?? '';
         $this->defaultEncryptionScope                = $property['DefaultEncryptionScope'] ?? '';
-        $this->denyEncryptionScopeOverride           = $property['DenyEncryptionScopeOverride'] ?? false;
-        $this->hasImmutabilityPolicy                 = $property['HasImmutabilityPolicy'] ?? false;
-        $this->hasLegalHold                          = $property['HasLegalHold'] ?? false;
-        $this->immutableStorageWithVersioningEnabled = $property['ImmutableStorageWithVersioningEnabled'] ?? false;
+        $this->denyEncryptionScopeOverride           = boolval($property['DenyEncryptionScopeOverride'] ?? false);
+        $this->hasImmutabilityPolicy                 = boolval($property['HasImmutabilityPolicy'] ?? false);
+        $this->hasLegalHold                          = boolval($property['HasLegalHold'] ?? false);
+        $this->immutableStorageWithVersioningEnabled = boolval($property['ImmutableStorageWithVersioningEnabled'] ?? false);
     }
 }

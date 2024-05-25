@@ -10,13 +10,38 @@ class Containers
 
     public function __construct(array $containers = [])
     {
-        print_r($containers);
-
         foreach ($containers as $container) {
-            print_r($container);
-
-            die;
             $this->containers[] = new Container($container);
         }
+    }
+
+    public function all(): array
+    {
+        return $this->containers;
+    }
+
+    public function first(): ?Container
+    {
+        return $this->containers[0] ?? null;
+    }
+
+    public function last(): ?Container
+    {
+        return $this->containers[count($this->containers) - 1] ?? null;
+    }
+
+    public function count(): int
+    {
+        return count($this->containers);
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->containers);
+    }
+
+    public function isNotEmpty(): bool
+    {
+        return !empty($this->containers);
     }
 }

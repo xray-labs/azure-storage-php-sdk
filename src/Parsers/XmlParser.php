@@ -9,14 +9,22 @@ use Sjpereira\AzureStoragePhpSdk\Parsers\Contracts\Parser;
 
 class XmlParser implements Parser
 {
-    public function parse(string $source): ?DOMDocument
+    /**
+     * Undocumented function
+     *
+     * @param string $source
+     * @return array
+     */
+    public function parse(string $source): array
     {
-        $xmlDoc = new DOMDocument(encoding: 'UTF-8');
+        $source = simplexml_load_string($source);
 
-        if (!$xmlDoc->loadXML($source)) {
-            return null;
-        }
+        $array = (array) json_decode(json_encode($source) ?: '', true);
 
-        return $xmlDoc;
+        array_walk_recursive($array, function(&$item) {
+            $item = $item === [] ? null : $item;
+        });
+        
+        return $array;
     }
 }

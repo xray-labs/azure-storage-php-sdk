@@ -8,11 +8,11 @@ readonly class Container
 {
     public string $name;
 
-    public Properties $property;
+    public Properties $properties;
 
     public function __construct(array $container)
     {
         $this->name     = $container['Name'] ?? ''; // TODO: throw exception if name does not exist
-        $this->property = new Properties($container['Properties'] ?? []);
+        $this->properties = new Properties($container['Properties'] ?? []);
     }
 }
