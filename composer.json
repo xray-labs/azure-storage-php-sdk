@@ -1,0 +1,54 @@
+{
+    "name": "sjpereira/azure-storage-php-sdk",
+    "description": "Integrate with Azure's cloud storage services",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Sjpereira\\AzureStoragePhpSdk\\": "src/",
+            "Sjpereira\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Silvio Pereira",
+            "email": "sjpereira2000@gmail.com"
+        },
+        {
+            "name": "Gabriel de Ramos",
+            "email": "gabrielramos791@gmail.com"
+        },
+        {
+            "name": "Erlon Sodre",
+            "email": "erlonsodre@gmail.com"
+        }
+    ],
+    "scripts": {
+        "post-install-cmd": [
+            "Sjpereira\\AzureStoragePhpSdk\\Installer::postInstall"
+        ],
+        "post-update-cmd": [
+            "Sjpereira\\AzureStoragePhpSdk\\Installer::postUpdate"
+        ],
+        "fix": [
+            "./vendor/bin/pint"
+        ],
+        "analyse": [
+            "./vendor/bin/phpstan analyse"
+        ],
+        "test": [
+            "./vendor/bin/pest"
+        ]
+    },
+    "minimum-stability": "stable",
+    "require-dev": {
+        "laravel/pint": "^1.16",
+        "phpstan/phpstan": "^1.11",
+        "pestphp/pest": "^2.34"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
