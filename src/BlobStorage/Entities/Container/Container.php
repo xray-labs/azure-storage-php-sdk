@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
+use Exception;
+
 readonly class Container
 {
     public string $name;
@@ -12,7 +14,16 @@ readonly class Container
 
     public function __construct(array $container)
     {
-        $this->name       = $container['Name'] ?? ''; // TODO: throw exception if name does not exist
+        if (($name = ($container['Name'] ?? '')) === '') {
+            throw new Exception('Name is required'); // TODO: Create Custom Exception
+        }
+
+        $this->name       = $name;
         $this->properties = new Properties($container['Properties'] ?? []);
+    }
+
+    public function listBlobs()
+    {
+        return [];
     }
 }

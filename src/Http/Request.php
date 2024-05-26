@@ -54,7 +54,21 @@ class Request
 
     protected function getResource(string $endpoint): string
     {
-        return str_replace(['?', '='], ['', ':'], $endpoint);
+        $queryParams = [];
+
+        $parsedUrl = parse_url($this->uri($endpoint));
+
+        if (isset($parsedUrl['query'])) {
+            parse_str($parsedUrl['query'], $queryParams);
+        }
+
+        $canonicalizedQuery = '';
+
+        foreach ($queryParams as $key => $value) {
+            $canonicalizedQuery .= strtolower($key) . ':' . $value . "\n";
+        }
+
+        return rtrim($canonicalizedQuery, "\n");
     }
 
     protected function getOptions(HttpVerb $verb, string $resource): array

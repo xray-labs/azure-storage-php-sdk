@@ -6,6 +6,7 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities;
 
 use DOMDocument;
 use GuzzleHttp\Exception\RequestException;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\BlobProperty;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\Containers;
 use Sjpereira\AzureStoragePhpSdk\Http\{Request};
 use Sjpereira\AzureStoragePhpSdk\Parsers\Contracts\Parser;
@@ -33,5 +34,29 @@ class Account
         } catch (RequestException $e) {
             throw $e; // TODO: Create Custom Exception
         }
+    }
+
+    public function getBlobServiceProperties(array $options = [])
+    {
+        try {
+            $response = $this->request
+                ->withOptions($options)
+                ->get('?comp=properties&restype=service')
+                ->getBody()
+                ->getContents();
+
+            /** @var DOMDocument $parsed */
+            $parsed = $this->parser->parse($response);
+
+            return new BlobProperty($parsed ?? []);
+        } catch (RequestException $e) {
+            throw $e; // TODO: Create Custom Exception
+        }
+    }
+
+    public function setBlobStorageProperties(array $options = [])
+    {
+        // TODO: Implement setBlobStorageProperties() method.
+        // https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties?tabs=microsoft-entra-id
     }
 }
