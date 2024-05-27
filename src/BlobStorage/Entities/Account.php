@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities;
 
 use GuzzleHttp\Exception\RequestException;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\BlobProperty;
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 final readonly class Account
 {
-    public function __construct(
-        protected Config $config,
-        protected Request $request,
-    ) {
+    public function __construct(protected Request $request)
+    {
         //
     }
 
@@ -46,7 +43,7 @@ final readonly class Account
             throw $e; // TODO: Create Custom Exception
         }
 
-        $parsed = $this->config->parser->parse($response);
+        $parsed = $this->request->config->parser->parse($response);
 
         return new BlobProperty($parsed ?? []);
     }

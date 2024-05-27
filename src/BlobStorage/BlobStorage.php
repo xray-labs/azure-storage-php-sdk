@@ -10,20 +10,18 @@ use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 final class BlobStorage
 {
-    public function __construct(
-        protected Config $config,
-        protected Request $request,
-    ) {
+    public function __construct(protected Request $request)
+    {
         //
     }
 
     public function account(): Account
     {
-        return new Account($this->config, $this->request);
+        return new Account($this->request);
     }
 
     public function containers(): ContainerManager
     {
-        return new ContainerManager($this->config, $this->request);
+        return new ContainerManager($this->request);
     }
 }

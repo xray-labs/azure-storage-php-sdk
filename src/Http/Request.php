@@ -17,7 +17,7 @@ class Request
 
     public function __construct(
         protected ClientInterface $client,
-        protected Config $config,
+        public Config $config,
     ) {
         //
     }
