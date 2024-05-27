@@ -4,44 +4,24 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
-class Containers
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
+use Sjpereira\AzureStoragePhpSdk\Support\Collection;
+
+/**
+ * @method ?Container first()
+ * @method ?Container last()
+ */
+final class Containers extends Collection
 {
-    protected array $containers = [];
-
-    public function __construct(array $containers = [])
+    public function __construct(protected ContainerManager $manager, array $containers = [])
     {
-        foreach ($containers as $container) {
-            $this->containers[] = new Container($container);
+        if (is_string(array_keys($containers)[0])) {
+            $containers = [$containers];
         }
-    }
 
-    public function all(): array
-    {
-        return $this->containers;
-    }
-
-    public function first(): ?Container
-    {
-        return $this->containers[0] ?? null;
-    }
-
-    public function last(): ?Container
-    {
-        return $this->containers[count($this->containers) - 1] ?? null;
-    }
-
-    public function count(): int
-    {
-        return count($this->containers);
-    }
-
-    public function isEmpty(): bool
-    {
-        return empty($this->containers);
-    }
-
-    public function isNotEmpty(): bool
-    {
-        return !empty($this->containers);
+        parent::__construct(array_map(
+            fn (array $container) => new Container($manager, $container),
+            $containers,
+        ));
     }
 }
