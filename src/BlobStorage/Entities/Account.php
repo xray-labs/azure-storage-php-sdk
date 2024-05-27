@@ -18,6 +18,24 @@ class Account
         //
     }
 
+    public function getAccountInformation(array $options = [])
+    {
+        try {
+            $response = $this->request
+                ->withOptions($options)
+                ->get('?comp=properties&restype=account')
+                ->getHeaders();
+
+            array_walk($response, function (&$value) {
+                $value = $value[0];
+            });
+
+            return new AccountInformation($response);
+        } catch (RequestException $e) {
+            throw $e; // TODO: Create Custom Exception
+        }
+    }
+
     public function listContainers(array $options = []): Containers
     {
         try {
@@ -58,5 +76,17 @@ class Account
     {
         // TODO: Implement setBlobStorageProperties() method.
         // https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties?tabs=microsoft-entra-id
+    }
+
+    public function preflightBlobRequest(array $options = [])
+    {
+        // TODO: Implement preflightBlobRequest() method.
+        // https://learn.microsoft.com/en-us/rest/api/storageservices/preflight-blob-request
+    }
+
+    public function getBlobServiceStats(array $options = [])
+    {
+        // TODO: Implement preflightBlobRequest() method.
+        // https://learn.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats?tabs=microsoft-entra-id
     }
 }

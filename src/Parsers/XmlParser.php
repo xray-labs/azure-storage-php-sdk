@@ -18,6 +18,7 @@ class XmlParser implements Parser
     {
         $source = simplexml_load_string($source);
 
+        dd($source);
         $array = (array) json_decode(json_encode($source) ?: '', true);
 
         array_walk_recursive($array, function (&$item) {
