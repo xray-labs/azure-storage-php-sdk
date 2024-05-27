@@ -4,27 +4,21 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\Parsers;
 
-use Sjpereira\AzureStoragePhpSdk\Parsers\Contracts\Parser;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Parser;
 
 class XmlParser implements Parser
 {
-    /**
-     * Undocumented function
-     *
-     * @param string $source
-     * @return array
-     */
     public function parse(string $source): array
     {
         $source = simplexml_load_string($source);
 
-        dd($source);
-        $array = (array) json_decode(json_encode($source) ?: '', true);
+        $parsed = (array) json_decode(json_encode($source) ?: '', true);
 
-        array_walk_recursive($array, function (&$item) {
-            $item = $item === [] ? null : $item;
-        });
+        array_walk_recursive(
+            $parsed,
+            fn (mixed &$item) => $item = $item === [] ? null : $item,
+        );
 
-        return $array;
+        return $parsed;
     }
 }
