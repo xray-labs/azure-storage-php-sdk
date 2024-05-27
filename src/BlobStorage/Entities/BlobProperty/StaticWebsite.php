@@ -16,7 +16,7 @@ final readonly class StaticWebsite
 
     public function __construct(array $staticWebsite)
     {
-        $this->enabled                  = boolval($staticWebsite['Enabled'] ?? false);
+        $this->enabled                  = to_boolean($staticWebsite['Enabled'] ?? false);
         $this->indexDocument            = $staticWebsite['IndexDocument'] ?? '';
         $this->defaultIndexDocumentPath = $staticWebsite['DefaultIndexDocumentPath'] ?? '';
         $this->errorDocument404Path     = $staticWebsite['ErrorDocument404Path'] ?? '';

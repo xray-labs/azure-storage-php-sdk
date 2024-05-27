@@ -21,10 +21,10 @@ final readonly class Logging
     public function __construct(array $logging)
     {
         $this->version                = $logging['Version'] ?? '';
-        $this->delete                 = boolval($logging['Delete'] ?? false);
-        $this->read                   = boolval($logging['Read'] ?? false);
-        $this->write                  = boolval($logging['Write'] ?? false);
-        $this->retentionPolicyEnabled = boolval($logging['RetentionPolicy']['Enabled'] ?? false);
+        $this->delete                 = to_boolean($logging['Delete'] ?? false);
+        $this->read                   = to_boolean($logging['Read'] ?? false);
+        $this->write                  = to_boolean($logging['Write'] ?? false);
+        $this->retentionPolicyEnabled = to_boolean($logging['RetentionPolicy']['Enabled'] ?? false);
         $this->retentionPolicyDays    = (int) ($logging['RetentionPolicy']['Days'] ?? 0);
     }
 }

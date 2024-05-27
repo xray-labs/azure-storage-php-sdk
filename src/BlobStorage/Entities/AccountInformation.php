@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities;
 
-use DateTime;
+use DateTimeImmutable;
 
 final readonly class AccountInformation
 {
@@ -18,9 +18,9 @@ final readonly class AccountInformation
 
     public string $xMsAccountKind;
 
-    public string $xMsIsHnsEnabled;
+    public bool $xMsIsHnsEnabled;
 
-    public DateTime $date;
+    public DateTimeImmutable $date;
 
     public function __construct(array $accountInformation)
     {
@@ -29,7 +29,7 @@ final readonly class AccountInformation
         $this->xMsVersion      = $accountInformation['x-ms-version'] ?? '';
         $this->xMsSkuName      = $accountInformation['x-ms-sku-name'] ?? '';
         $this->xMsAccountKind  = $accountInformation['x-ms-account-kind'] ?? '';
-        $this->xMsIsHnsEnabled = $accountInformation['x-ms-is-hns-enabled'] ?? '';
-        $this->date            = new DateTime($accountInformation['Date'] ?? 'now');
+        $this->xMsIsHnsEnabled = to_boolean($accountInformation['x-ms-is-hns-enabled'] ?? false);
+        $this->date            = new DateTimeImmutable($accountInformation['Date'] ?? 'now');
     }
 }

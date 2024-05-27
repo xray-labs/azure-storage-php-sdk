@@ -16,12 +16,12 @@ final readonly class MinuteMetrics
 
     public int $retentionPolicyDays;
 
-    public function __construct(array $minuteMetricts)
+    public function __construct(array $minuteMetrics)
     {
-        $this->version                = $minuteMetricts['Version'] ?? '';
-        $this->enabled                = boolval($minuteMetricts['Enabled'] ?? false);
-        $this->includeAPIs            = boolval($minuteMetricts['IncludeAPIs'] ?? false);
-        $this->retentionPolicyEnabled = boolval($minuteMetricts['RetentionPolicy']['Enabled'] ?? false);
-        $this->retentionPolicyDays    = (int) ($minuteMetricts['RetentionPolicy']['Days'] ?? 0);
+        $this->version                = $minuteMetrics['Version'] ?? '';
+        $this->enabled                = to_boolean($minuteMetrics['Enabled'] ?? false);
+        $this->includeAPIs            = to_boolean($minuteMetrics['IncludeAPIs'] ?? false);
+        $this->retentionPolicyEnabled = to_boolean($minuteMetrics['RetentionPolicy']['Enabled'] ?? false);
+        $this->retentionPolicyDays    = (int) ($minuteMetrics['RetentionPolicy']['Days'] ?? 0);
     }
 }

@@ -10,7 +10,7 @@ final readonly class CorsRules
 
     public array $allowedMethods;
 
-    public int $maxAgeInSeconds;
+    public ?int $maxAgeInSeconds;
 
     public array $exposedHeaders;
 
@@ -18,10 +18,19 @@ final readonly class CorsRules
 
     public function __construct(array $corsRules)
     {
-        $this->allowedOrigins  = explode(',', $corsRules['AllowedOrigins'] ?? '');
-        $this->allowedMethods  = explode(',', $corsRules['AllowedMethods'] ?? '');
-        $this->maxAgeInSeconds = (int) ($corsRules['MaxAgeInSeconds'] ?? 0);
-        $this->exposedHeaders  = explode(',', $corsRules['ExposedHeaders'] ?? '');
-        $this->allowedHeaders  = explode(',', $corsRules['AllowedHeaders'] ?? '');
+        $this->allowedOrigins  = $this->parseCommaSeparatedList($corsRules['AllowedOrigins'] ?? '');
+        $this->allowedMethods  = $this->parseCommaSeparatedList($corsRules['AllowedMethods'] ?? '');
+        $this->maxAgeInSeconds = isset($corsRules['MaxAgeInSeconds']) ? (int) $corsRules['MaxAgeInSeconds'] : null;
+        $this->exposedHeaders  = $this->parseCommaSeparatedList($corsRules['ExposedHeaders'] ?? '');
+        $this->allowedHeaders  = $this->parseCommaSeparatedList($corsRules['AllowedHeaders'] ?? '');
+    }
+
+    protected function parseCommaSeparatedList(string $string): array
+    {
+        if (empty(trim($string))) {
+            return [];
+        }
+
+        return explode(',', $string);
     }
 }

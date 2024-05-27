@@ -23,17 +23,11 @@ final readonly class BlobProperty
     public function __construct(array $blobProperty)
     {
         $this->defaultServiceVersion = $blobProperty['DefaultServiceVersion'] ?? '';
-
-        $this->logging = new Logging($blobProperty['Logging'] ?? []);
-
-        $this->hourMetrics = new HourMetrics($blobProperty['HourMetrics'] ?? []);
-
-        $this->minuteMetrics = new MinuteMetrics($blobProperty['MinuteMetrics'] ?? []);
-
-        $this->corsRules = new CorsRules($blobProperty['Cors']['CorsRule'] ?? []);
-
+        $this->logging               = new Logging($blobProperty['Logging'] ?? []);
+        $this->hourMetrics           = new HourMetrics($blobProperty['HourMetrics'] ?? []);
+        $this->minuteMetrics         = new MinuteMetrics($blobProperty['MinuteMetrics'] ?? []);
+        $this->corsRules             = new CorsRules($blobProperty['Cors']['CorsRule'] ?? []);
         $this->deleteRetentionPolicy = new DeleteRetentionPolicy($blobProperty['DeleteRetentionPolicy'] ?? []);
-
-        $this->staticWebsite = new StaticWebsite($blobProperty['StaticWebsite'] ?? []);
+        $this->staticWebsite         = new StaticWebsite($blobProperty['StaticWebsite'] ?? []);
     }
 }

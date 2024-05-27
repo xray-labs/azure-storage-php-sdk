@@ -14,8 +14,8 @@ final readonly class DeleteRetentionPolicy
 
     public function __construct(array $deleteRetentionPolicy)
     {
-        $this->enabled              = boolval($deleteRetentionPolicy['Enabled'] ?? false);
-        $this->allowPermanentDelete = boolval($deleteRetentionPolicy['AllowPermanentDelete'] ?? false);
+        $this->enabled              = to_boolean($deleteRetentionPolicy['Enabled'] ?? false);
+        $this->allowPermanentDelete = to_boolean($deleteRetentionPolicy['AllowPermanentDelete'] ?? false);
         $this->days                 = (int) ($deleteRetentionPolicy['Days'] ?? 0);
     }
 }
