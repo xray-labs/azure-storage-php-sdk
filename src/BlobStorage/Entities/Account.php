@@ -4,57 +4,37 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities;
 
-use DOMDocument;
 use GuzzleHttp\Exception\RequestException;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\BlobProperty;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\Containers;
-use Sjpereira\AzureStoragePhpSdk\Http\{Request};
-use Sjpereira\AzureStoragePhpSdk\Parsers\Contracts\Parser;
+use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
-class Account
+final readonly class Account
 {
-    public function __construct(protected Request $request, protected Parser $parser)
-    {
+    public function __construct(
+        protected Config $config,
+        protected Request $request,
+    ) {
         //
     }
 
-    public function getAccountInformation(array $options = [])
+    public function information(array $options = []): AccountInformation
     {
         try {
             $response = $this->request
                 ->withOptions($options)
                 ->get('?comp=properties&restype=account')
                 ->getHeaders();
-
-            array_walk($response, function (&$value) {
-                $value = $value[0];
-            });
-
-            return new AccountInformation($response);
         } catch (RequestException $e) {
             throw $e; // TODO: Create Custom Exception
         }
+
+        array_walk($response, fn (array &$value) => $value = current($value));
+
+        return new AccountInformation($response);
     }
 
-    public function listContainers(array $options = []): Containers
-    {
-        try {
-            $response = $this->request
-                ->withOptions($options)
-                ->get('?comp=list')
-                ->getBody()
-                ->getContents();
-
-            /** @var DOMDocument $parsed */
-            $parsed = $this->parser->parse($response);
-
-            return new Containers($parsed['Containers']['Container'] ?? []);
-        } catch (RequestException $e) {
-            throw $e; // TODO: Create Custom Exception
-        }
-    }
-
-    public function getBlobServiceProperties(array $options = [])
+    public function blobServiceProperties(array $options = [])
     {
         try {
             $response = $this->request
@@ -62,14 +42,13 @@ class Account
                 ->get('?comp=properties&restype=service')
                 ->getBody()
                 ->getContents();
-
-            /** @var DOMDocument $parsed */
-            $parsed = $this->parser->parse($response);
-
-            return new BlobProperty($parsed ?? []);
         } catch (RequestException $e) {
             throw $e; // TODO: Create Custom Exception
         }
+
+        $parsed = $this->config->parser->parse($response);
+
+        return new BlobProperty($parsed ?? []);
     }
 
     public function setBlobStorageProperties(array $options = [])

@@ -6,7 +6,6 @@ namespace Sjpereira\AzureStoragePhpSdk\Http;
 
 use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 
@@ -19,7 +18,6 @@ class Request
     public function __construct(
         protected ClientInterface $client,
         protected Config $config,
-        protected SharedKeyAuth $auth,
     ) {
         //
     }
@@ -41,34 +39,31 @@ class Request
     public function get(string $endpoint): ResponseInterface
     {
         $options = $this->getOptions(
-            HttpVerb::GET,
-            $this->getResource($endpoint),
+            $verb = HttpVerb::GET,
+            Resource::canonicalize($uri = $this->uri($endpoint)),
         );
 
-        return $this->client->request(
-            'GET',
-            $this->uri($endpoint),
-            $options,
-        );
+        return $this->client->request($verb->value, $uri, $options);
     }
 
-    protected function getResource(string $endpoint): string
+    public function put(string $endpoint): ResponseInterface
     {
-        $queryParams = [];
+        $options = $this->getOptions(
+            $verb = HttpVerb::PUT,
+            Resource::canonicalize($uri = $this->uri($endpoint)),
+        );
 
-        $parsedUrl = parse_url($this->uri($endpoint));
+        return $this->client->request($verb->value, $uri, $options);
+    }
 
-        if (isset($parsedUrl['query'])) {
-            parse_str($parsedUrl['query'], $queryParams);
-        }
+    public function delete(string $endpoint): ResponseInterface
+    {
+        $options = $this->getOptions(
+            $verb = HttpVerb::DELETE,
+            Resource::canonicalize($uri = $this->uri($endpoint)),
+        );
 
-        $canonicalizedQuery = '';
-
-        foreach ($queryParams as $key => $value) {
-            $canonicalizedQuery .= strtolower($key) . ':' . $value . "\n";
-        }
-
-        return rtrim($canonicalizedQuery, "\n");
+        return $this->client->request($verb->value, $uri, $options);
     }
 
     protected function getOptions(HttpVerb $verb, string $resource): array
@@ -77,9 +72,9 @@ class Request
         $headers = Headers::parse($this->headers);
 
         $options['headers'] = array_merge($this->headers, [
-            Resource::AUTH_DATE_KEY    => $this->auth->getDate(),
+            Resource::AUTH_DATE_KEY    => $this->config->auth->getDate(),
             Resource::AUTH_VERSION_KEY => Resource::VERSION,
-            Resource::AUTH_HEADER_KEY  => $this->auth->getAuthentication($verb, $headers, $resource),
+            Resource::AUTH_HEADER_KEY  => $this->config->auth->getAuthentication($verb, $headers, $resource),
         ]);
 
         return $options;
