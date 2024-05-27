@@ -6,7 +6,7 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities;
 
 use DateTime;
 
-readonly class AccountInformation
+final readonly class AccountInformation
 {
     public string $server;
 

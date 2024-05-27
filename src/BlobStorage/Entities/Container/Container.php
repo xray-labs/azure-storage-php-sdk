@@ -6,7 +6,7 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
 use Exception;
 
-readonly class Container
+final readonly class Container
 {
     public string $name;
 

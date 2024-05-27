@@ -8,7 +8,7 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 use Sjpereira\AzureStoragePhpSdk\Http\Headers;
 
-class SharedKeyAuth
+final class SharedKeyAuth implements Auth
 {
     public function __construct(protected Config $config)
     {

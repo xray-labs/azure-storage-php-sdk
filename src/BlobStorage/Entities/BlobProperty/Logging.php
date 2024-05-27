@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
-readonly class Logging
+final readonly class Logging
 {
     public string $version;
 

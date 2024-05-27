@@ -8,7 +8,7 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account;
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Parsers\Contracts\Parser;
 
-class BlobStorage
+final class BlobStorage
 {
     public function __construct(
         protected Config $config,

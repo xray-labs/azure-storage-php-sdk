@@ -6,7 +6,7 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
 use DateTimeImmutable;
 
-readonly class Properties
+final readonly class Properties
 {
     public DateTimeImmutable $lastModified;
 

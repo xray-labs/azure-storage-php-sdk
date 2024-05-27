@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
-readonly class BlobProperty
+final readonly class BlobProperty
 {
     public string $defaultServiceVersion;
 

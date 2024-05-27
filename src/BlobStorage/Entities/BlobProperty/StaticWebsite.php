@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
-readonly class StaticWebsite
+final readonly class StaticWebsite
 {
     public bool $enabled;
 
