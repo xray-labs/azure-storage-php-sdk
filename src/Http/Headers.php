@@ -37,6 +37,8 @@ class Headers
         'Range'               => null,
     ];
 
+    public array $additionalHeaders = [];
+
     public static function parse(array $headers): static
     {
         $instance = new static();
@@ -45,6 +47,8 @@ class Headers
             $method = 'set' . mb_convert_case($name, MB_CASE_TITLE, 'UTF-8');
 
             if (!method_exists($instance, $method)) {
+                $instance->additionalHeaders[$name] = $value;
+
                 continue;
             }
 
