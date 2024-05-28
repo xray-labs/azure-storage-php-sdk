@@ -8,6 +8,7 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
 use Sjpereira\AzureStoragePhpSdk\Support\Collection;
 
 /**
+ * @method array<Container> all()
  * @method ?Container first()
  * @method ?Container last()
  */
