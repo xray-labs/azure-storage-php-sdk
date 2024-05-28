@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\Http;
 
 use RuntimeException;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 
 /**
  * @property-read ?string $contentEncoding
@@ -21,7 +22,7 @@ use RuntimeException;
  *
  * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-blob
  */
-class Headers
+final class Headers
 {
     protected array $headers = [
         'Content-Encoding'    => null,
@@ -37,17 +38,19 @@ class Headers
         'Range'               => null,
     ];
 
-    public array $additionalHeaders = [];
+    protected array $additionalHeaders = [];
 
     public static function parse(array $headers): static
     {
         $instance = new static();
 
+        $additionalHeaders = [];
+
         foreach ($headers as $name => $value) {
             $method = 'set' . mb_convert_case($name, MB_CASE_TITLE, 'UTF-8');
 
             if (!method_exists($instance, $method)) {
-                $instance->additionalHeaders[$name] = $value;
+                $additionalHeaders[$name] = $value;
 
                 continue;
             }
@@ -55,7 +58,7 @@ class Headers
             $instance->$method($value);
         }
 
-        return $instance;
+        return $instance->withAdditionalHeaders($additionalHeaders);
     }
 
     public function __get(string $attribute): ?string
@@ -72,6 +75,37 @@ class Headers
     public function __toString(): string
     {
         return implode("\n", $this->headers);
+    }
+
+    public function getCanonicalHeaders(): string
+    {
+        $additionalHeaders = $this->additionalHeaders;
+        $canonicalHeaders  = '';
+
+        ksort($additionalHeaders);
+
+        foreach ($additionalHeaders as $key => $value) {
+            $keyLower = mb_convert_case($key, MB_CASE_LOWER, 'UTF-8');
+
+            if (strpos($keyLower, Resource::CANONICAL_HEADER_PREFIX) !== 0) {
+                continue;
+            }
+
+            if (is_bool($value)) {
+                $value = $value ? 'true' : 'false';
+            }
+
+            $canonicalHeaders .= "{$key}:{$value}\n";
+        }
+
+        return rtrim($canonicalHeaders, "\n");
+    }
+
+    public function withAdditionalHeaders(array $additionalHeaders = []): static
+    {
+        $this->additionalHeaders = array_merge($this->additionalHeaders, $additionalHeaders);
+
+        return $this;
     }
 
     public function setContentEncoding(string $contentEncoding): static
@@ -150,5 +184,10 @@ class Headers
         $this->headers['Range'] = $range;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return $this->additionalHeaders;
     }
 }

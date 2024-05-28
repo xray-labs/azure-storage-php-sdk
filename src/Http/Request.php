@@ -69,13 +69,14 @@ class Request
     protected function getOptions(HttpVerb $verb, string $resource): array
     {
         $options = $this->options;
-        $headers = Headers::parse($this->headers);
-
-        $options['headers'] = array_merge($this->headers, [
+        $headers = Headers::parse(array_merge($this->headers, [
             Resource::AUTH_DATE_KEY    => $this->config->auth->getDate(),
             Resource::AUTH_VERSION_KEY => Resource::VERSION,
-            Resource::AUTH_HEADER_KEY  => $this->config->auth->getAuthentication($verb, $headers, $resource),
-        ]);
+        ]));
+
+        $options['headers'] = $headers->withAdditionalHeaders([
+            Resource::AUTH_HEADER_KEY => $this->config->auth->getAuthentication($verb, $headers, $resource),
+        ])->toArray();
 
         return $options;
     }

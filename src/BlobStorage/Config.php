@@ -36,8 +36,8 @@ final readonly class Config
      */
     public function __construct(array $config)
     {
-        $this->account   = $config['account'] ?? '';
-        $this->key       = $config['key'] ?? '';
+        $this->account   = $config['account'];
+        $this->key       = $config['key'];
         $this->version   = $config['version'] ?? Resource::VERSION;
         $this->parser    = $config['parser'] ?? new XmlParser();
         $this->converter = $config['converter'] ?? new XmlConverter();
