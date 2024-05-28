@@ -26,6 +26,10 @@ final readonly class Properties
 
     public bool $immutableStorageWithVersioningEnabled;
 
+    public ?DateTimeImmutable $deletedTime;
+
+    public ?int $remainingRetentionDays;
+
     public function __construct(array $property)
     {
         $this->lastModified                          = new DateTimeImmutable($property['Last-Modified'] ?? 'now');
@@ -37,5 +41,7 @@ final readonly class Properties
         $this->hasImmutabilityPolicy                 = to_boolean($property['HasImmutabilityPolicy'] ?? false);
         $this->hasLegalHold                          = to_boolean($property['HasLegalHold'] ?? false);
         $this->immutableStorageWithVersioningEnabled = to_boolean($property['ImmutableStorageWithVersioningEnabled'] ?? false);
+        $this->deletedTime                           = isset($property['DeletedTime']) ? new DateTimeImmutable($property['DeletedTime']) : null;
+        $this->remainingRetentionDays                = isset($property['RemainingRetentionDays']) ? (int) $property['RemainingRetentionDays'] : null;
     }
 }
