@@ -3,7 +3,10 @@ parameters:
     paths:
         - src/
         - tests/
-    includes:
-        - vendor/phpstan/phpstan/conf/bleedingEdge.neon
     ignoreErrors:
+        -
+            messages:
+                - '#Call to an undefined method Pest\\PendingCalls\\TestCall\:\:expect\(\)#'
+                - '#Undefined variable\: \$this#'
+            path: tests/
     

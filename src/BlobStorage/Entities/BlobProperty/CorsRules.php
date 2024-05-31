@@ -16,6 +16,15 @@ final readonly class CorsRules
 
     public array $allowedHeaders;
 
+    /**
+     * @param array{
+     *     AllowedOrigins?: string,
+     *     AllowedMethods?: string,
+     *     MaxAgeInSeconds?: int,
+     *     ExposedHeaders?: string,
+     *     AllowedHeaders?: string,
+     * } $corsRules
+     */
     public function __construct(array $corsRules)
     {
         $this->allowedOrigins  = $this->parseCommaSeparatedList($corsRules['AllowedOrigins'] ?? '');
