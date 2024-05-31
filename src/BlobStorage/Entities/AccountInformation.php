@@ -22,6 +22,19 @@ final readonly class AccountInformation
 
     public DateTimeImmutable $date;
 
+    /**
+     * Undocumented function
+     *
+     * @param array{
+     *  Server: ?string,
+     *  x-ms-request-id: ?string,
+     *  x-ms-version: ?string,
+     *  x-ms-sku-name: ?string,
+     *  x-ms-account-kind: ?string,
+     *  x-ms-is-hns-enabled: ?bool,
+     *  Date: ?string
+     * } $accountInformation
+     */
     public function __construct(array $accountInformation)
     {
         $this->server          = $accountInformation['Server'] ?? '';

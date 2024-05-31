@@ -20,6 +20,11 @@ final readonly class BlobProperty
 
     public StaticWebsite $staticWebsite;
 
+    /**
+     * Undocumented function
+     *
+     * @param array<mixed> $blobProperty
+     */
     public function __construct(array $blobProperty)
     {
         $this->defaultServiceVersion = $blobProperty['DefaultServiceVersion'] ?? '';

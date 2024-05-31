@@ -14,6 +14,11 @@ final readonly class StaticWebsite
 
     public string $errorDocument404Path;
 
+    /**
+     * Undocumented function
+     *
+     * @param array<string> $staticWebsite
+     */
     public function __construct(array $staticWebsite)
     {
         $this->enabled                  = to_boolean($staticWebsite['Enabled'] ?? false);

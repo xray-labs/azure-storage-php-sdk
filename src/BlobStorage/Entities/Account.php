@@ -15,6 +15,12 @@ final readonly class Account
         //
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param array<string, scalar> $options
+     * @return AccountInformation
+     */
     public function information(array $options = []): AccountInformation
     {
         try {
@@ -27,11 +33,28 @@ final readonly class Account
         }
 
         array_walk($response, fn (array &$value) => $value = current($value));
+        /**
+         * @var array{
+         *  Server: ?string,
+         *  x-ms-request-id: ?string,
+         *  x-ms-version: ?string,
+         *  x-ms-sku-name: ?string,
+         *  x-ms-account-kind: ?string,
+         *  x-ms-is-hns-enabled: ?bool,
+         *  Date: ?string
+         * } $response
+         * */
 
         return new AccountInformation($response);
     }
 
-    public function blobServiceProperties(array $options = [])
+    /**
+     * Undocumented function
+     *
+     * @param array<string, scalar> $options
+     * @return BlobProperty
+     */
+    public function blobServiceProperties(array $options = []): BlobProperty
     {
         try {
             $response = $this->request
@@ -44,23 +67,42 @@ final readonly class Account
         }
 
         $parsed = $this->request->config->parser->parse($response);
+        /** @var ?array<mixed> $parsed */
 
         return new BlobProperty($parsed ?? []);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param array<string, scalar> $options
+     * @return void
+     */
     public function setBlobStorageProperties(array $options = [])
     {
         // TODO: Implement setBlobStorageProperties() method.
         // https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties?tabs=microsoft-entra-id
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param array<string, scalar> $options
+     * @return void
+     */
     public function preflightBlobRequest(array $options = [])
     {
         // TODO: Implement preflightBlobRequest() method.
         // https://learn.microsoft.com/en-us/rest/api/storageservices/preflight-blob-request
     }
 
-    public function getBlobServiceStats(array $options = [])
+    /**
+     * Undocumented function
+     *
+     * @param array<string, scalar> $options
+     * @return void
+     */
+    public function getBlobServiceStats(array $options = []): void
     {
         // TODO: Implement preflightBlobRequest() method.
         // https://learn.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats?tabs=microsoft-entra-id

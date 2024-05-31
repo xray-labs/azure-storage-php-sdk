@@ -12,6 +12,15 @@ final readonly class DeleteRetentionPolicy
 
     public int $days;
 
+    /**
+     * Undocumented function
+     *
+     * @param array{
+     *  Enabled: ?bool,
+     *  AllowPermanentDelete: ?bool,
+     *  Days: ?int
+     * } $deleteRetentionPolicy
+     */
     public function __construct(array $deleteRetentionPolicy)
     {
         $this->enabled              = to_boolean($deleteRetentionPolicy['Enabled'] ?? false);

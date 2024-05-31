@@ -18,6 +18,20 @@ final readonly class Logging
 
     public int $retentionPolicyDays;
 
+    /**
+     * Undocumented function
+     *
+     * @param array{
+     *  Version: ?string,
+     *  Delete: ?bool,
+     *  Read: ?bool,
+     *  Write: ?bool,
+     *  RetentionPolicy: ?array{
+     *    Enabled: bool,
+     *    Days: int
+     *  }
+     * } $logging
+     */
     public function __construct(array $logging)
     {
         $this->version                = $logging['Version'] ?? '';

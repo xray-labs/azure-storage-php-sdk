@@ -16,6 +16,19 @@ final readonly class MinuteMetrics
 
     public int $retentionPolicyDays;
 
+    /**
+     * Undocumented function
+     *
+     * @param array{
+     *  Version: ?string,
+     *  Enabled: ?bool,
+     *  IncludeAPIs: ?bool,
+     *  RetentionPolicy: ?array{
+     *    Enabled: bool,
+     *    Days: int
+     *  }
+     * } $minuteMetrics
+     */
     public function __construct(array $minuteMetrics)
     {
         $this->version                = $minuteMetrics['Version'] ?? '';
