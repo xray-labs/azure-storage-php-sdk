@@ -11,9 +11,17 @@ use Sjpereira\AzureStoragePhpSdk\Support\Collection;
  * @method array<Container> all()
  * @method ?Container first()
  * @method ?Container last()
- */
+ *
+ * @extends Collection<int, Container>
+*/
 final class Containers extends Collection
 {
+    /**
+     * Undocumented function
+     *
+     * @param ContainerManager $manager
+     * @param array<array<mixed>> $containers
+     */
     public function __construct(protected ContainerManager $manager, array $containers = [])
     {
         if (is_string(array_keys($containers)[0])) {

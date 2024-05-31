@@ -17,9 +17,17 @@ final readonly class Container
 
     public Properties $properties;
 
+    /**
+     * Undocumented function
+     *
+     * @param array<mixed> $container
+     */
     public function __construct(protected ContainerManager $manager, array $container)
     {
-        if (($name = ($container['Name'] ?? '')) === '') {
+        /** @var string $name */
+        $name = ($container['Name'] ?? '');
+
+        if ($name === '') {
             throw RequiredFieldException::missingField('Name');
         }
 
@@ -54,6 +62,11 @@ final readonly class Container
         return $this->manager->restore($this->name, $this->version);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return array<mixed>
+     */
     public function listBlobs(): array
     {
         return [];

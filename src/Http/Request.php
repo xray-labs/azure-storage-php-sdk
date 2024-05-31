@@ -14,14 +14,14 @@ class Request
     /**
      * Undocumented variable
      *
-     * @var array<string, mixed>
+     * @var array<string, scalar>
      */
     protected array $options = [];
 
     /**
      * Undocumented variable
      *
-     * @var array<string, string|int|null>
+     * @var array<string, scalar>
      */
     protected array $headers = [];
 
@@ -35,7 +35,7 @@ class Request
     /**
      * Undocumented variable
      *
-     * @param array<string, mixed> $options
+     * @param array<string, scalar> $options
      */
     public function withOptions(array $options = []): static
     {
@@ -47,7 +47,7 @@ class Request
     /**
      * Undocumented variable
      *
-     * @param array<string, string|int|null> $headers
+     * @param array<string, scalar> $headers
      */
     public function withHeaders(array $headers = []): static
     {
@@ -96,6 +96,7 @@ class Request
     protected function getOptions(HttpVerb $verb, string $resource): array
     {
         $options = $this->options;
+
         $headers = Headers::parse(array_merge($this->headers, [
             Resource::AUTH_DATE_KEY    => $this->config->auth->getDate(),
             Resource::AUTH_VERSION_KEY => Resource::VERSION,

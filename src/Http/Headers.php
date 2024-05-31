@@ -43,10 +43,10 @@ final class Headers
         'Range'               => null,
     ];
 
-    /** @var array<string, int|string|null> $additionalHeaders */
+    /** @var array<string, scalar> $additionalHeaders */
     public array $additionalHeaders = [];
 
-    /** @param array<string, int|string|null> $headers*/
+    /** @param array<string, scalar> $headers*/
     public static function parse(array $headers): static
     {
         $instance = new static();
@@ -108,6 +108,12 @@ final class Headers
         return rtrim($canonicalHeaders, "\n");
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param array<string, scalar> $additionalHeaders
+     * @return static
+     */
     public function withAdditionalHeaders(array $additionalHeaders = []): static
     {
         $this->additionalHeaders = array_merge($this->additionalHeaders, $additionalHeaders);
@@ -193,6 +199,11 @@ final class Headers
         return $this;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return array<string, scalar>
+     */
     public function toArray(): array
     {
         return $this->additionalHeaders;

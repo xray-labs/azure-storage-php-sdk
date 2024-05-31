@@ -16,6 +16,13 @@ readonly class ContainerManager
         //
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param string $name
+     * @param array<string, scalar> $options
+     * @return ContainerLevelAccess
+     */
     public function levelAccess(string $name, array $options = []): ContainerLevelAccess
     {
         try {
@@ -28,11 +35,19 @@ readonly class ContainerManager
             throw $e; // TODO: Create Custom Exception
         }
 
+        /** @var array<array<string>> */
         $parsed = $this->request->config->parser->parse($response);
 
         return new ContainerLevelAccess($parsed['SignedIdentifiers'] ?? []);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param string $name
+     * @param array<string, scalar> $options
+     * @return ContainerProperty
+     */
     public function properties(string $name, array $options = []): ContainerProperty
     {
         try {
@@ -46,9 +61,17 @@ readonly class ContainerManager
 
         array_walk($response, fn (array &$value) => $value = current($value));
 
+        /** @var array<string> $response */
         return new ContainerProperty($response);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param string $name
+     * @param array<string, scalar> $options
+     * @return ContainerMetadata
+     */
     public function metadata(string $name, array $options = []): ContainerMetadata
     {
         try {
@@ -62,9 +85,17 @@ readonly class ContainerManager
 
         array_walk($response, fn (array &$value) => $value = current($value));
 
+        /** @var array<string> $response */
         return new ContainerMetadata($response);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param array<string, scalar> $options
+     * @param bool $withDeleted
+     * @return Containers
+     */
     public function list(array $options = [], bool $withDeleted = false): Containers
     {
         try {
@@ -77,6 +108,13 @@ readonly class ContainerManager
             throw $e; // TODO: Create Custom Exception
         }
 
+        /**
+         * @var ?array{
+         *     Containers: array{
+         *         Container: array<array<mixed>>
+         *     }
+         * }
+        */
         $parsed = $this->request->config->parser->parse($response);
 
         return new Containers($this, $parsed['Containers']['Container'] ?? []);

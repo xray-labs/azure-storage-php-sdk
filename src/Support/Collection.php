@@ -9,8 +9,8 @@ use JsonSerializable;
 use Traversable;
 
 /**
- * @template TKey of string|int
- * @template TValue of ?object
+ * @template TKey of array-key
+ * @template TValue
  * @extends ArrayIterator<TKey, TValue>
  */
 class Collection extends ArrayIterator implements JsonSerializable

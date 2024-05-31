@@ -16,8 +16,22 @@ final readonly class ContainerLevelAccess
 
     public string $accessPolicyPermission;
 
+    /**
+     * Undocumented function
+     *
+     * @param array<string> $containerLevelAccess
+     */
     public function __construct(array $containerLevelAccess)
     {
+        /** @var array{
+         *   Id: ?string,
+         *   AccessPolicy: ?array{
+         *     Start: string,
+         *     Expiry: string,
+         *     Permission: string
+         *   }
+         * }
+        */
         $signedIdentifier = $containerLevelAccess['SignedIdentifier'] ?? [];
 
         $this->id                     = $signedIdentifier['Id'] ?? '';

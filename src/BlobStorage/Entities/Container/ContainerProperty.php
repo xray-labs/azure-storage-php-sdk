@@ -34,6 +34,11 @@ final readonly class ContainerProperty
 
     public DateTimeImmutable $date;
 
+    /**
+     * Undocumented function
+     *
+     * @param array<string> $containerProperty
+     */
     public function __construct(array $containerProperty)
     {
         $this->lastModified                             = new DateTimeImmutable($containerProperty['Last-Modified'] ?? 'now');

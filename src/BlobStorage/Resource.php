@@ -19,7 +19,9 @@ final class Resource
 
     public static function canonicalize(string $uri): string
     {
+        /** @var array<string, string> */
         $parsed = parse_url($uri);
+
         parse_str($parsed['query'] ?? '', $queryParams);
 
         ksort($queryParams);

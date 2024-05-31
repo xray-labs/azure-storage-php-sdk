@@ -30,6 +30,11 @@ final readonly class Properties
 
     public ?int $remainingRetentionDays;
 
+    /**
+     * Undocumented function
+     *
+     * @param array<string, string> $property
+     */
     public function __construct(array $property)
     {
         $this->lastModified                          = new DateTimeImmutable($property['Last-Modified'] ?? 'now');
