@@ -24,6 +24,11 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
  */
 final class Headers
 {
+    /**
+     * Undocumented variable
+     *
+     * @var array<string, int|string|null> $headers
+     */
     protected array $headers = [
         'Content-Encoding'    => null,
         'Content-Language'    => null,
@@ -38,8 +43,10 @@ final class Headers
         'Range'               => null,
     ];
 
-    protected array $additionalHeaders = [];
+    /** @var array<string, int|string|null> $additionalHeaders */
+    public array $additionalHeaders = [];
 
+    /** @param array<string, int|string|null> $headers*/
     public static function parse(array $headers): static
     {
         $instance = new static();
@@ -69,7 +76,7 @@ final class Headers
             throw new RuntimeException("Invalid header: $attribute");
         }
 
-        return $this->headers[$name];
+        return (string) $this->headers[$name];
     }
 
     public function __toString(): string

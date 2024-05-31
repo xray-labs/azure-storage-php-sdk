@@ -8,6 +8,12 @@ use Sjpereira\AzureStoragePhpSdk\Contracts\Parser;
 
 class XmlParser implements Parser
 {
+    /**
+     * Undocumented function
+     *
+     * @param string $source
+     * @return array<string, mixed>
+     */
     public function parse(string $source): array
     {
         $source = simplexml_load_string($source);

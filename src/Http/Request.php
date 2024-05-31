@@ -11,8 +11,18 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 
 class Request
 {
+    /**
+     * Undocumented variable
+     *
+     * @var array<string, mixed>
+     */
     protected array $options = [];
 
+    /**
+     * Undocumented variable
+     *
+     * @var array<string, string|int|null>
+     */
     protected array $headers = [];
 
     public function __construct(
@@ -22,6 +32,11 @@ class Request
         //
     }
 
+    /**
+     * Undocumented variable
+     *
+     * @param array<string, mixed> $options
+     */
     public function withOptions(array $options = []): static
     {
         $this->options = array_merge($this->options, $options);
@@ -29,6 +44,11 @@ class Request
         return $this;
     }
 
+    /**
+     * Undocumented variable
+     *
+     * @param array<string, string|int|null> $headers
+     */
     public function withHeaders(array $headers = []): static
     {
         $this->headers = array_merge($this->headers, $headers);
@@ -66,6 +86,13 @@ class Request
         return $this->client->request($verb->value, $uri, $options);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param HttpVerb $verb
+     * @param string $resource
+     * @return array<string, mixed>
+     */
     protected function getOptions(HttpVerb $verb, string $resource): array
     {
         $options = $this->options;

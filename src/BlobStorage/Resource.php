@@ -26,6 +26,10 @@ final class Resource
 
         $result = '';
 
+        /**
+         * @var string $value
+         * @var string $key
+         */
         foreach ($queryParams as $key => $value) {
             $result .= mb_convert_case($key, MB_CASE_LOWER, 'UTF-8') . ':' . $value . "\n";
         }

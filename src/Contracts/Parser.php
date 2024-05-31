@@ -10,7 +10,7 @@ interface Parser
      * Undocumented function
      *
      * @param string $source
-     * @return array<T>
+     * @return array<object>
      */
     public function parse(string $source): array;
 }

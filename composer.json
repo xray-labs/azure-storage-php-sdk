@@ -12,6 +12,11 @@
         ],
         "test": [
             "./vendor/bin/pest"
+        ],
+        "verify": [
+            "./vendor/bin/pint --test",
+            "@analyse",
+            "@test"
         ]
     },
     "require": {
