@@ -102,18 +102,13 @@ final class Headers
                 $value = $value ? 'true' : 'false';
             }
 
-            $canonicalHeaders .= "{$key}:{$value}\n";
+            $canonicalHeaders .= "{$keyLower}:{$value}\n";
         }
 
         return rtrim($canonicalHeaders, "\n");
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param array<string, scalar> $additionalHeaders
-     * @return static
-     */
+    /** @param array<string, scalar> $additionalHeaders */
     public function withAdditionalHeaders(array $additionalHeaders = []): static
     {
         $this->additionalHeaders = array_merge($this->additionalHeaders, $additionalHeaders);
@@ -199,11 +194,7 @@ final class Headers
         return $this;
     }
 
-    /**
-     * Undocumented function
-     *
-     * @return array<string, scalar>
-     */
+    /** @return array<string, scalar> */
     public function toArray(): array
     {
         $headers = array_filter($this->headers);

@@ -8,7 +8,7 @@ use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerMetadata;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 class ContainerMetadataManager implements Manager
@@ -41,15 +41,15 @@ class ContainerMetadataManager implements Manager
 
     /**
      * @param string $container Name of the container
-     * @param array<string, scalar> $parameters
+     * @param array<string, string> $parameters
      */
     public function save(string $container, array $parameters): bool
     {
         $headers = [];
-
+        
         foreach ($parameters as $key => $value) {
-            $name           = Resource::CONTAINER_META_PREFIX . str_camel_to_header($key);
-            $headers[$name] = $value;
+            $this->validateMetadataKey($key);
+            $headers[Resource::CONTAINER_META_PREFIX . $key] = urlencode($value);
         }
 
         try {
@@ -57,8 +57,23 @@ class ContainerMetadataManager implements Manager
                 ->withHeaders($headers)
                 ->put("{$container}?restype=container&comp=metadata")
                 ->isOk();
-        } catch (RequestExceptionInterface) {
-            return false;
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+    }
+
+    protected function validateMetadataKey(string $key): void
+    {
+        $message  = "Invalid metadata key: {$key}.";
+
+        if (is_numeric($key[0])) {
+            throw InvalidArgumentException::create("{$message} Metadata keys cannot start with a number.");
+        }
+
+        $name = preg_replace('/[^a-z0-9_]/i', '', $key);
+
+        if ($key !== $name) {
+            throw InvalidArgumentException::create("{$message} Only alphanumeric characters and underscores are allowed.");
         }
     }
 }
