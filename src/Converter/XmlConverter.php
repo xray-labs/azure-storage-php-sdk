@@ -32,14 +32,17 @@ class XmlConverter implements Converter
         return $result;
     }
 
-    /** @param array<string, mixed> $source */
+    /** @param array<string|int, mixed> $source */
     protected function generateXmlRecursively(array $source, SimpleXMLElement &$xml): void
     {
         foreach ($source as $key => $value) {
             if (is_array($value)) {
-                $child = $xml->addChild((string)$key);
-
-                $this->generateXmlRecursively($value, $child);
+                if (is_int($key)) {
+                    $this->generateXmlRecursively($value, $xml);
+                } else {
+                    $child = $xml->addChild($key);
+                    $this->generateXmlRecursively($value, $child);
+                }
 
                 continue;
             }
