@@ -17,12 +17,7 @@ use Sjpereira\AzureStoragePhpSdk\Support\Collection;
 */
 final class Containers extends Collection
 {
-    /**
-     * Undocumented function
-     *
-     * @param ContainerManager $manager
-     * @param array<array<mixed>> $containers
-     */
+    /** @param array<array<mixed>> $containers */
     public function __construct(protected ContainerManager $manager, array $containers = [])
     {
         if (is_string(array_keys($containers)[0])) {
@@ -30,7 +25,7 @@ final class Containers extends Collection
         }
 
         parent::__construct(array_map(
-            fn (array $container) => new Container($manager, $container),
+            fn (array $container) => (new Container($container))->setManager($this->manager),
             $containers,
         ));
     }

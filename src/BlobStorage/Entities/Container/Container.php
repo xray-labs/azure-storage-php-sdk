@@ -6,10 +6,16 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\ContainerAccessLevels;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
+use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
+/**
+ * @method ContainerManager getManager()
+ */
 final readonly class Container
 {
+    use HasManager;
+
     public string $name;
 
     public bool $deleted;
@@ -19,7 +25,7 @@ final readonly class Container
     public Properties $properties;
 
     /** @param array<mixed> $container */
-    public function __construct(protected ContainerManager $manager, array $container)
+    public function __construct(array $container)
     {
         /** @var string $name */
         $name = ($container['Name'] ?? '');
@@ -36,26 +42,36 @@ final readonly class Container
 
     public function listAccessLevels(): ContainerAccessLevels
     {
-        return $this->manager->accessLevel()->list($this->name);
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->accessLevel()->list($this->name);
     }
 
     public function properties(): ContainerProperty
     {
-        return $this->manager->properties($this->name);
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->properties()->list($this->name);
     }
 
     public function metadata(): ContainerMetadata
     {
-        return $this->manager->metadata($this->name);
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->metadata()->get($this->name);
     }
 
     public function delete(): bool
     {
-        return $this->manager->delete($this->name);
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->delete($this->name);
     }
 
     public function restore(): bool
     {
-        return $this->manager->restore($this->name, $this->version);
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->restore($this->name, $this->version);
     }
 }

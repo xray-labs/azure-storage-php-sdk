@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
 
-use GuzzleHttp\Exception\RequestException;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\{ContainerMetadata, ContainerProperty, Containers};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelManager;
+use Psr\Http\Client\RequestExceptionInterface;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\Containers;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\{
+    ContainerAccessLevelManager,
+    ContainerMetadataManager,
+    ContainerPropertyManager,
+};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
-readonly class ContainerManager
+readonly class ContainerManager implements Manager
 {
     public function __construct(protected Request $request)
     {
@@ -22,40 +28,14 @@ readonly class ContainerManager
         return new ContainerAccessLevelManager($this->request);
     }
 
-    /** @param array<string, scalar> $options */
-    public function properties(string $name, array $options = []): ContainerProperty
+    public function properties(): ContainerPropertyManager
     {
-        try {
-            $response = $this->request
-                ->withOptions($options)
-                ->get("{$name}?restype=container")
-                ->getHeaders();
-        } catch (RequestException $e) {
-            throw $e; // TODO: Create Custom Exception
-        }
-
-        array_walk($response, fn (array &$value) => $value = current($value));
-
-        /** @var array<string> $response */
-        return new ContainerProperty($response);
+        return new ContainerPropertyManager($this->request);
     }
 
-    /** @param array<string, scalar> $options */
-    public function metadata(string $name, array $options = []): ContainerMetadata
+    public function metadata(): ContainerMetadataManager
     {
-        try {
-            $response = $this->request
-                ->withOptions($options)
-                ->get("{$name}?comp=metadata&restype=container")
-                ->getHeaders();
-        } catch (RequestException $e) {
-            throw $e; // TODO: Create Custom Exception
-        }
-
-        array_walk($response, fn (array &$value) => $value = current($value));
-
-        /** @var array<string> $response */
-        return new ContainerMetadata($response);
+        return new ContainerMetadataManager($this->request);
     }
 
     /** @param array<string, scalar> $options */
@@ -66,8 +46,8 @@ readonly class ContainerManager
                 ->withOptions($options)
                 ->get('?comp=list' . ($withDeleted ? '&include=deleted' : ''))
                 ->getBody();
-        } catch (RequestException $e) {
-            throw $e; // TODO: Create Custom Exception
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
         }
 
         /**
@@ -90,7 +70,7 @@ readonly class ContainerManager
             return $this->request
                 ->put("{$name}?restype=container")
                 ->isCreated();
-        } catch (RequestException $e) {
+        } catch (RequestExceptionInterface) {
             return false;
         }
     }
@@ -103,7 +83,7 @@ readonly class ContainerManager
             return $this->request
                 ->delete("{$name}?restype=container")
                 ->isAccepted();
-        } catch (RequestException $e) {
+        } catch (RequestExceptionInterface) {
             return false;
         }
     }
@@ -120,7 +100,7 @@ readonly class ContainerManager
                 ])
                 ->put("{$name}?comp=undelete&restype=container")
                 ->isCreated();
-        } catch (RequestException $e) {
+        } catch (RequestExceptionInterface) {
             return false;
         }
     }
