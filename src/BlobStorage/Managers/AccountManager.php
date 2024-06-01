@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities;
+namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\BlobProperty;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\AccountInformation;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\StoragePropertyManager;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
-final readonly class Account
+readonly class AccountManager implements Manager
 {
     public function __construct(protected Request $request)
     {
@@ -44,29 +46,9 @@ final readonly class Account
         return new AccountInformation($response);
     }
 
-    /** @param array<string, scalar> $options */
-    public function blobServiceProperties(array $options = []): BlobProperty
+    public function storageProperties(): StoragePropertyManager
     {
-        try {
-            $response = $this->request
-                ->withOptions($options)
-                ->get('?comp=properties&restype=service')
-                ->getBody();
-        } catch (RequestExceptionInterface $e) {
-            throw RequestException::createFromRequestException($e);
-        }
-
-        /** @var ?array<mixed> $parsed */
-        $parsed = $this->request->config->parser->parse($response);
-
-        return new BlobProperty($parsed ?? []);
-    }
-
-    /** @param array<string, scalar> $options */
-    public function setBlobStorageProperties(array $options = []): void
-    {
-        // TODO: Implement setBlobStorageProperties() method.
-        // https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties?tabs=microsoft-entra-id
+        return new StoragePropertyManager($this->request);
     }
 
     /** @param array<string, scalar> $options */

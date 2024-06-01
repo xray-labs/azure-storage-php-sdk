@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 final class BlobStorage
@@ -15,9 +14,9 @@ final class BlobStorage
         //
     }
 
-    public function account(): Account
+    public function account(): AccountManager
     {
-        return new Account($this->request);
+        return new AccountManager($this->request);
     }
 
     public function containers(): ContainerManager
