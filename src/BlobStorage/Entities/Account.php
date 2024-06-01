@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities;
 
-use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\BlobProperty;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 final readonly class Account
@@ -23,8 +24,8 @@ final readonly class Account
                 ->withOptions($options)
                 ->get('?comp=properties&restype=account')
                 ->getHeaders();
-        } catch (RequestException $e) {
-            throw $e; // TODO: Create Custom Exception
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
         }
 
         array_walk($response, fn (array &$value) => $value = current($value));
@@ -51,8 +52,8 @@ final readonly class Account
                 ->withOptions($options)
                 ->get('?comp=properties&restype=service')
                 ->getBody();
-        } catch (RequestException $e) {
-            throw $e; // TODO: Create Custom Exception
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
         }
 
         /** @var ?array<mixed> $parsed */
