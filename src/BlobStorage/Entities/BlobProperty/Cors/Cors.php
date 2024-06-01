@@ -17,20 +17,27 @@ use Sjpereira\AzureStoragePhpSdk\Support\Collection;
  */
 class Cors extends Collection implements Arrayable
 {
-    public function __construct()
+    public function __construct(array $corsRules)
     {
-        //
+        if (isset(array_keys($corsRules)[0]) && is_string(array_keys($corsRules)[0])) {
+            $corsRules = [$corsRules];
+        }
+
+        parent::__construct(
+            array_map(
+                fn (array $rule) => new CorsRule($rule),
+                $corsRules,
+            ),
+        );
     }
 
     public function toArray(): array
     {
         return [
-            'Cors' => [
-                array_map(
-                    fn (CorsRule $rule) => $rule->toArray(),
-                    $this->all(),
-                ),
-            ],
+            'Cors' => array_map(
+                fn (CorsRule $rule) => $rule->toArray(),
+                $this->all(),
+            ),
         ];
     }
 }

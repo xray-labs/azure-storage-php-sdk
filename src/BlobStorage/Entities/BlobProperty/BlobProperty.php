@@ -91,11 +91,11 @@ final readonly class BlobProperty implements Arrayable, Xmlable
             ? new MinuteMetrics($blobProperty['MinuteMetrics'])
             : null;
 
-        dd($blobProperty);
-
-        $this->cors = isset($blobProperty['CorsRules'])
-            ? new Cors($blobProperty['CorsRules'])
-            : null;
+        if (isset($blobProperty['Cors'])) {
+            $this->cors = isset($blobProperty['Cors']['CorsRule'])
+                ? new Cors($blobProperty['Cors']['CorsRule'])
+                : new Cors([]);
+        }
 
         $this->deleteRetentionPolicy = isset($blobProperty['DeleteRetentionPolicy'])
             ? new DeleteRetentionPolicy($blobProperty['DeleteRetentionPolicy'])
