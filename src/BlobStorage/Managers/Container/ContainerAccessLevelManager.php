@@ -25,8 +25,7 @@ readonly class ContainerAccessLevelManager
             $response = $this->request
                 ->withOptions($options)
                 ->get("{$container}?comp=acl&restype=container")
-                ->getBody()
-                ->getContents();
+                ->getBody();
         } catch (RequestException $e) {
             throw $e; // TODO: Create Custom Exception
         }
@@ -48,7 +47,7 @@ readonly class ContainerAccessLevelManager
                 ->withOptions($options)
                 ->withHeaders(['Content-Type' => 'application/xml'])
                 ->put("{$container}?comp=acl&restype=container", $accessLevel->toXML())
-                ->getStatusCode() === 200;
+                ->isOk();
         } catch (RequestException $e) {
             return false;
         }

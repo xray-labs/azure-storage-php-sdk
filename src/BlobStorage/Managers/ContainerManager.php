@@ -40,13 +40,7 @@ readonly class ContainerManager
         return new ContainerProperty($response);
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param string $name
-     * @param array<string, scalar> $options
-     * @return ContainerMetadata
-     */
+    /** @param array<string, scalar> $options */
     public function metadata(string $name, array $options = []): ContainerMetadata
     {
         try {
@@ -64,30 +58,23 @@ readonly class ContainerManager
         return new ContainerMetadata($response);
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param array<string, scalar> $options
-     * @param bool $withDeleted
-     * @return Containers
-     */
+    /** @param array<string, scalar> $options */
     public function list(array $options = [], bool $withDeleted = false): Containers
     {
         try {
             $response = $this->request
                 ->withOptions($options)
                 ->get('?comp=list' . ($withDeleted ? '&include=deleted' : ''))
-                ->getBody()
-                ->getContents();
+                ->getBody();
         } catch (RequestException $e) {
             throw $e; // TODO: Create Custom Exception
         }
 
         /**
          * @var ?array{
-         *     Containers: array{
-         *         Container: array<array<mixed>>
-         *     }
+         *   Containers: array{
+         *     Container: array<array<mixed>>
+         *   }
          * }
         */
         $parsed = $this->request->config->parser->parse($response);
@@ -100,9 +87,9 @@ readonly class ContainerManager
         // TODO: Validate if it's a valid url container (lower case, number and hyphen)
 
         try {
-            $response = $this->request->put("{$name}?restype=container");
-
-            return $response->getStatusCode() === 201;
+            return $this->request
+                ->put("{$name}?restype=container")
+                ->isCreated();
         } catch (RequestException $e) {
             return false;
         }
@@ -113,9 +100,9 @@ readonly class ContainerManager
         // TODO: Validate if it's a valid url container (lower case, number and hyphen)
 
         try {
-            $response = $this->request->delete("{$name}?restype=container");
-
-            return $response->getStatusCode() === 202;
+            return $this->request
+                ->delete("{$name}?restype=container")
+                ->isAccepted();
         } catch (RequestException $e) {
             return false;
         }
@@ -126,14 +113,13 @@ readonly class ContainerManager
         // TODO: Validate if it's a valid url container (lower case, number and hyphen)
 
         try {
-            $response = $this->request
+            return $this->request
                 ->withHeaders([
                     Resource::DELETE_CONTAINER_NAME_KEY    => $name,
                     Resource::DELETE_CONTAINER_VERSION_KEY => $version,
                 ])
-                ->put("{$name}?comp=undelete&restype=container");
-
-            return $response->getStatusCode() === 201;
+                ->put("{$name}?comp=undelete&restype=container")
+                ->isCreated();
         } catch (RequestException $e) {
             return false;
         }

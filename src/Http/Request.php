@@ -5,24 +5,15 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\Http;
 
 use GuzzleHttp\ClientInterface;
-use Psr\Http\Message\ResponseInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 
 class Request
 {
-    /**
-     * Undocumented variable
-     *
-     * @var array<string, scalar>
-     */
+    /** @var array<string, scalar> */
     protected array $options = [];
 
-    /**
-     * Undocumented variable
-     *
-     * @var array<string, scalar>
-     */
+    /** @var array<string, scalar> */
     protected array $headers = [];
 
     public function __construct(
@@ -32,11 +23,7 @@ class Request
         //
     }
 
-    /**
-     * Undocumented variable
-     *
-     * @param array<string, scalar> $options
-     */
+    /** @param array<string, scalar> $options */
     public function withOptions(array $options = []): static
     {
         $this->options = array_merge($this->options, $options);
@@ -44,11 +31,7 @@ class Request
         return $this;
     }
 
-    /**
-     * Undocumented variable
-     *
-     * @param array<string, scalar> $headers
-     */
+    /** @param array<string, scalar> $headers */
     public function withHeaders(array $headers = []): static
     {
         $this->headers = array_merge($this->headers, $headers);
@@ -56,17 +39,19 @@ class Request
         return $this;
     }
 
-    public function get(string $endpoint): ResponseInterface
+    public function get(string $endpoint): Response
     {
         $options = $this->getOptions(
             $verb = HttpVerb::GET,
             Resource::canonicalize($uri = $this->uri($endpoint)),
         );
 
-        return $this->client->request($verb->value, $uri, $options);
+        return Response::createFromGuzzleResponse(
+            $this->client->request($verb->value, $uri, $options)
+        );
     }
 
-    public function put(string $endpoint, string $body = ''): ResponseInterface
+    public function put(string $endpoint, string $body = ''): Response
     {
         $options = $this->getOptions(
             $verb = HttpVerb::PUT,
@@ -74,26 +59,23 @@ class Request
             $body,
         );
 
-        return $this->client->request($verb->value, $uri, $options);
+        return Response::createFromGuzzleResponse(
+            $this->client->request($verb->value, $uri, $options)
+        );
     }
 
-    public function delete(string $endpoint): ResponseInterface
+    public function delete(string $endpoint): Response
     {
         $options = $this->getOptions(
             $verb = HttpVerb::DELETE,
             Resource::canonicalize($uri = $this->uri($endpoint)),
         );
 
-        return $this->client->request($verb->value, $uri, $options);
+        return Response::createFromGuzzleResponse(
+            $this->client->request($verb->value, $uri, $options)
+        );
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param HttpVerb $verb
-     * @param string $resource
-     * @return array<string, mixed>
-     */
     protected function getOptions(HttpVerb $verb, string $resource, string $body = ''): array
     {
         $options = $this->options;
@@ -105,7 +87,6 @@ class Request
 
         if (!empty($body)) {
             $options['body'] = $body;
-
             $headers->setContentLength(strlen($body));
         }
 
