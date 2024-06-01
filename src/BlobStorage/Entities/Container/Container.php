@@ -12,7 +12,7 @@ use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 /**
  * @method ContainerManager getManager()
  */
-final readonly class Container
+final class Container
 {
     use HasManager;
 

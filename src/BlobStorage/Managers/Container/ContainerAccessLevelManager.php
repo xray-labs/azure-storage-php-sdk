@@ -9,10 +9,11 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{
     ContainerAccessLevel,
     ContainerAccessLevels,
 };
+use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
-readonly class ContainerAccessLevelManager
+readonly class ContainerAccessLevelManager implements Manager
 {
     public function __construct(protected Request $request)
     {
