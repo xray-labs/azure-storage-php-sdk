@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\Cors\Cors;
 use Sjpereira\AzureStoragePhpSdk\Contracts\{Arrayable, Xmlable};
 use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
 
@@ -17,14 +18,12 @@ final readonly class BlobProperty implements Arrayable, Xmlable
 
     public ?MinuteMetrics $minuteMetrics;
 
-    public ?CorsRules $corsRules;
+    public ?Cors $cors;
 
     public ?DeleteRetentionPolicy $deleteRetentionPolicy;
 
     public ?StaticWebsite $staticWebsite;
 
-   
-   
     /** @param array{
      *  DefaultServiceVersion: string,
      *  Logging?: array{
@@ -55,13 +54,14 @@ final readonly class BlobProperty implements Arrayable, Xmlable
      *          Enabled: bool
      *      }
      *  },
-     *  CorsRules?: array{
-     *     AllowedOrigins?: string,
-     *     AllowedMethods?: string,
-     *     MaxAgeInSeconds?: int,
-     *     ExposedHeaders?: string,
-     *     AllowedHeaders?: string,
-     *  },
+     *  Cors?: array{
+     *      CorsRules: array{
+     *          AllowedOrigins?: string,
+     *          AllowedMethods?: string,
+     *          MaxAgeInSeconds?: int,
+     *          ExposedHeaders?: string,
+     *          AllowedHeaders?: string,
+     *  }[],
      *  DeleteRetentionPolicy?: array{
      *     Enabled: ?bool,
      *     AllowPermanentDelete: ?bool,
@@ -91,8 +91,10 @@ final readonly class BlobProperty implements Arrayable, Xmlable
             ? new MinuteMetrics($blobProperty['MinuteMetrics'])
             : null;
 
-        $this->corsRules = isset($blobProperty['CorsRules'])
-            ? new CorsRules($blobProperty['CorsRules'])
+        dd($blobProperty);
+
+        $this->cors = isset($blobProperty['CorsRules'])
+            ? new Cors($blobProperty['CorsRules'])
             : null;
 
         $this->deleteRetentionPolicy = isset($blobProperty['DeleteRetentionPolicy'])
@@ -112,7 +114,7 @@ final readonly class BlobProperty implements Arrayable, Xmlable
                 ...($this->logging?->toArray() ?? []),
                 ...($this->hourMetrics?->toArray() ?? []),
                 ...($this->minuteMetrics?->toArray() ?? []),
-                ...($this->corsRules?->toArray() ?? []),
+                ...($this->cors?->toArray() ?? []),
                 ...($this->deleteRetentionPolicy?->toArray() ?? []),
                 ...($this->staticWebsite?->toArray() ?? []),
             ], fn (mixed $value) => $value !== null),

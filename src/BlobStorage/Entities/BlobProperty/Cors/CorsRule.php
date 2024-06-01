@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
+namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\Cors;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
 
-final readonly class CorsRules implements Arrayable
+final readonly class CorsRule implements Arrayable
 {
     /** @var array<string> $allowedOrigins */
     public array $allowedOrigins;
@@ -43,15 +43,13 @@ final readonly class CorsRules implements Arrayable
     public function toArray(): array
     {
         return [
-            'Cors' => [
-                'CorsRules' => array_filter([
-                    'AllowedOrigins'  => implode(',', $this->allowedOrigins),
-                    'AllowedMethods'  => implode(',', $this->allowedMethods),
-                    'MaxAgeInSeconds' => $this->maxAgeInSeconds,
-                    'ExposedHeaders'  => implode(',', $this->exposedHeaders),
-                    'AllowedHeaders'  => implode(',', $this->allowedHeaders),
-                ], fn (string|int|null $value) => $value !== null && $value !== ''),
-            ],
+            'CorsRule' => array_filter([
+                'AllowedOrigins'  => implode(',', $this->allowedOrigins),
+                'AllowedMethods'  => implode(',', $this->allowedMethods),
+                'MaxAgeInSeconds' => $this->maxAgeInSeconds,
+                'ExposedHeaders'  => implode(',', $this->exposedHeaders),
+                'AllowedHeaders'  => implode(',', $this->allowedHeaders),
+            ], fn (string|int|null $value) => $value !== null && $value !== ''),
         ];
     }
 

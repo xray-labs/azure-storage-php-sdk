@@ -48,7 +48,7 @@ class XmlConverter implements Converter
                 $value = $value ? 'true' : 'false';
             }
 
-            $xml->addChild((string)$key, htmlspecialchars(is_string($value) ? $value : ''));
+            $xml->addChild((string)$key, htmlspecialchars((string) $value));
         }
     }
 }

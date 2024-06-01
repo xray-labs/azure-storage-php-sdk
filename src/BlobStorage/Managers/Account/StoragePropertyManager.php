@@ -41,6 +41,7 @@ readonly class StoragePropertyManager implements Manager
         try {
             return $this->request
                 ->withOptions($options)
+                ->withHeaders(['Content-Type' => 'application/xml'])
                 ->put('?comp=properties&restype=service', $blobProperty->toXml())
                 ->isAccepted();
         } catch (RequestExceptionInterface $e) {
