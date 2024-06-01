@@ -16,13 +16,13 @@ final class Container
 {
     use HasManager;
 
-    public string $name;
+    public readonly string $name;
 
-    public bool $deleted;
+    public readonly bool $deleted;
 
-    public string $version;
+    public readonly string $version;
 
-    public Properties $properties;
+    public readonly Properties $properties;
 
     /** @param array<mixed> $container */
     public function __construct(array $container)
