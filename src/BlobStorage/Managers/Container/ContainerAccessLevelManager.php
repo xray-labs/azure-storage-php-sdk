@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container;
 
-use GuzzleHttp\Exception\RequestException;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{ContainerAccessLevel, ContainerAccessLevels};
+use Psr\Http\Client\RequestExceptionInterface;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{
+    ContainerAccessLevel,
+    ContainerAccessLevels,
+};
+use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 readonly class ContainerAccessLevelManager
@@ -26,8 +30,8 @@ readonly class ContainerAccessLevelManager
                 ->withOptions($options)
                 ->get("{$container}?comp=acl&restype=container")
                 ->getBody();
-        } catch (RequestException $e) {
-            throw $e; // TODO: Create Custom Exception
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
         }
 
         /** @var array<array<array<mixed>>> */
@@ -48,7 +52,7 @@ readonly class ContainerAccessLevelManager
                 ->withHeaders(['Content-Type' => 'application/xml'])
                 ->put("{$container}?comp=acl&restype=container", $accessLevel->toXML())
                 ->isOk();
-        } catch (RequestException $e) {
+        } catch (RequestExceptionInterface) {
             return false;
         }
     }

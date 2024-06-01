@@ -17,6 +17,8 @@ final class Resource
     public const string DELETE_CONTAINER_NAME_KEY    = 'x-ms-deleted-container-name';
     public const string DELETE_CONTAINER_VERSION_KEY = 'x-ms-deleted-container-version';
 
+    public const string CONTAINER_META_PREFIX = 'x-ms-meta-';
+
     public static function canonicalize(string $uri): string
     {
         /** @var array<string, string> */
