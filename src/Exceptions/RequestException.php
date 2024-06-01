@@ -21,7 +21,7 @@ class RequestException extends Exception
         // TODO: Customize Exception Depending on the status code
 
         return match($exception->getCode()) {
-            403 => new FailedAuthenticationException($exception->getMessage(), $exception->getCode(), $exception),
+            403     => new FailedAuthenticationException($exception->getMessage(), $exception->getCode(), $exception),
             default => new self($exception->getMessage(), $exception->getCode(), $exception),
         };
     }

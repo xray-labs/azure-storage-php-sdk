@@ -46,7 +46,7 @@ class ContainerMetadataManager implements Manager
     public function save(string $container, array $parameters): bool
     {
         $headers = [];
-        
+
         foreach ($parameters as $key => $value) {
             $this->validateMetadataKey($key);
             $headers[Resource::CONTAINER_META_PREFIX . $key] = urlencode($value);
@@ -64,7 +64,7 @@ class ContainerMetadataManager implements Manager
 
     protected function validateMetadataKey(string $key): void
     {
-        $message  = "Invalid metadata key: {$key}.";
+        $message = "Invalid metadata key: {$key}.";
 
         if (is_numeric($key[0])) {
             throw InvalidArgumentException::create("{$message} Metadata keys cannot start with a number.");
