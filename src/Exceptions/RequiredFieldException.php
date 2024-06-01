@@ -13,8 +13,8 @@ final class RequiredFieldException extends Exception
         parent::__construct($message);
     }
 
-    public static function missingField(string $field): self
+    public static function missingField(string $field): static
     {
-        return new self("Field [{$field}] is required");
+        return new static("Field [{$field}] is required");
     }
 }

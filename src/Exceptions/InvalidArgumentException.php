@@ -6,15 +6,15 @@ namespace Sjpereira\AzureStoragePhpSdk\Exceptions;
 
 use Exception;
 
-class ManagerNotSetException extends Exception
+class InvalidArgumentException extends Exception
 {
     protected function __construct(string $message)
     {
         parent::__construct($message);
     }
 
-    public static function create(): static
+    public static function create(string $message): static
     {
-        return new static('Manager not set');
+        return new static($message);
     }
 }
