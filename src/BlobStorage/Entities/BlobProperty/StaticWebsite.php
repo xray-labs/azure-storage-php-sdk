@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
-final readonly class StaticWebsite
+use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
+
+final readonly class StaticWebsite implements Arrayable
 {
     public bool $enabled;
 
@@ -14,16 +16,24 @@ final readonly class StaticWebsite
 
     public string $errorDocument404Path;
 
-    /**
-     * Undocumented function
-     *
-     * @param array<string> $staticWebsite
-     */
+    /** @param array<string> $staticWebsite */
     public function __construct(array $staticWebsite)
     {
         $this->enabled                  = to_boolean($staticWebsite['Enabled'] ?? false);
         $this->indexDocument            = $staticWebsite['IndexDocument'] ?? '';
         $this->defaultIndexDocumentPath = $staticWebsite['DefaultIndexDocumentPath'] ?? '';
         $this->errorDocument404Path     = $staticWebsite['ErrorDocument404Path'] ?? '';
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'StaticWebsite' => [
+                'Enabled'                  => $this->enabled,
+                'IndexDocument'            => $this->indexDocument,
+                'DefaultIndexDocumentPath' => $this->defaultIndexDocumentPath,
+                'ErrorDocument404Path'     => $this->errorDocument404Path,
+            ],
+        ];
     }
 }

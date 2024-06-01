@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
-final readonly class HourMetrics
+use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
+
+final readonly class HourMetrics implements Arrayable
 {
     public string $version;
 
@@ -14,11 +16,9 @@ final readonly class HourMetrics
 
     public bool $retentionPolicyEnabled;
 
-    public int $retentionPolicyDays;
+    public ?int $retentionPolicyDays;
 
     /**
-     * Undocumented function
-     *
      * @param array{
      *  Version: ?string,
      *  Enabled: ?bool,
@@ -35,6 +35,23 @@ final readonly class HourMetrics
         $this->enabled                = to_boolean($hourMetrics['Enabled'] ?? false);
         $this->includeAPIs            = to_boolean($hourMetrics['IncludeAPIs'] ?? false);
         $this->retentionPolicyEnabled = to_boolean($hourMetrics['RetentionPolicy']['Enabled'] ?? false);
-        $this->retentionPolicyDays    = (int) ($hourMetrics['RetentionPolicy']['Days'] ?? 0);
+        $this->retentionPolicyDays    = isset($hourMetrics['RetentionPolicy']['Days'])
+            ? (int) $hourMetrics['RetentionPolicy']['Days']
+            : null;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'HourMetrics' => [
+                'Version'         => $this->version,
+                'Enabled'         => $this->enabled,
+                'IncludeAPIs'     => $this->includeAPIs,
+                'RetentionPolicy' => array_filter([
+                    'Enabled' => $this->retentionPolicyEnabled,
+                    'Days'    => $this->retentionPolicyDays,
+                ], fn (bool|int|null $value) => $value !== null && $value !== ''),
+            ],
+        ];
     }
 }

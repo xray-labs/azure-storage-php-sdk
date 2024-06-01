@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
-final readonly class Logging
+use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
+
+final readonly class Logging implements Arrayable
 {
     public string $version;
 
@@ -16,11 +18,9 @@ final readonly class Logging
 
     public bool $retentionPolicyEnabled;
 
-    public int $retentionPolicyDays;
+    public ?int $retentionPolicyDays;
 
     /**
-     * Undocumented function
-     *
      * @param array{
      *  Version: ?string,
      *  Delete: ?bool,
@@ -28,7 +28,7 @@ final readonly class Logging
      *  Write: ?bool,
      *  RetentionPolicy: ?array{
      *    Enabled: bool,
-     *    Days: int
+     *    Days: ?int
      *  }
      * } $logging
      */
@@ -39,6 +39,24 @@ final readonly class Logging
         $this->read                   = to_boolean($logging['Read'] ?? false);
         $this->write                  = to_boolean($logging['Write'] ?? false);
         $this->retentionPolicyEnabled = to_boolean($logging['RetentionPolicy']['Enabled'] ?? false);
-        $this->retentionPolicyDays    = (int) ($logging['RetentionPolicy']['Days'] ?? 0);
+        $this->retentionPolicyDays    = isset($logging['RetentionPolicy']['Days'])
+            ? (int) $logging['RetentionPolicy']['Days']
+            : null;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'Logging' => [
+                'Version'         => $this->version,
+                'Delete'          => $this->delete,
+                'Read'            => $this->read,
+                'Write'           => $this->write,
+                'RetentionPolicy' => array_filter([
+                    'Enabled' => $this->retentionPolicyEnabled,
+                    'Days'    => $this->retentionPolicyDays,
+                ], fn (bool|int|null $value) => $value !== null && $value !== ''),
+            ],
+        ];
     }
 }

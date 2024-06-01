@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
-final readonly class DeleteRetentionPolicy
+use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
+
+final readonly class DeleteRetentionPolicy implements Arrayable
 {
     public bool $enabled;
 
     public bool $allowPermanentDelete;
 
-    public int $days;
+    public ?int $days;
 
     /**
-     * Undocumented function
-     *
      * @param array{
      *  Enabled: ?bool,
      *  AllowPermanentDelete: ?bool,
@@ -25,6 +25,19 @@ final readonly class DeleteRetentionPolicy
     {
         $this->enabled              = to_boolean($deleteRetentionPolicy['Enabled'] ?? false);
         $this->allowPermanentDelete = to_boolean($deleteRetentionPolicy['AllowPermanentDelete'] ?? false);
-        $this->days                 = (int) ($deleteRetentionPolicy['Days'] ?? 0);
+        $this->days                 = isset($deleteRetentionPolicy['Days'])
+            ? (int) $deleteRetentionPolicy['Days']
+            : null;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'DeleteRetentionPolicy' => array_filter([
+                'Enabled'              => $this->enabled,
+                'AllowPermanentDelete' => $this->allowPermanentDelete,
+                'Days'                 => $this->days,
+            ], fn (bool|int|null $value) => $value !== null && $value !== ''),
+        ];
     }
 }

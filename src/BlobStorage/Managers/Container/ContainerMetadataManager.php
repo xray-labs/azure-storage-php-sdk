@@ -11,7 +11,7 @@ use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
-class ContainerMetadataManager implements Manager
+readonly class ContainerMetadataManager implements Manager
 {
     public function __construct(protected Request $request)
     {
