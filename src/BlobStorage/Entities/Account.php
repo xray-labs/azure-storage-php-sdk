@@ -62,14 +62,14 @@ final readonly class Account
     }
 
     /** @param array<string, scalar> $options */
-    public function setBlobStorageProperties(array $options = [])
+    public function setBlobStorageProperties(array $options = []): void
     {
         // TODO: Implement setBlobStorageProperties() method.
         // https://learn.microsoft.com/en-us/rest/api/storageservices/set-blob-service-properties?tabs=microsoft-entra-id
     }
 
     /** @param array<string, scalar> $options */
-    public function preflightBlobRequest(array $options = [])
+    public function preflightBlobRequest(array $options = []): void
     {
         // TODO: Implement preflightBlobRequest() method.
         // https://learn.microsoft.com/en-us/rest/api/storageservices/preflight-blob-request

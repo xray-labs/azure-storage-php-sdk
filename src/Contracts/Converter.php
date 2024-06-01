@@ -6,11 +6,6 @@ namespace Sjpereira\AzureStoragePhpSdk\Contracts;
 
 interface Converter
 {
-    /**
-     * Undocumented function
-     *
-     * @param array<?object> $source
-     * @return string
-     */
+    /** @param array<?object> $source */
     public function convert(array $source): string;
 }

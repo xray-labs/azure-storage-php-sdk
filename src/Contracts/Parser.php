@@ -6,11 +6,6 @@ namespace Sjpereira\AzureStoragePhpSdk\Contracts;
 
 interface Parser
 {
-    /**
-     * Undocumented function
-     *
-     * @param string $source
-     * @return array<object>
-     */
+    /** @return array<object> */
     public function parse(string $source): array;
 }
