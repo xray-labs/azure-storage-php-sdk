@@ -13,8 +13,8 @@ class InvalidArgumentException extends Exception
         parent::__construct($message);
     }
 
-    public static function create(string $message): static
+    public static function create(string $message): self
     {
-        return new static($message);
+        return new self($message);
     }
 }

@@ -28,10 +28,10 @@ final readonly class Config
      * @param array{
      *      account: string,
      *      key: string,
-     *      version: ?string,
-     *      parser: ?Parser,
-     *      converter: ?Converter,
-     *      auth: ?Auth
+     *      version?: string,
+     *      parser?: Parser,
+     *      converter?: Converter,
+     *      auth?: Auth
      * } $config
      */
     public function __construct(array $config)

@@ -13,8 +13,8 @@ class ManagerNotSetException extends Exception
         parent::__construct($message);
     }
 
-    public static function create(): static
+    public static function create(): self
     {
-        return new static('Manager not set');
+        return new self('Manager not set');
     }
 }

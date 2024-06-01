@@ -23,7 +23,7 @@ trait HasManager
         return $this->manager;
     }
 
-    protected function ensureManagerIsConfigured(): never
+    protected function ensureManagerIsConfigured(): void
     {
         if (!isset($this->manager)) {
             throw ManagerNotSetException::create();

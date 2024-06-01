@@ -47,11 +47,11 @@ final class Container
         return $this->getManager()->accessLevel()->list($this->name);
     }
 
-    public function properties(): ContainerProperty
+    public function properties(): ContainerProperties
     {
         $this->ensureManagerIsConfigured();
 
-        return $this->getManager()->properties()->list($this->name);
+        return $this->getManager()->getProperties($this->name);
     }
 
     public function metadata(): ContainerMetadata
