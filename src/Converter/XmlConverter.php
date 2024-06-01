@@ -6,41 +6,33 @@ namespace Sjpereira\AzureStoragePhpSdk\Converter;
 
 use SimpleXMLElement;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Converter;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\UnableToConvertException;
 
 class XmlConverter implements Converter
 {
     /**
-     * Undocumented function
-     *
      * @param array<string, mixed> $source
-     * @return string
-     * @throws \RuntimeException
+     * @throws UnableToConvertException
     */
     public function convert(array $source): string
     {
         $rootTag = array_keys($source)[0];
         $xml     = new SimpleXMLElement($rootTag ? '<' . $rootTag . '/>' : '<root/>');
 
-        if(is_array($source[$rootTag])) {
+        if (is_array($source[$rootTag])) {
             $this->generateXmlRecursively($source[$rootTag], $xml);
         }
 
         $result = $xml->asXML();
 
         if ($result === false) {
-            throw new \RuntimeException('Failed to convert XML'); // TODO: Better exception
+            throw UnableToConvertException::create('Failed to convert XML');
         }
 
         return $result;
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param array<string, mixed> $source
-     * @param SimpleXMLElement $xml
-     * @return void
-    */
+    /** @param array<string, mixed> $source */
     protected function generateXmlRecursively(array $source, SimpleXMLElement &$xml): void
     {
         foreach ($source as $key => $value) {
