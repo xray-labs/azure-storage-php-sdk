@@ -76,6 +76,7 @@ class Request
         );
     }
 
+    /** @return array<string, mixed> */
     protected function getOptions(HttpVerb $verb, string $resource, string $body = ''): array
     {
         $options = $this->options;

@@ -22,6 +22,7 @@ final class Response
         return new self($response);
     }
 
+    /** @return array<string, mixed> */
     public function getHeaders(): array
     {
         return $this->response->getHeaders();

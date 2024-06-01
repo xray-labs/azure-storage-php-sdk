@@ -9,4 +9,8 @@ parameters:
                 - '#Call to an undefined method Pest\\PendingCalls\\TestCall\:\:expect\(\)#'
                 - '#Undefined variable\: \$this#'
             path: tests/
+        -
+            messages:
+                - '#Parameter \#[0-9]+? \$[a-zA-Z0-9]+? of function array_walk expects callable\(mixed, string\)\: mixed, Closure\(array\)\: mixed given#'
+            path: src/
     
