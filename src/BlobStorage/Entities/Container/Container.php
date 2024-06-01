@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\ContainerAccessLevels;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
@@ -17,11 +18,7 @@ final readonly class Container
 
     public Properties $properties;
 
-    /**
-     * Undocumented function
-     *
-     * @param array<mixed> $container
-     */
+    /** @param array<mixed> $container */
     public function __construct(protected ContainerManager $manager, array $container)
     {
         /** @var string $name */
@@ -37,9 +34,9 @@ final readonly class Container
         $this->properties = new Properties($container['Properties'] ?? []);
     }
 
-    public function levelAccess(): ContainerLevelAccess
+    public function listAccessLevels(): ContainerAccessLevels
     {
-        return $this->manager->levelAccess($this->name);
+        return $this->manager->accessLevel()->list($this->name);
     }
 
     public function properties(): ContainerProperty
@@ -60,15 +57,5 @@ final readonly class Container
     public function restore(): bool
     {
         return $this->manager->restore($this->name, $this->version);
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return array<mixed>
-     */
-    public function listBlobs(): array
-    {
-        return [];
     }
 }

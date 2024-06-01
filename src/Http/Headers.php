@@ -54,7 +54,7 @@ final class Headers
         $additionalHeaders = [];
 
         foreach ($headers as $name => $value) {
-            $method = 'set' . mb_convert_case($name, MB_CASE_TITLE, 'UTF-8');
+            $method = 'set' . preg_replace('/[^\w]/', '', mb_convert_case($name, MB_CASE_LOWER, 'UTF-8'));
 
             if (!method_exists($instance, $method)) {
                 $additionalHeaders[$name] = $value;
@@ -206,6 +206,8 @@ final class Headers
      */
     public function toArray(): array
     {
-        return $this->additionalHeaders;
+        $headers = array_filter($this->headers);
+
+        return array_merge($headers, $this->additionalHeaders);
     }
 }

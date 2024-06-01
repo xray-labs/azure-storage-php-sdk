@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
 
 use GuzzleHttp\Exception\RequestException;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\{ContainerLevelAccess, ContainerMetadata, ContainerProperty, Containers};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\{ContainerMetadata, ContainerProperty, Containers};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
@@ -16,38 +17,12 @@ readonly class ContainerManager
         //
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param string $name
-     * @param array<string, scalar> $options
-     * @return ContainerLevelAccess
-     */
-    public function levelAccess(string $name, array $options = []): ContainerLevelAccess
+    public function accessLevel(): ContainerAccessLevelManager
     {
-        try {
-            $response = $this->request
-                ->withOptions($options)
-                ->get("{$name}?comp=acl&restype=container")
-                ->getBody()
-                ->getContents();
-        } catch (RequestException $e) {
-            throw $e; // TODO: Create Custom Exception
-        }
-
-        /** @var array<array<string>> */
-        $parsed = $this->request->config->parser->parse($response);
-
-        return new ContainerLevelAccess($parsed['SignedIdentifiers'] ?? []);
+        return new ContainerAccessLevelManager($this->request);
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param string $name
-     * @param array<string, scalar> $options
-     * @return ContainerProperty
-     */
+    /** @param array<string, scalar> $options */
     public function properties(string $name, array $options = []): ContainerProperty
     {
         try {

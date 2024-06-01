@@ -25,11 +25,7 @@ class Collection extends ArrayIterator implements JsonSerializable
         //
     }
 
-    /**
-     * Undocumented function
-     *
-     * @return array<object>
-     */
+    /** @return array<object> */
     public function all(): array
     {
         return $this->items;

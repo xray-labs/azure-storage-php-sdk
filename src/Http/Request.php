@@ -66,11 +66,12 @@ class Request
         return $this->client->request($verb->value, $uri, $options);
     }
 
-    public function put(string $endpoint): ResponseInterface
+    public function put(string $endpoint, string $body = ''): ResponseInterface
     {
         $options = $this->getOptions(
             $verb = HttpVerb::PUT,
             Resource::canonicalize($uri = $this->uri($endpoint)),
+            $body,
         );
 
         return $this->client->request($verb->value, $uri, $options);
@@ -93,7 +94,7 @@ class Request
      * @param string $resource
      * @return array<string, mixed>
      */
-    protected function getOptions(HttpVerb $verb, string $resource): array
+    protected function getOptions(HttpVerb $verb, string $resource, string $body = ''): array
     {
         $options = $this->options;
 
@@ -101,6 +102,12 @@ class Request
             Resource::AUTH_DATE_KEY    => $this->config->auth->getDate(),
             Resource::AUTH_VERSION_KEY => Resource::VERSION,
         ]));
+
+        if (!empty($body)) {
+            $options['body'] = $body;
+
+            $headers->setContentLength(strlen($body));
+        }
 
         $options['headers'] = $headers->withAdditionalHeaders([
             Resource::AUTH_HEADER_KEY => $this->config->auth->getAuthentication($verb, $headers, $resource),

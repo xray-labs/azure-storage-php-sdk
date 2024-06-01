@@ -11,6 +11,7 @@ use Sjpereira\AzureStoragePhpSdk\Support\Collection;
  * @method array<Container> all()
  * @method ?Container first()
  * @method ?Container last()
+ * @method ?Container get(int $key)
  *
  * @extends Collection<int, Container>
 */
