@@ -8,6 +8,18 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\Cors\Cors;
 use Sjpereira\AzureStoragePhpSdk\Contracts\{Arrayable, Xmlable};
 use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
 
+/**
+ * @phpstan-import-type LoggingType from Logging
+ * @phpstan-import-type HourMetricsType from HourMetrics
+ * @phpstan-import-type MinuteMetricsType from MinuteMetrics
+ * @phpstan-import-type CorsType from Cors
+ * @phpstan-import-type DeleteRetentionPolicyType from DeleteRetentionPolicy
+ * @phpstan-import-type StaticWebsiteType from StaticWebsite
+ *
+ * @phpstan-type BlobPropertyType array{DefaultServiceVersion?: string, Logging?: LoggingType, HourMetrics?: HourMetricsType, MinuteMetrics?: MinuteMetricsType, Cors?: CorsType, DeleteRetentionPolicy?: DeleteRetentionPolicyType, StaticWebsite?: StaticWebsiteType}
+ *
+ * @implements Arrayable<array{StorageServiceProperties: array{DefaultServiceVersion: string, Logging?: LoggingType, HourMetrics?: HourMetricsType, MinuteMetrics?: MinuteMetricsType, Cors?: CorsType, DeleteRetentionPolicy?: DeleteRetentionPolicyType, StaticWebsite?: StaticWebsiteType}}>
+ */
 final readonly class BlobProperty implements Arrayable, Xmlable
 {
     public string $defaultServiceVersion;
@@ -24,57 +36,7 @@ final readonly class BlobProperty implements Arrayable, Xmlable
 
     public ?StaticWebsite $staticWebsite;
 
-    /** @param array{
-     *  DefaultServiceVersion: string,
-     *  Logging?: array{
-     *      Version: ?string,
-     *      Delete: ?bool,
-     *      Read: ?bool,
-     *      Write: ?bool,
-     *      RetentionPolicy: ?array{
-     *          Days?: int,
-     *          Enabled: bool
-     *      }
-     *  },
-     *  HourMetrics?: array{
-     *      Version: ?string,
-     *      Enabled: ?bool,
-     *      IncludeAPIs: ?bool,
-     *      RetentionPolicy: ?array{
-     *          Days?: int,
-     *          Enabled: bool
-     *      }
-     *  },
-     *  MinuteMetrics?: array{
-     *      Version: ?string,
-     *      Enabled: ?bool,
-     *      IncludeAPIs: ?bool,
-     *      RetentionPolicy: ?array{
-     *          Days?: int,
-     *          Enabled: bool
-     *      }
-     *  },
-     *  Cors?: array{
-     *      CorsRules: array{
-     *          AllowedOrigins?: string,
-     *          AllowedMethods?: string,
-     *          MaxAgeInSeconds?: int,
-     *          ExposedHeaders?: string,
-     *          AllowedHeaders?: string,
-     *  }[],
-     *  DeleteRetentionPolicy?: array{
-     *     Enabled: ?bool,
-     *     AllowPermanentDelete: ?bool,
-     *     Days?: int
-     *  },
-     *  StaticWebsite?: array{
-     *      Enabled: bool,
-     *      IndexDocument: string,
-     *      DefaultIndexDocumentPath: string,
-     *      ErrorDocument404Path: string,
-     *  }
-     * } $blobProperty
-     */
+    /** @param BlobPropertyType $blobProperty */
     public function __construct(array $blobProperty)
     {
         $this->defaultServiceVersion = $blobProperty['DefaultServiceVersion'] ?? '';
@@ -95,6 +57,8 @@ final readonly class BlobProperty implements Arrayable, Xmlable
             $this->cors = isset($blobProperty['Cors']['CorsRule'])
                 ? new Cors($blobProperty['Cors']['CorsRule'])
                 : new Cors([]);
+        } else {
+            $this->cors = null;
         }
 
         $this->deleteRetentionPolicy = isset($blobProperty['DeleteRetentionPolicy'])
@@ -108,17 +72,36 @@ final readonly class BlobProperty implements Arrayable, Xmlable
 
     public function toArray(): array
     {
-        return [
-            'StorageServiceProperties' => array_filter([
-                'DefaultServiceVersion' => $this->defaultServiceVersion,
-                ...($this->logging?->toArray() ?? []),
-                ...($this->hourMetrics?->toArray() ?? []),
-                ...($this->minuteMetrics?->toArray() ?? []),
-                ...($this->cors?->toArray() ?? []),
-                ...($this->deleteRetentionPolicy?->toArray() ?? []),
-                ...($this->staticWebsite?->toArray() ?? []),
-            ], fn (mixed $value) => $value !== null),
-        ];
+        $values = ['DefaultServiceVersion' => $this->defaultServiceVersion];
+
+        if ($this->logging) {
+            $values[] = $this->logging->toArray();
+        }
+
+        if ($this->hourMetrics) {
+            $values[] = $this->hourMetrics->toArray();
+        }
+
+        if ($this->minuteMetrics) {
+            $values[] = $this->minuteMetrics->toArray();
+        }
+
+        if ($this->cors) {
+            $values[] = $this->cors->toArray();
+        }
+
+        if ($this->deleteRetentionPolicy) {
+            $values[] = $this->deleteRetentionPolicy->toArray();
+        }
+
+        if ($this->staticWebsite) {
+            $values[] = $this->staticWebsite->toArray();
+        }
+
+        return ['StorageServiceProperties' => array_filter(
+            $values,
+            fn (mixed $value) => $value !== null,
+        )];
     }
 
     public function toXml(): string

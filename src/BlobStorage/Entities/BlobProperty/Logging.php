@@ -6,6 +6,12 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
 
+/**
+ * @phpstan-type RetentionPolicyType array{Days?: int, Enabled: bool}
+ * @phpstan-type LoggingType array{Version: ?string, Delete?: bool, Read?: bool, Write?: bool, RetentionPolicy?: RetentionPolicyType}
+ *
+ * @implements Arrayable<array{Logging: LoggingType}>
+ */
 final readonly class Logging implements Arrayable
 {
     public string $version;
@@ -20,18 +26,7 @@ final readonly class Logging implements Arrayable
 
     public ?int $retentionPolicyDays;
 
-    /**
-     * @param array{
-     *  Version: ?string,
-     *  Delete: ?bool,
-     *  Read: ?bool,
-     *  Write: ?bool,
-     *  RetentionPolicy: ?array{
-     *    Enabled: bool,
-     *    Days: ?int
-     *  }
-     * } $logging
-     */
+    /** @param LoggingType $logging */
     public function __construct(array $logging)
     {
         $this->version                = $logging['Version'] ?? '';

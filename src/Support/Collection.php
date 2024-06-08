@@ -10,37 +10,39 @@ use Traversable;
 
 /**
  * @template TKey of array-key
- * @template TValue
+ * @template TValue of object
  * @extends ArrayIterator<TKey, TValue>
  */
 class Collection extends ArrayIterator implements JsonSerializable
 {
-    /**
-     * Undocumented function
-     *
-     * @param array<object> $items
-     */
+    /** @param array<TKey, TValue> $items */
     public function __construct(protected array $items = [])
     {
         //
     }
 
-    /** @return array<object> */
+    /** @return array<TKey, TValue> */
     public function all(): array
     {
         return $this->items;
     }
 
+    /** @return TValue|null */
     public function first(): ?object
     {
         return $this->get(0);
     }
 
+    /** @return TValue|null */
     public function last(): ?object
     {
         return $this->get(count($this->items) - 1);
     }
 
+    /**
+     * @param TKey $key
+     * @return TValue|null
+     */
     public function get(int|string $key): ?object
     {
         return $this->items[$key] ?? null;
@@ -61,21 +63,13 @@ class Collection extends ArrayIterator implements JsonSerializable
         return !empty($this->items);
     }
 
-    /**
-     * Undocumented function
-     *
-     * @return Traversable<object>
-     */
+    /** @return Traversable<TKey, TValue> */
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->items);
     }
 
-    /**
-     * Undocumented function
-     *
-     * @return array<object>
-     */
+    /** @return array<TKey, TValue> */
     public function jsonSerialize(): array
     {
         return $this->items;
@@ -87,10 +81,8 @@ class Collection extends ArrayIterator implements JsonSerializable
     }
 
     /**
-     * Undocumented function
-     *
-     * @param int|string $offset
-     * @return object|null
+     * @param TKey $offset
+     * @return TValue|null
      */
     public function offsetGet(mixed $offset): ?object
     {
@@ -98,17 +90,15 @@ class Collection extends ArrayIterator implements JsonSerializable
     }
 
     /**
-     * Undocumented function
-     *
-     * @param int|string $offset
-     * @param object $value
-     * @return void
+     * @param TKey $offset
+     * @param TValue $value
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->items[$offset] = $value;
     }
 
+    /** @param TKey $offset */
     public function offsetUnset(mixed $offset): void
     {
         unset($this->items[$offset]);

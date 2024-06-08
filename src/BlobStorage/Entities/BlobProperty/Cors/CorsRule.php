@@ -6,6 +6,11 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\Cors;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
 
+/**
+ * @phpstan-type CorsRuleType array{AllowedOrigins?: string, AllowedMethods?: string, MaxAgeInSeconds?: int, ExposedHeaders?: string, AllowedHeaders?: string}
+ *
+ * @implements Arrayable<array{CorsRule: CorsRuleType}>
+ */
 final readonly class CorsRule implements Arrayable
 {
     /** @var array<string> $allowedOrigins */
@@ -22,22 +27,14 @@ final readonly class CorsRule implements Arrayable
     /** @var array<string> $allowedHeaders */
     public array $allowedHeaders;
 
-    /**
-     * @param array{
-     *     AllowedOrigins?: string,
-     *     AllowedMethods?: string,
-     *     MaxAgeInSeconds?: int,
-     *     ExposedHeaders?: string,
-     *     AllowedHeaders?: string,
-     * } $corsRules
-     */
-    public function __construct(array $corsRules)
+    /** @param CorsRuleType $corsRule */
+    public function __construct(array $corsRule)
     {
-        $this->allowedOrigins  = $this->parseCommaSeparatedList($corsRules['AllowedOrigins'] ?? '');
-        $this->allowedMethods  = $this->parseCommaSeparatedList($corsRules['AllowedMethods'] ?? '');
-        $this->maxAgeInSeconds = isset($corsRules['MaxAgeInSeconds']) ? (int) $corsRules['MaxAgeInSeconds'] : null;
-        $this->exposedHeaders  = $this->parseCommaSeparatedList($corsRules['ExposedHeaders'] ?? '');
-        $this->allowedHeaders  = $this->parseCommaSeparatedList($corsRules['AllowedHeaders'] ?? '');
+        $this->allowedOrigins  = $this->parseCommaSeparatedList($corsRule['AllowedOrigins'] ?? '');
+        $this->allowedMethods  = $this->parseCommaSeparatedList($corsRule['AllowedMethods'] ?? '');
+        $this->maxAgeInSeconds = isset($corsRule['MaxAgeInSeconds']) ? (int) $corsRule['MaxAgeInSeconds'] : null;
+        $this->exposedHeaders  = $this->parseCommaSeparatedList($corsRule['ExposedHeaders'] ?? '');
+        $this->allowedHeaders  = $this->parseCommaSeparatedList($corsRule['AllowedHeaders'] ?? '');
     }
 
     public function toArray(): array

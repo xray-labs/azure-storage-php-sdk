@@ -6,6 +6,12 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
 
+/**
+ * @phpstan-type RetentionPolicyType array{Days?: int, Enabled: bool}
+ * @phpstan-type MinuteMetricsType array{Version: ?string, Enabled?: bool, IncludeAPIs?: bool, RetentionPolicy?: RetentionPolicyType}
+ *
+ * @implements Arrayable<array{MinuteMetrics: MinuteMetricsType}>
+ */
 final readonly class MinuteMetrics implements Arrayable
 {
     public string $version;
@@ -18,17 +24,7 @@ final readonly class MinuteMetrics implements Arrayable
 
     public ?int $retentionPolicyDays;
 
-    /**
-     * @param array{
-     *  Version: ?string,
-     *  Enabled: ?bool,
-     *  IncludeAPIs: ?bool,
-     *  RetentionPolicy: ?array{
-     *    Enabled: bool,
-     *    Days: int
-     *  }
-     * } $minuteMetrics
-     */
+    /** @param MinuteMetricsType $minuteMetrics */
     public function __construct(array $minuteMetrics)
     {
         $this->version                = $minuteMetrics['Version'] ?? '';

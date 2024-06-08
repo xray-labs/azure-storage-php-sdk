@@ -8,27 +8,25 @@ use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
 use Sjpereira\AzureStoragePhpSdk\Support\Collection;
 
 /**
- * @method array<CorsRule> all()
- * @method ?CorsRule first()
- * @method ?CorsRule last()
- * @method ?CorsRule get(int $key)
+ * @phpstan-import-type CorsRuleType from CorsRule
+ * @phpstan-type CorsType CorsRuleType[]
  *
  * @extends Collection<int, CorsRule>
+ * @implements Arrayable<array{Cors: CorsType}>
  */
-class Cors extends Collection implements Arrayable
+final class Cors extends Collection implements Arrayable
 {
+    /** @param CorsRuleType|CorsRuleType[] $corsRules */
     public function __construct(array $corsRules)
     {
-        if (isset(array_keys($corsRules)[0]) && is_string(array_keys($corsRules)[0])) {
+        $firstKey = array_keys($corsRules)[0] ?? null;
+
+        if (isset($firstKey) && is_string($firstKey)) {
             $corsRules = [$corsRules];
         }
 
-        parent::__construct(
-            array_map(
-                fn (array $rule) => new CorsRule($rule),
-                $corsRules,
-            ),
-        );
+        /** @var CorsRuleType[] $corsRules */
+        parent::__construct($this->generateCorsList($corsRules));
     }
 
     public function toArray(): array
@@ -39,5 +37,17 @@ class Cors extends Collection implements Arrayable
                 $this->all(),
             ),
         ];
+    }
+
+    /**
+     * @param CorsRuleType[] $corsRules
+     * @return CorsRule[]
+     */
+    protected function generateCorsList(array $corsRules): array
+    {
+        return array_map(
+            fn (array $rule): CorsRule => new CorsRule($rule),
+            $corsRules,
+        );
     }
 }

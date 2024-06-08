@@ -6,6 +6,11 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
 
+/**
+ * @phpstan-type StaticWebsiteType array{Enabled?: bool, IndexDocument?: string, DefaultIndexDocumentPath?: string, ErrorDocument404Path?: string}
+ *
+ * @implements Arrayable<array{StaticWebsite: StaticWebsiteType}>
+ */
 final readonly class StaticWebsite implements Arrayable
 {
     public bool $enabled;
@@ -16,7 +21,7 @@ final readonly class StaticWebsite implements Arrayable
 
     public string $errorDocument404Path;
 
-    /** @param array<string> $staticWebsite */
+    /** @param StaticWebsiteType $staticWebsite */
     public function __construct(array $staticWebsite)
     {
         $this->enabled                  = to_boolean($staticWebsite['Enabled'] ?? false);

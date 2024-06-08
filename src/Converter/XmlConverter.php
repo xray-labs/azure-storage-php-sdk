@@ -16,8 +16,14 @@ class XmlConverter implements Converter
     */
     public function convert(array $source): string
     {
-        $rootTag = array_keys($source)[0];
-        $xml     = new SimpleXMLElement($rootTag ? '<' . $rootTag . '/>' : '<root/>');
+        /** @var string|false $rootTag */
+        $rootTag = current(array_keys($source));
+
+        if (!$rootTag) {
+            throw  UnableToConvertException::create('Missing root tag element');
+        }
+
+        $xml = new SimpleXMLElement("<{$rootTag}/>");
 
         if (is_array($source[$rootTag])) {
             $this->generateXmlRecursively($source[$rootTag], $xml);
@@ -32,7 +38,7 @@ class XmlConverter implements Converter
         return $result;
     }
 
-    /** @param array<string|int, mixed> $source */
+    /** @param array<string|int, int|string|float|bool|null|array<string|int, int|string|float|bool|null>> $source */
     protected function generateXmlRecursively(array $source, SimpleXMLElement &$xml): void
     {
         foreach ($source as $key => $value) {

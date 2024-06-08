@@ -10,6 +10,9 @@ use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
+/**
+ * @phpstan-import-type BlobPropertyType from BlobProperty
+ */
 readonly class StoragePropertyManager implements Manager
 {
     public function __construct(protected Request $request)
@@ -29,14 +32,14 @@ readonly class StoragePropertyManager implements Manager
             throw RequestException::createFromRequestException($e);
         }
 
-        /** @var ?array<mixed> $parsed */
+        /** @var ?BlobPropertyType $parsed */
         $parsed = $this->request->config->parser->parse($response);
 
         return new BlobProperty($parsed ?? []);
     }
 
     /** @param array<string, scalar> $options */
-    public function save(BlobProperty $blobProperty, array $options = [])
+    public function save(BlobProperty $blobProperty, array $options = []): bool
     {
         try {
             return $this->request

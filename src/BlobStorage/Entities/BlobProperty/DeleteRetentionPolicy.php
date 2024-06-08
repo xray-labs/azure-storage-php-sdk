@@ -6,6 +6,11 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
 
+/**
+ * @phpstan-type DeleteRetentionPolicyType array{Enabled?: bool, AllowPermanentDelete?: bool, Days?: int}
+ *
+ * @implements Arrayable<array{DeleteRetentionPolicy: DeleteRetentionPolicyType}>
+ */
 final readonly class DeleteRetentionPolicy implements Arrayable
 {
     public bool $enabled;
@@ -14,13 +19,7 @@ final readonly class DeleteRetentionPolicy implements Arrayable
 
     public ?int $days;
 
-    /**
-     * @param array{
-     *  Enabled: ?bool,
-     *  AllowPermanentDelete: ?bool,
-     *  Days: ?int
-     * } $deleteRetentionPolicy
-     */
+    /** @param DeleteRetentionPolicyType $deleteRetentionPolicy */
     public function __construct(array $deleteRetentionPolicy)
     {
         $this->enabled              = to_boolean($deleteRetentionPolicy['Enabled'] ?? false);
