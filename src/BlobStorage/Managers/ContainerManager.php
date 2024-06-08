@@ -9,10 +9,11 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\Container;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\{ContainerProperties, Containers};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\{
     ContainerAccessLevelManager,
+    ContainerLeaseManager,
     ContainerMetadataManager,
 };
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request};
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 
@@ -75,9 +76,11 @@ readonly class ContainerManager implements Manager
         return new Containers($this, $parsed['Containers']['Container'] ?? []);
     }
 
-    public function lease(): void
+    public function lease(string $name): ContainerLeaseManager
     {
+        $this->validateContainerName($name);
 
+        return new ContainerLeaseManager($this->request, $name);
     }
 
     public function create(string $name): bool

@@ -70,7 +70,7 @@ class PreflightBlobRequestManager implements Manager
     protected function request(HttpVerb $verb, string $origin, array $headers = []): Response
     {
         $options = [
-            Resource::ACCESS_CONTROL_ORIGIN_KEY         => $origin,
+            Resource::ORIGIN_KEY                        => $origin,
             Resource::ACCESS_CONTROL_REQUEST_METHOD_KEY => $verb->value,
         ];
 

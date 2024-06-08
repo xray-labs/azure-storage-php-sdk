@@ -33,7 +33,6 @@ final readonly class Properties
 
     public ?int $remainingRetentionDays;
 
-
     /** @param PropertiesType $property */
     public function __construct(array $property)
     {
