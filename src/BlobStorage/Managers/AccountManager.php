@@ -7,9 +7,9 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\AccountInformation;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\StoragePropertyManager;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
-use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 readonly class AccountManager implements Manager
 {

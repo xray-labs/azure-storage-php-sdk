@@ -11,9 +11,9 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\{
     ContainerMetadataManager,
 };
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
-use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 readonly class ContainerManager implements Manager
 {
@@ -72,7 +72,7 @@ readonly class ContainerManager implements Manager
          *   }
          * }
         */
-        $parsed = $this->request->config->parser->parse($response);
+        $parsed = $this->request->getConfig()->parser->parse($response);
 
         return new Containers($this, $parsed['Containers']['Container'] ?? []);
     }

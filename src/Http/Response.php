@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\Http;
 
 use Psr\Http\Message\ResponseInterface;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Response as ResponseContract;
 
-final class Response
+final class Response implements ResponseContract
 {
     public const int STATUS_OK       = 200;
     public const int STATUS_CREATED  = 201;

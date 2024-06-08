@@ -7,9 +7,9 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container;
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerMetadata;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
-use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 readonly class ContainerMetadataManager implements Manager
 {

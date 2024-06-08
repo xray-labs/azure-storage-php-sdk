@@ -6,9 +6,9 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account;
 
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\BlobProperty;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
-use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 /**
  * @phpstan-import-type BlobPropertyType from BlobProperty
@@ -33,7 +33,7 @@ readonly class StoragePropertyManager implements Manager
         }
 
         /** @var ?BlobPropertyType $parsed */
-        $parsed = $this->request->config->parser->parse($response);
+        $parsed = $this->request->getConfig()->parser->parse($response);
 
         return new BlobProperty($parsed ?? []);
     }

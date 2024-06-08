@@ -9,9 +9,9 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{
     ContainerAccessLevel,
     ContainerAccessLevels,
 };
+use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
-use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
 readonly class ContainerAccessLevelManager implements Manager
 {
@@ -36,7 +36,7 @@ readonly class ContainerAccessLevelManager implements Manager
         }
 
         /** @var array<array<array<mixed>>> */
-        $parsed = $this->request->config->parser->parse($response);
+        $parsed = $this->request->getConfig()->parser->parse($response);
 
         return new ContainerAccessLevels($this, $parsed['SignedIdentifier'] ?? []);
     }

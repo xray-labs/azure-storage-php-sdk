@@ -7,8 +7,9 @@ namespace Sjpereira\AzureStoragePhpSdk\Http;
 use GuzzleHttp\ClientInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request as RequestContract, Response as ResponseContract};
 
-class Request
+class Request implements RequestContract
 {
     /** @var array<string, scalar> */
     protected array $options = [];
@@ -21,6 +22,11 @@ class Request
         public Config $config,
     ) {
         //
+    }
+
+    public function getConfig(): Config
+    {
+        return $this->config;
     }
 
     /** @param array<string, scalar> $options */
@@ -39,7 +45,7 @@ class Request
         return $this;
     }
 
-    public function get(string $endpoint): Response
+    public function get(string $endpoint): ResponseContract
     {
         $options = $this->getOptions(
             $verb = HttpVerb::GET,
@@ -51,7 +57,7 @@ class Request
         );
     }
 
-    public function put(string $endpoint, string $body = ''): Response
+    public function put(string $endpoint, string $body = ''): ResponseContract
     {
         $options = $this->getOptions(
             $verb = HttpVerb::PUT,
@@ -64,7 +70,7 @@ class Request
         );
     }
 
-    public function delete(string $endpoint): Response
+    public function delete(string $endpoint): ResponseContract
     {
         $options = $this->getOptions(
             $verb = HttpVerb::DELETE,

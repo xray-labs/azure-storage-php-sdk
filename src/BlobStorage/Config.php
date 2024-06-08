@@ -10,6 +10,9 @@ use Sjpereira\AzureStoragePhpSdk\Contracts\{Converter, Parser};
 use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
 use Sjpereira\AzureStoragePhpSdk\Parsers\XmlParser;
 
+/**
+ * @phpstan-type ConfigType array{account: string, key: string, version?: string, parser?: Parser, converter?: Converter, auth?: Auth}
+ */
 final readonly class Config
 {
     public string $account;
@@ -24,16 +27,7 @@ final readonly class Config
 
     public Auth $auth;
 
-    /**
-     * @param array{
-     *      account: string,
-     *      key: string,
-     *      version?: string,
-     *      parser?: Parser,
-     *      converter?: Converter,
-     *      auth?: Auth
-     * } $config
-     */
+    /** @param ConfigType $config */
     public function __construct(array $config)
     {
         $this->account   = $config['account'];
