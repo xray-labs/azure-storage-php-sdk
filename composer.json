@@ -4,19 +4,18 @@
     "type": "library",
     "license": "MIT",
     "scripts": {
-        "fix": [
-            "./vendor/bin/pint"
-        ],
-        "analyse": [
-            "./vendor/bin/phpstan analyse"
-        ],
-        "test": [
-            "./vendor/bin/pest --coverage --parallel"
-        ],
+        "md" : ["./vendor/bin/phpmd src/ text phpmd.xml"],
+        "cs": ["./vendor/bin/phpcs --standard=phpcs.xml"],
+        "fix": ["./vendor/bin/pint"],
+        "analyse": ["./vendor/bin/phpstan analyse"],
+        "test": ["./vendor/bin/pest --coverage --parallel"],
+      
         "verify": [
+            "./vendor/bin/phpmd src/ text phpmd.xml",
+            "./vendor/bin/phpcs --standard=phpcs.xml",
             "./vendor/bin/pint --test",
-            "@analyse",
-            "@test"
+            "./vendor/bin/phpstan analyse",
+            "./vendor/bin/pest --coverage --parallel"
         ]
     },
     "require": {
@@ -27,7 +26,9 @@
         "laravel/pint": "^1.16",
         "phpstan/phpstan": "^1.11",
         "pestphp/pest": "^2.34",
-        "symfony/var-dumper": "^7.0"
+        "symfony/var-dumper": "^7.0",
+        "phpmd/phpmd": "^2.15",
+        "squizlabs/php_codesniffer": "^3.10"
     },
     "authors": [
         { "name": "Silvio Pereira", "email": "sjpereira2000@gmail.com" },
