@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\Http;
 
+use Closure;
 use GuzzleHttp\ClientInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
@@ -17,6 +18,8 @@ class Request implements RequestContract
     /** @var array<string, scalar> */
     protected array $headers = [];
 
+    protected ?Closure $usingAccountCallback = null;
+
     protected bool $shouldAuthenticate = true;
 
     public function __construct(
@@ -24,6 +27,13 @@ class Request implements RequestContract
         public Config $config,
     ) {
         //
+    }
+
+    public function usingAccount(Closure $callback): static
+    {
+        $this->usingAccountCallback = $callback;
+
+        return $this;
     }
 
     public function getConfig(): Config
@@ -138,6 +148,14 @@ class Request implements RequestContract
 
     protected function uri(?string $endpoint = null): string
     {
-        return "https://{$this->config->account}.blob.core.windows.net/{$endpoint}";
+        $account = $this->config->account;
+
+        if (!is_null($this->usingAccountCallback)) {
+            $account = call_user_func($this->usingAccountCallback, $account);
+
+            $this->usingAccountCallback = null;
+        }
+
+        return "https://{$account}.blob.core.windows.net/{$endpoint}";
     }
 }

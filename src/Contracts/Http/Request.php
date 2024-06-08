@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\Contracts\Http;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
+use Closure;
+use Sjpereira\AzureStoragePhpSdk\Contracts\HasConfig;
 
-interface Request
+interface Request extends HasConfig, HttpMethods
 {
-    public function getConfig(): Config;
+    public function usingAccount(Closure $callback): static;
 
     public function withAuthentication(bool $shouldAuthenticate = true): static;
 
@@ -19,12 +20,4 @@ interface Request
 
     /** @param array<string, scalar> $headers */
     public function withHeaders(array $headers = []): static;
-
-    public function get(string $endpoint): Response;
-
-    public function put(string $endpoint, string $body = ''): Response;
-
-    public function delete(string $endpoint): Response;
-
-    public function options(string $endpoint): Response;
 }

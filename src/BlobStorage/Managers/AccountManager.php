@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\AccountInformation;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\{AccountInformation, GeoReplication};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestManager, StoragePropertyManager};
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
@@ -57,9 +57,22 @@ readonly class AccountManager implements Manager
     }
 
     /** @param array<string, scalar> $options */
-    public function getBlobServiceStats(array $options = []): void
+    public function blobServiceStats(array $options = []): GeoReplication
     {
-        // TODO: Implement preflightBlobRequest() method.
-        // https://learn.microsoft.com/en-us/rest/api/storageservices/get-blob-service-stats?tabs=microsoft-entra-id
+        try {
+            $response = $this->request
+                ->usingAccount(fn (string $account): string => "{$account}-secondary")
+                ->withOptions($options)
+                ->get('?comp=stats&restype=service')
+                ->getBody();
+
+            /** @var array{GeoReplication: array{Status: string, LastSyncTime: string}} $parsed */
+            $parsed = $this->request->getConfig()->parser->parse($response);
+
+            return new GeoReplication($parsed['GeoReplication']);
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
     }
 }
+//
