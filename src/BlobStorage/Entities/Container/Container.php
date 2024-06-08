@@ -10,10 +10,13 @@ use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 /**
- * @method ContainerManager getManager()
+ * @phpstan-import-type PropertiesType from Properties
+ *
+ * @phpstan-type ContainerType array{Name?: string, Deleted?: bool, Version?: string, Properties?: PropertiesType}
  */
 final class Container
 {
+    /** @use HasManager<ContainerManager> */
     use HasManager;
 
     public readonly string $name;
@@ -24,13 +27,13 @@ final class Container
 
     public readonly Properties $properties;
 
-    /** @param array<mixed> $container */
+    /** @param ContainerType $container */
     public function __construct(array $container)
     {
         /** @var string $name */
         $name = ($container['Name'] ?? '');
 
-        if ($name === '') {
+        if (empty($name)) {
             throw RequiredFieldException::missingField('Name');
         }
 

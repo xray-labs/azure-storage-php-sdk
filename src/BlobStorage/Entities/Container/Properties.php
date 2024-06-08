@@ -6,6 +6,9 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
 use DateTimeImmutable;
 
+/**
+ * @phpstan-type PropertiesType array{Last-Modified?: string, Etag?: string, LeaseStatus?: string, LeaseState?: string, DefaultEncryptionScope?: string, DenyEncryptionScopeOverride?: bool, HasImmutabilityPolicy?: bool, HasLegalHold?: bool, ImmutableStorageWithVersioningEnabled?: bool, DeletedTime?: string, RemainingRetentionDays?: int}
+ */
 final readonly class Properties
 {
     public DateTimeImmutable $lastModified;
@@ -30,11 +33,8 @@ final readonly class Properties
 
     public ?int $remainingRetentionDays;
 
-    /**
-     * Undocumented function
-     *
-     * @param array<string, string> $property
-     */
+
+    /** @param PropertiesType $property */
     public function __construct(array $property)
     {
         $this->lastModified                          = new DateTimeImmutable($property['Last-Modified'] ?? 'now');

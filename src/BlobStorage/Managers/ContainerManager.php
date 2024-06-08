@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
 
 use Psr\Http\Client\RequestExceptionInterface;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\Container;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\{ContainerProperties, Containers};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\{
     ContainerAccessLevelManager,
@@ -15,6 +16,9 @@ use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 
+/**
+ * @phpstan-import-type ContainerType from Container
+ */
 readonly class ContainerManager implements Manager
 {
     public function __construct(protected Request $request)
@@ -65,16 +69,15 @@ readonly class ContainerManager implements Manager
             throw RequestException::createFromRequestException($e);
         }
 
-        /**
-         * @var ?array{
-         *   Containers: array{
-         *     Container: array<array<mixed>>
-         *   }
-         * }
-        */
+        /** @var array{Containers?: array{Container: ContainerType|ContainerType[]}} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
         return new Containers($this, $parsed['Containers']['Container'] ?? []);
+    }
+
+    public function lease(): void
+    {
+
     }
 
     public function create(string $name): bool
