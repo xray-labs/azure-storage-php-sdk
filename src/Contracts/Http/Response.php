@@ -11,6 +11,8 @@ interface Response
 
     public function getBody(): string;
 
+    public function getStatusCode(): int;
+
     public function isOk(): bool;
 
     public function isCreated(): bool;

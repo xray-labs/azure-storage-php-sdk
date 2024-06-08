@@ -6,7 +6,12 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums;
 
 enum HttpVerb: string
 {
-    case GET    = 'GET';
-    case PUT    = 'PUT';
-    case DELETE = 'DELETE';
+    case DELETE  = 'DELETE';
+    case GET     = 'GET';
+    case HEAD    = 'HEAD';
+    case MERGE   = 'MERGE';
+    case POST    = 'POST';
+    case OPTIONS = 'OPTIONS';
+    case PUT     = 'PUT';
+    case PATCH   = 'PATCH';
 }

@@ -6,7 +6,7 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
 
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\AccountInformation;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\StoragePropertyManager;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestManager, StoragePropertyManager};
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
@@ -51,11 +51,9 @@ readonly class AccountManager implements Manager
         return new StoragePropertyManager($this->request);
     }
 
-    /** @param array<string, scalar> $options */
-    public function preflightBlobRequest(array $options = []): void
+    public function preflightBlobRequest(): PreflightBlobRequestManager
     {
-        // TODO: Implement preflightBlobRequest() method.
-        // https://learn.microsoft.com/en-us/rest/api/storageservices/preflight-blob-request
+        return new PreflightBlobRequestManager($this->request);
     }
 
     /** @param array<string, scalar> $options */

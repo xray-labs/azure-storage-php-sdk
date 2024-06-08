@@ -10,6 +10,10 @@ interface Request
 {
     public function getConfig(): Config;
 
+    public function withAuthentication(bool $shouldAuthenticate = true): static;
+
+    public function withoutAuthentication(): static;
+
     /** @param array<string, scalar> $options */
     public function withOptions(array $options = []): static;
 
@@ -21,4 +25,6 @@ interface Request
     public function put(string $endpoint, string $body = ''): Response;
 
     public function delete(string $endpoint): Response;
+
+    public function options(string $endpoint): Response;
 }

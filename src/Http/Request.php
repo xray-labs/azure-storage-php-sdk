@@ -17,6 +17,8 @@ class Request implements RequestContract
     /** @var array<string, scalar> */
     protected array $headers = [];
 
+    protected bool $shouldAuthenticate = true;
+
     public function __construct(
         protected ClientInterface $client,
         public Config $config,
@@ -27,6 +29,18 @@ class Request implements RequestContract
     public function getConfig(): Config
     {
         return $this->config;
+    }
+
+    public function withAuthentication(bool $shouldAuthenticate = true): static
+    {
+        $this->shouldAuthenticate = $shouldAuthenticate;
+
+        return $this;
+    }
+
+    public function withoutAuthentication(): static
+    {
+        return $this->withAuthentication(false);
     }
 
     /** @param array<string, scalar> $options */
@@ -82,6 +96,18 @@ class Request implements RequestContract
         );
     }
 
+    public function options(string $endpoint): ResponseContract
+    {
+        $options = $this->getOptions(
+            $verb = HttpVerb::OPTIONS,
+            Resource::canonicalize($uri = $this->uri($endpoint)),
+        );
+
+        return Response::createFromGuzzleResponse(
+            $this->client->request($verb->value, $uri, $options)
+        );
+    }
+
     /** @return array<string, mixed> */
     protected function getOptions(HttpVerb $verb, string $resource, string $body = ''): array
     {
@@ -97,9 +123,15 @@ class Request implements RequestContract
             $headers->setContentLength(strlen($body));
         }
 
-        $options['headers'] = $headers->withAdditionalHeaders([
-            Resource::AUTH_HEADER_KEY => $this->config->auth->getAuthentication($verb, $headers, $resource),
-        ])->toArray();
+        if ($this->shouldAuthenticate) {
+            $headers = $headers->withAdditionalHeaders([
+                Resource::AUTH_HEADER_KEY => $this->config->auth->getAuthentication($verb, $headers, $resource),
+            ]);
+        } else {
+            $this->withAuthentication();
+        }
+
+        $options['headers'] = $headers->toArray();
 
         return $options;
     }

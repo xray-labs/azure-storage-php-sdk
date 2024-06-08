@@ -26,7 +26,13 @@ final class Response implements ResponseContract
     /** @return array<string, mixed> */
     public function getHeaders(): array
     {
-        return $this->response->getHeaders();
+        $headers = [];
+
+        foreach ($this->response->getHeaders() as $name => $values) {
+            $headers[$name] = current($values);
+        }
+
+        return $headers;
     }
 
     public function getBody(): string
@@ -34,18 +40,23 @@ final class Response implements ResponseContract
         return $this->response->getBody()->getContents();
     }
 
+    public function getStatusCode(): int
+    {
+        return $this->response->getStatusCode();
+    }
+
     public function isOk(): bool
     {
-        return $this->response->getStatusCode() === self::STATUS_OK;
+        return $this->getStatusCode() === self::STATUS_OK;
     }
 
     public function isCreated(): bool
     {
-        return $this->response->getStatusCode() === self::STATUS_CREATED;
+        return $this->getStatusCode() === self::STATUS_CREATED;
     }
 
     public function isAccepted(): bool
     {
-        return $this->response->getStatusCode() === self::STATUS_ACCEPTED;
+        return $this->getStatusCode() === self::STATUS_ACCEPTED;
     }
 }

@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage;
 
 use GuzzleHttp\Client;
+use Sjpereira\AzureStoragePhpSdk\Authentication\Contracts\Auth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request as RequestContract;
+use Sjpereira\AzureStoragePhpSdk\Contracts\{Converter, Parser};
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
-/**
- * @phpstan-import-type ConfigType from Config
- */
 final class BlobStorage
 {
     public function __construct(protected RequestContract $request)
@@ -19,7 +18,7 @@ final class BlobStorage
         //
     }
 
-    /** @param ConfigType $options */
+    /** @param array{account: string, key: string, version?: string, parser?: Parser, converter?: Converter, auth?: Auth} $options */
     public static function client(array $options, ?RequestContract $request = null): self
     {
         $config = new Config($options);
