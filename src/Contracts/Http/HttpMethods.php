@@ -8,6 +8,8 @@ interface HttpMethods
 {
     public function get(string $endpoint): Response;
 
+    public function post(string $endpoint, string $body = ''): Response;
+
     public function put(string $endpoint, string $body = ''): Response;
 
     public function delete(string $endpoint): Response;

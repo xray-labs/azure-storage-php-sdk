@@ -81,6 +81,19 @@ class Request implements RequestContract
         );
     }
 
+    public function post(string $endpoint, string $body = ''): ResponseContract
+    {
+        $options = $this->getOptions(
+            $verb = HttpVerb::POST,
+            Resource::canonicalize($uri = $this->uri($endpoint)),
+            $body,
+        );
+
+        return Response::createFromGuzzleResponse(
+            $this->client->request($verb->value, $uri, $options)
+        );
+    }
+
     public function put(string $endpoint, string $body = ''): ResponseContract
     {
         $options = $this->getOptions(

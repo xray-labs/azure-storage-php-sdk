@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\{AccountInformation, GeoReplication};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\{
+    AccountInformation,
+    GeoReplication,
+    KeyInfo,
+    UserDelegationKey,
+};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestManager, StoragePropertyManager};
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
@@ -74,5 +79,21 @@ readonly class AccountManager implements Manager
             throw RequestException::createFromRequestException($e);
         }
     }
+
+    public function userDelegationKey(KeyInfo $keyInfo): UserDelegationKey
+    {
+        # FIX: Needs other authentication (Microsoft Entra ID)
+        try {
+            $response = $this->request
+                ->post('?comp=userdelegationkey&restype=service', $keyInfo->toXml())
+                ->getBody();
+
+            /** @var array{UserDelegationKey: array{SignedOid: string, SignedTid: string, SignedStart: string, SignedExpiry: string, SignedService: string, SignedVersion: string, Value: string}} $parsed */
+            $parsed = $this->request->getConfig()->parser->parse($response);
+
+            return new UserDelegationKey($parsed['UserDelegationKey']);
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+    }
 }
-//
