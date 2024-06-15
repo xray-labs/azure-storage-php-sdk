@@ -32,7 +32,7 @@ class XmlConverter implements Converter
         $result = $xml->asXML();
 
         if ($result === false) {
-            throw UnableToConvertException::create('Failed to convert XML');
+            throw UnableToConvertException::create('Failed to convert XML'); // @codeCoverageIgnore
         }
 
         return $result;
