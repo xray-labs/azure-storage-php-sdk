@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\Contracts;
 
-/** @template TValue of array */
+/**
+ * @template TKey of key-of-array
+ * @template TValue of value-of-array
+ */
 interface Arrayable
 {
-    /** @return TValue */
+    /** @return array<TKey, TValue> */
     public function toArray(): array;
 }

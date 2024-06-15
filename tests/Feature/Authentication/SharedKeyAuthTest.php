@@ -34,7 +34,7 @@ it('should get correctly the authentication signature for all http methods', fun
     ]));
 
     $headers      = new Headers();
-    $stringToSign = "{$verb->value}\n{$headers}\n\n/{$account}/";
+    $stringToSign = "{$verb->value}\n{$headers->toString()}\n\n/{$account}/";
 
     $signature = base64_encode(hash_hmac('sha256', $stringToSign, $decodedKey, true));
 
@@ -61,7 +61,7 @@ it('should get correctly the authentication signature for all headers', function
     $verb = HttpVerb::GET;
 
     $headers      = (new Headers())->{$headerMethod}($headerValue);
-    $stringToSign = "{$verb->value}\n{$headers}\n\n/{$account}/";
+    $stringToSign = "{$verb->value}\n{$headers->toString()}\n\n/{$account}/";
 
     $signature = base64_encode(hash_hmac('sha256', $stringToSign, $decodedKey, true));
 
@@ -92,7 +92,7 @@ it('should get correctly the authentication signature for all canonical headers'
     $verb = HttpVerb::GET;
 
     $headers      = (new Headers())->withAdditionalHeaders([$headerMethod => $headerValue]);
-    $stringToSign = "{$verb->value}\n{$headers}\n{$headers->getCanonicalHeaders()}\n/{$account}/";
+    $stringToSign = "{$verb->value}\n{$headers->toString()}\n{$headers->getCanonicalHeaders()}\n/{$account}/";
 
     $signature = base64_encode(hash_hmac('sha256', $stringToSign, $decodedKey, true));
 

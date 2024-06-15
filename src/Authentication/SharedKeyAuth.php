@@ -30,7 +30,7 @@ final class SharedKeyAuth implements Auth
 
         $stringToSign = $this->getSigningString(
             $verb->value,
-            (string)$headers,
+            $headers->toString(),
             $headers->getCanonicalHeaders(),
             $resource,
         );

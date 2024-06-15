@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\Http;
 
-use RuntimeException;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Stringable;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 /**
  * @property-read ?string $contentEncoding
@@ -20,15 +22,13 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
  * @property-read ?string $ifUnmodifiedSince
  * @property-read ?string $range
  *
+ * @implements Arrayable<string, int|string|null>
+ *
  * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-blob
  */
-final class Headers
+ final class Headers implements Stringable, Arrayable
 {
-    /**
-     * Undocumented variable
-     *
-     * @var array<string, int|string|null> $headers
-     */
+    /** @var array<string, int|string|null> $headers */
     protected array $headers = [
         'Content-Encoding'    => null,
         'Content-Language'    => null,
@@ -36,7 +36,7 @@ final class Headers
         'Content-MD5'         => null,
         'Content-Type'        => null,
         'Date'                => null,
-        'If-Modified-Since '  => null,
+        'If-Modified-Since'   => null,
         'If-Match'            => null,
         'If-None-Match'       => null,
         'If-Unmodified-Since' => null,
@@ -73,13 +73,14 @@ final class Headers
         $name = str_camel_to_header($attribute);
 
         if (!array_key_exists($name, $this->headers)) {
-            throw new RuntimeException("Invalid header: $attribute");
+            throw InvalidArgumentException::create("Invalid header: $attribute");
         }
 
         return (string) $this->headers[$name];
     }
 
-    public function __toString(): string
+
+    public function toString(): string
     {
         return implode("\n", $this->headers);
     }
@@ -194,7 +195,6 @@ final class Headers
         return $this;
     }
 
-    /** @return array<string, scalar> */
     public function toArray(): array
     {
         $headers = array_filter($this->headers);
