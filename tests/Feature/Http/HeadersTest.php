@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Psr7\Header;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Sjpereira\AzureStoragePhpSdk\Http\Headers;
@@ -10,7 +9,7 @@ use Sjpereira\AzureStoragePhpSdk\Http\Headers;
 uses()->group('http');
 
 it('should throw an exception if header is missing', function (): void {
-    expect(new Headers)
+    expect(new Headers())
         ->nonExistentHeader->toBeNull();
 })->throws(InvalidArgumentException::class, 'Invalid header: nonExistentHeader');
 
@@ -29,10 +28,10 @@ it('should set header methods in headers class', function (string $method, strin
         'Range'               => null,
     ], [$key => $value]);
 
-    $attribute = str_replace('set', '', $method);
+    $attribute    = str_replace('set', '', $method);
     $attribute[0] = mb_convert_case($attribute[0], MB_CASE_LOWER, 'UTF-8');
 
-    expect((new Headers)->{$method}($value))
+    expect((new Headers())->{$method}($value))
         ->toString()->toBe(implode("\n", $headers))
         ->{$attribute}->toBe((string)$value);
 })->with([
@@ -49,8 +48,8 @@ it('should set header methods in headers class', function (string $method, strin
     'Range'               => ['setRange', 'bytes=0-100', 'Range'],
 ]);
 
-it('should add additional headers', function (){
-    $headers = (new Headers)
+it('should add additional headers', function () {
+    $headers = (new Headers())
         ->withAdditionalHeaders(['foo' => 'bar'])
         ->withAdditionalHeaders(['bar' => 'baz']);
 
@@ -61,35 +60,35 @@ it('should add additional headers', function (){
         ]);
 });
 
-it('should parse all the given headers into the headers class', function (){
+it('should parse all the given headers into the headers class', function () {
     $headers = [
-        'Content-Encoding'    => 'utf-8',
-        'Content-Language'    => 'en',
-        'Content-Length'      => 100,
-        'Content-MD5'         => '12345',
-        'Content-Type'        => 'application/xml',
-        'Date'                => 'Sat, 15 Jun 2024 00:00:00 GMT',
-        'If-Modified-Since'   => 'Fri, 14 Jun 2024 00:00:00 GMT',
-        'If-Match'            => 'match',
-        'If-None-Match'       => 'none',
-        'If-Unmodified-Since' => 'Sun, 16 Jun 2024 00:00:00 GMT',
-        'Range'               => 'bytes=0-100',
-        'new-header' => 'new-value',
-        Resource::CANONICAL_HEADER_PREFIX. 'other' => 'other-value',
+        'Content-Encoding'                          => 'utf-8',
+        'Content-Language'                          => 'en',
+        'Content-Length'                            => 100,
+        'Content-MD5'                               => '12345',
+        'Content-Type'                              => 'application/xml',
+        'Date'                                      => 'Sat, 15 Jun 2024 00:00:00 GMT',
+        'If-Modified-Since'                         => 'Fri, 14 Jun 2024 00:00:00 GMT',
+        'If-Match'                                  => 'match',
+        'If-None-Match'                             => 'none',
+        'If-Unmodified-Since'                       => 'Sun, 16 Jun 2024 00:00:00 GMT',
+        'Range'                                     => 'bytes=0-100',
+        'new-header'                                => 'new-value',
+        Resource::CANONICAL_HEADER_PREFIX . 'other' => 'other-value',
     ];
 
     expect(Headers::parse($headers))
         ->toArray()->toEqual($headers);
 });
 
-it('should get all canonical headers from the headers class', function (){
+it('should get all canonical headers from the headers class', function () {
     $additionalHeaders = [
-        'another-header' => 'other-value',
-        Resource::AUTH_DATE_KEY    =>'Fri, 14 Jun 2024 00:00:00 GMT',
-        Resource::CANONICAL_HEADER_PREFIX.'should-create' => false,
-        Resource::AUTH_VERSION_KEY => '2021-06-08',
-        Resource::CANONICAL_HEADER_PREFIX.'should-delete' => true,
-        'new-header' => 'new-value',
+        'another-header'                                    => 'other-value',
+        Resource::AUTH_DATE_KEY                             => 'Fri, 14 Jun 2024 00:00:00 GMT',
+        Resource::CANONICAL_HEADER_PREFIX . 'should-create' => false,
+        Resource::AUTH_VERSION_KEY                          => '2021-06-08',
+        Resource::CANONICAL_HEADER_PREFIX . 'should-delete' => true,
+        'new-header'                                        => 'new-value',
     ];
 
     ksort($additionalHeaders);
@@ -108,7 +107,6 @@ it('should get all canonical headers from the headers class', function (){
         $expected .= "{$key}:{$value}\n";
     }
 
-
-    expect((new Headers)->withAdditionalHeaders($additionalHeaders))
+    expect((new Headers())->withAdditionalHeaders($additionalHeaders))
         ->getCanonicalHeaders()->toBe(rtrim($expected, "\n"));
 });

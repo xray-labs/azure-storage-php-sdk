@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\Http;
 
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Stringable;
+use Sjpereira\AzureStoragePhpSdk\Contracts\{Arrayable, Stringable};
 use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 /**
@@ -26,7 +25,7 @@ use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
  *
  * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-blob
  */
- final class Headers implements Stringable, Arrayable
+final class Headers implements Stringable, Arrayable
 {
     /** @var array<string, int|string|null> $headers */
     protected array $headers = [
@@ -78,7 +77,6 @@ use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
         return (string) $this->headers[$name];
     }
-
 
     public function toString(): string
     {
