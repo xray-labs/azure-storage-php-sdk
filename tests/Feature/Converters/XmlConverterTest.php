@@ -24,7 +24,7 @@ it('should throw unable to convert exception if the root tag is missing', functi
 it('should convert correctly to xml', function () {
     $xml = <<<XML
     <Body>
-        <List><0>Test 1</0></List>
+        <0>Test 1</0>
         <AnotherList>
             <Content>List Content</Content>
             <Type>List Type</Type>
@@ -42,7 +42,7 @@ it('should convert correctly to xml', function () {
     expect(new XmlConverter())
         ->convert([
             'Body' => [
-                'List'        => ['Test 1'],
+                ['Test 1'],
                 'AnotherList' => ['Content' => 'List Content', 'Type' => 'List Type'],
                 'Created'     => true,
                 'Modified'    => false,
