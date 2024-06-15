@@ -8,6 +8,7 @@ use Sjpereira\AzureStoragePhpSdk\Authentication\Contracts\Auth;
 use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\Contracts\{Converter, Parser};
 use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Sjpereira\AzureStoragePhpSdk\Parsers\XmlParser;
 
 /**
@@ -27,9 +28,20 @@ final readonly class Config
 
     public Auth $auth;
 
-    /** @param ConfigType $config */
+    /**
+     * @param ConfigType $config
+     * @throws InvalidArgumentException
+     */
     public function __construct(array $config)
     {
+        if (empty($config['account'] ?? null)) {
+            throw InvalidArgumentException::create('Account name must be provided.');
+        }
+
+        if (empty($config['key'] ?? null)) {
+            throw InvalidArgumentException::create('Account key must be provided.');
+        }
+
         $this->account   = $config['account'];
         $this->key       = $config['key'];
         $this->version   = $config['version'] ?? Resource::VERSION;
