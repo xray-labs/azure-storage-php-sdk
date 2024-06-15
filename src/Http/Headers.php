@@ -21,7 +21,7 @@ use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
  * @property-read ?string $ifUnmodifiedSince
  * @property-read ?string $range
  *
- * @implements Arrayable<string, int|string|null>
+ * @implements Arrayable<array<string, bool|float|int|string|null>>
  *
  * @see https://docs.microsoft.com/en-us/rest/api/storageservices/put-blob
  */

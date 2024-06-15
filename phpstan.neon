@@ -8,6 +8,8 @@ parameters:
             messages:
                 - '#Call to an undefined method Pest\\PendingCalls\\TestCall\:\:expect\(\)#'
                 - '#Undefined variable\: \$this#'
+                - '#Call to an undefined method Pest(\\Mixins)?\\Expectation\<.+?\>\:\:[a-zA-Z]+?\(\)#'
+                - '#Access to an undefined property Pest(\\Mixins)?\\Expectation\<.+?\>\:\:\$[a-zA-Z]+?#'
             path: tests/
         -
             messages:

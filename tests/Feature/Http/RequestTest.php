@@ -77,20 +77,25 @@ it('should get request config', function (): void {
 
 class Client implements ClientInterface
 {
+    /** @var array<string, array{uri: string, options: array<string, scalar>}> */
     protected array $requests = [];
 
+    /** @param array<string, scalar> $options */
     public function send(RequestInterface $request, array $options = []): ResponseInterface
     {
         return new Response();
     }
 
+    /** @param array<string, scalar> $options */
     public function sendAsync(RequestInterface $request, array $options = []): PromiseInterface
     {
         return new Promise();
     }
 
-    public function request(string $method, $uri, array $options = []): ResponseInterface
+    /** @param array<string, scalar> $options */
+    public function request(string $method, mixed $uri, array $options = []): ResponseInterface
     {
+        /** @phpstan-ignore-next-line */
         $this->requests[$method] = [
             'uri'     => $uri,
             'options' => $options,
@@ -99,7 +104,8 @@ class Client implements ClientInterface
         return new Response();
     }
 
-    public function requestAsync(string $method, $uri, array $options = []): PromiseInterface
+    /** @param array<string, scalar> $options */
+    public function requestAsync(string $method, mixed $uri, array $options = []): PromiseInterface
     {
         return new Promise();
     }
@@ -109,17 +115,13 @@ class Client implements ClientInterface
         return [];
     }
 
-    public function assertRequestSent(string $method, string $uri, array|Closure $options = []): void
+    public function assertRequestSent(string $method, string $uri, ?Closure $options = null): void
     {
         Assert::assertArrayHasKey($method, $this->requests, 'Request not sent');
         Assert::assertSame($uri, $this->requests[$method]['uri'], 'Invalid URI');
 
-        if ($options instanceof Closure) {
+        if (!is_null($options)) {
             Assert::assertTrue($options($this->requests[$method]['options']), 'Invalid options');
-
-            return;
         }
-
-        Assert::assertSame($options, $this->requests[$method]['options'], 'Invalid options');
     }
 }

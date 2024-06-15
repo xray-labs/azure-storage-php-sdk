@@ -22,7 +22,7 @@ it('should create a request exception from a guzzle request exception interface'
     );
 
     expect(RequestException::createFromRequestException($guzzleException))
-        ->toBeInstanceOf($exceptionClass)
+        ->toBeInstanceOf($exceptionClass) // @phpstan-ignore-line
         ->getMessage()->toBe('Something went wrong')
         ->getCode()->toBe($statusCode)
         ->getPrevious()->toBe($guzzleException);

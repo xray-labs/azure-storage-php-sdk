@@ -11,12 +11,12 @@ use Sjpereira\AzureStoragePhpSdk\Parsers\XmlParser;
 uses()->group('blob-storage');
 
 it('should throw an exception if the account isn\'t provided', function () {
-    expect(new Config(['key' => 'my-account-key']))
+    expect(new Config(['key' => 'my-account-key'])) // @phpstan-ignore-line
         ->toBeInstance(Config::class);
 })->throws(InvalidArgumentException::class, 'Account name must be provided.');
 
 it('should throw an exception if the key isn\'t provided', function () {
-    expect(new Config(['account' => 'account']))
+    expect(new Config(['account' => 'account'])) // @phpstan-ignore-line
         ->toBeInstance(Config::class);
 })->throws(InvalidArgumentException::class, 'Account key must be provided.');
 

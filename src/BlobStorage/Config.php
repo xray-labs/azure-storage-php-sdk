@@ -34,11 +34,11 @@ final readonly class Config
      */
     public function __construct(array $config)
     {
-        if (empty($config['account'] ?? null)) {
+        if (empty($config['account'] ?? null)) { // @phpstan-ignore-line
             throw InvalidArgumentException::create('Account name must be provided.');
         }
 
-        if (empty($config['key'] ?? null)) {
+        if (empty($config['key'] ?? null)) { // @phpstan-ignore-line
             throw InvalidArgumentException::create('Account key must be provided.');
         }
 

@@ -38,8 +38,6 @@ class XmlConverter implements Converter
         return $result;
     }
 
-    public $key = '';
-
     /** @param array<string|int, int|string|float|bool|null|array<string|int, int|string|float|bool|null>> $source */
     protected function generateXmlRecursively(array $source, SimpleXMLElement &$xml): void
     {

@@ -20,7 +20,7 @@ class RequestFake implements Request
 
     protected bool $shouldAuthenticate = true;
 
-    /** @var array<string, scalar> */
+    /** @var array<string, array{endpoint: string, body?: string}|null> */
     protected array $methods = [
         'get'     => null,
         'post'    => null,
