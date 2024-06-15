@@ -41,7 +41,7 @@ it('should set header methods in headers class', function (string $method, strin
     'Content MD5'         => ['setContentMD5', '12345', 'Content-MD5'],
     'Content Type'        => ['setContentType', 'application/xml', 'Content-Type'],
     'Date'                => ['setDate', 'Sat, 15 Jun 2024 00:00:00 GMT', 'Date'],
-    'If-Modified-Since'   => ['setIfModifiedSince', 'Fri, 14 Jun 2024 00:00:00 GMT', 'If-Modified-Since'],
+    'If-Modified-Since'   => ['setIfModifiedSince', 'Thu, 13 Jun 2024 00:00:00 GMT', 'If-Modified-Since'],
     'If-Match'            => ['setIfMatch', 'match', 'If-Match'],
     'If-None-Match'       => ['setIfNoneMatch', 'none', 'If-None-Match'],
     'If-Unmodified-Since' => ['setIfUnmodifiedSince', 'Sun, 16 Jun 2024 00:00:00 GMT', 'If-Unmodified-Since'],

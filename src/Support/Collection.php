@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\Support;
 
+use ArrayAccess;
 use ArrayIterator;
+use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
 
 /**
  * @template TKey of array-key
  * @template TValue of object
- * @extends ArrayIterator<TKey, TValue>
+ * @implements IteratorAggregate<TKey, TValue>
+ * @implements ArrayAccess<TKey, TValue>
  */
-class Collection extends ArrayIterator implements JsonSerializable
+class Collection implements IteratorAggregate, ArrayAccess, JsonSerializable
 {
     /** @param array<TKey, TValue> $items */
     public function __construct(protected array $items = [])
