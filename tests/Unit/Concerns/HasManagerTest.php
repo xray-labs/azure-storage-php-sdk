@@ -10,6 +10,7 @@ uses()->group('concerns', 'traits');
 
 it('should throw an exception if the manager is not set', function () {
     $class = new class () {
+        /** @use HasManager<Manager> */
         use HasManager;
 
         public function throwException(): void
@@ -27,6 +28,7 @@ it('should get the manager out of the trait', function () {
     };
 
     $class = new class ($manager) {
+        /** @use HasManager<Manager> */
         use HasManager;
 
         public function __construct(Manager $manager)
@@ -46,6 +48,7 @@ it('should set the manager in the trait', function () {
     };
 
     $class = new class ($manager) {
+        /** @use HasManager<Manager> */
         use HasManager;
 
         public function __construct(protected Manager $managerToCheck)

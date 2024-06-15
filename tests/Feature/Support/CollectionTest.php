@@ -30,9 +30,9 @@ it('should be accessible', function (string $method, mixed $expected, ?int $para
         ->toBe($expected);
 })->with([
     'Get All Items'  => ['all', fn (array $values): bool => count($values) === 3],
-    'Get First Item' => ['first', fn (object $value): bool => $value->id === 1],
-    'Get Last Item'  => ['last', fn (object $value): bool => $value->id === 3],
-    'Get Item'       => ['get', fn (object $value): bool => $value->id === 2, 1],
+    'Get First Item' => ['first', fn (object $value): bool => $value->id === 1], // @phpstan-ignore-line
+    'Get Last Item'  => ['last', fn (object $value): bool => $value->id === 3], // @phpstan-ignore-line
+    'Get Item'       => ['get', fn (object $value): bool => $value->id === 2, 1], // @phpstan-ignore-line
     'Count Items'    => ['count', 3],
     'Is Empty'       => ['isEmpty', false],
     'Is Not Empty'   => ['isNotEmpty', true],
@@ -51,11 +51,11 @@ it('should be treated as an array', function (Closure $callback) {
         ->toBeTrue();
 })->with([
     'Key Exists' => [fn (Collection $collection): bool => isset($collection[2])],
-    'Get Key'    => [fn (Collection $collection): bool => $collection[1]->id === 2],
+    'Get Key'    => [fn (Collection $collection): bool => $collection[1]->id === 2], // @phpstan-ignore-line
     'Set Key'    => [function (Collection $collection): bool {
         $collection[4] = (object)['id' => 4];
 
-        return $collection[4]->id === 4;
+        return $collection[4]->id === 4; // @phpstan-ignore-line
     }],
     'Unset Key' => [function (Collection $collection): bool {
         unset($collection[2]);
