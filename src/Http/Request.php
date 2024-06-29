@@ -169,6 +169,12 @@ class Request implements RequestContract
             $this->usingAccountCallback = null;
         }
 
+        if (!is_null($endpoint)) {
+            [$endpoint, $params] = explode('?', $endpoint, 2);
+
+            $endpoint = implode('/', array_map('rawurlencode', explode('/', $endpoint))) . "?{$params}";
+        }
+
         return "https://{$account}.blob.core.windows.net/{$endpoint}";
     }
 }

@@ -13,15 +13,19 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\{
     ContainerMetadataManager,
 };
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
+use Sjpereira\AzureStoragePhpSdk\Concerns\HasRequestShared as HasRequestSharedTrait;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request};
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
+use Sjpereira\AzureStoragePhpSdk\Contracts\{HasRequestShared, Manager};
 use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 
 /**
  * @phpstan-import-type ContainerType from Container
  */
-readonly class ContainerManager implements Manager
+readonly class ContainerManager implements Manager, HasRequestShared
 {
+    /** @use HasRequestSharedTrait<Request> */
+    use HasRequestSharedTrait;
+
     public function __construct(protected Request $request)
     {
         //

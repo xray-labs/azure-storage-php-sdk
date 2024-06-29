@@ -51,6 +51,6 @@ final class Resource
             $result .= mb_convert_case($key, MB_CASE_LOWER, 'UTF-8') . ':' . $value . "\n";
         }
 
-        return ($parsed['path'] ?: '') . "\n" . rtrim($result, "\n");
+        return $parsed['path'] . "\n" . rtrim($result, "\n");
     }
 }
