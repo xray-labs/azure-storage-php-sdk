@@ -7,9 +7,12 @@ namespace Sjpereira\AzureStoragePhpSdk\Tests\Http;
 use Closure;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
+use Sjpereira\AzureStoragePhpSdk\Tests\Http\Concerns\HasHttpAssertions;
 
 class RequestFake implements Request
 {
+    use HasHttpAssertions;
+
     /** @var array<string, scalar> */
     protected array $options = [];
 
@@ -29,9 +32,18 @@ class RequestFake implements Request
         'options' => null,
     ];
 
+    protected ?ResponseFake $fakeResponse = null;
+
     public function __construct(protected Config $config)
     {
         //
+    }
+
+    public function withFakeResponse(ResponseFake $fakeResponse): static
+    {
+        $this->fakeResponse = $fakeResponse;
+
+        return $this;
     }
 
     public function usingAccount(Closure $callback): static
@@ -80,7 +92,7 @@ class RequestFake implements Request
             'endpoint' => $endpoint,
         ];
 
-        return new ResponseFake();
+        return $this->fakeResponse ?? new ResponseFake();
     }
 
     public function post(string $endpoint, string $body = ''): Response
@@ -90,7 +102,7 @@ class RequestFake implements Request
             'body'     => $body,
         ];
 
-        return new ResponseFake();
+        return $this->fakeResponse ?? new ResponseFake();
     }
 
     public function put(string $endpoint, string $body = ''): Response
@@ -100,7 +112,7 @@ class RequestFake implements Request
             'body'     => $body,
         ];
 
-        return new ResponseFake();
+        return $this->fakeResponse ?? new ResponseFake();
     }
 
     public function delete(string $endpoint): Response
@@ -109,7 +121,7 @@ class RequestFake implements Request
             'endpoint' => $endpoint,
         ];
 
-        return new ResponseFake();
+        return $this->fakeResponse ?? new ResponseFake();
     }
 
     public function options(string $endpoint): Response
@@ -118,6 +130,6 @@ class RequestFake implements Request
             'endpoint' => $endpoint,
         ];
 
-        return new ResponseFake();
+        return $this->fakeResponse ?? new ResponseFake();
     }
 }

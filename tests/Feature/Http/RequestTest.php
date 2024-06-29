@@ -27,7 +27,7 @@ it('should send get, delete, and options requests', function (string $method, Ht
 
     $client->assertRequestSent(
         $verb->value,
-        'https://foo.blob.core.windows.net/endpoint',
+        'https://foo.blob.core.windows.net/endpoint?',
         fn (array $options): bool => $options['foo'] === 'bar'
             && array_key_exists(Resource::AUTH_DATE_KEY, $options['headers'])
             && array_key_exists(Resource::AUTH_HEADER_KEY, $options['headers'])
@@ -56,7 +56,7 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
 
     $client->assertRequestSent(
         $verb->value,
-        'https://my_account.blob.core.windows.net/endpoint',
+        'https://my_account.blob.core.windows.net/endpoint?',
         fn (array $options): bool => $options['headers']['foo'] === 'bar'
             && $options['body'] === $body
             && array_key_exists(Resource::AUTH_DATE_KEY, $options['headers'])

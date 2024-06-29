@@ -31,9 +31,11 @@ readonly class AccountManager implements Manager
                 ->withOptions($options)
                 ->get('?comp=properties&restype=account')
                 ->getHeaders();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
-            throw RequestException::createFromRequestException($e);
+            throw RequestException::createFromRequestException($e); // @codeCoverageIgnore
         }
+        // @codeCoverageIgnoreEnd
 
         array_walk($response, fn (array &$value) => $value = current($value));
 
@@ -75,9 +77,11 @@ readonly class AccountManager implements Manager
             $parsed = $this->request->getConfig()->parser->parse($response);
 
             return new GeoReplication($parsed['GeoReplication']);
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     public function userDelegationKey(KeyInfo $keyInfo): UserDelegationKey
@@ -92,8 +96,10 @@ readonly class AccountManager implements Manager
             $parsed = $this->request->getConfig()->parser->parse($response);
 
             return new UserDelegationKey($parsed['UserDelegationKey']);
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 }

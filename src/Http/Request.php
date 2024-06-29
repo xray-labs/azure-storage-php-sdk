@@ -170,7 +170,7 @@ class Request implements RequestContract
         }
 
         if (!is_null($endpoint)) {
-            [$endpoint, $params] = explode('?', $endpoint, 2);
+            [$endpoint, $params] = array_pad(explode('?', $endpoint, 2), 2, '');
 
             $endpoint = implode('/', array_map('rawurlencode', explode('/', $endpoint))) . "?{$params}";
         }
