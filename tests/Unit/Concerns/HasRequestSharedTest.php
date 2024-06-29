@@ -16,7 +16,7 @@ it('should have a request shared property', function () {
         /** @use HasRequestShared<RequestFake> */
         use HasRequestShared;
 
-        public function __construct(protected Request $request)
+        public function __construct(protected RequestFake $request)
         {
             //
         }

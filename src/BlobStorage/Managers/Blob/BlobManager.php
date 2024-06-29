@@ -38,6 +38,7 @@ readonly class BlobManager implements Manager
         return new Blobs($this, $parsed['Blobs']['Blob'] ?? []);
     }
 
+    /** @param array<string, scalar> $options */
     public function get(string $blobName, array $options = []): string
     {
         try {

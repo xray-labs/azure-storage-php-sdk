@@ -8,6 +8,7 @@ use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Response;
 
 class ResponseFake implements Response
 {
+    /** @param array<string, scalar|scalar[]> $headers */
     public function __construct(
         protected string $body = '',
         protected int $statusCode = 200,

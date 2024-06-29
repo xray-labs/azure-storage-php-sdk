@@ -9,6 +9,7 @@ use PHPUnit\Framework\Assert;
 /** @internal */
 trait HasHttpAssertions
 {
+    /** @param array<string, scalar> $options */
     public function assertSentWithOptions(array $options): static
     {
         Assert::assertSame($options, $this->options);
@@ -16,6 +17,7 @@ trait HasHttpAssertions
         return $this;
     }
 
+    /** @param array<string, scalar> $headers */
     public function assertSentWithHeaders(array $headers): static
     {
         Assert::assertSame($headers, $this->headers);
@@ -45,7 +47,7 @@ trait HasHttpAssertions
         $this->assertMethod('post', $endpoint);
 
         if (!is_null($body)) {
-            Assert::assertSame($body, $this->methods['post']['body']);
+            Assert::assertSame($body, $this->methods['post']['body'] ?? '');
         }
 
         return $this;
@@ -56,7 +58,7 @@ trait HasHttpAssertions
         $this->assertMethod('put', $endpoint);
 
         if (!is_null($body)) {
-            Assert::assertSame($body, $this->methods['put']['body']);
+            Assert::assertSame($body, $this->methods['put']['body'] ?? '');
         }
 
         return $this;
@@ -79,6 +81,6 @@ trait HasHttpAssertions
     protected function assertMethod(string $method, string $endpoint): void
     {
         Assert::assertArrayHasKey($method, $this->methods);
-        Assert::assertSame($endpoint, $this->methods[$method]['endpoint']);
+        Assert::assertSame($endpoint, $this->methods[$method]['endpoint'] ?? '');
     }
 }

@@ -51,6 +51,7 @@ final class Blob
         $this->deleted = to_boolean($blob['Deleted'] ?? false);
     }
 
+    /** @param array<string, scalar> $options */
     public function get(array $options = []): string
     {
         $this->ensureManagerIsConfigured();

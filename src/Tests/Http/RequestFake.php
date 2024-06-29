@@ -9,6 +9,9 @@ use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
 use Sjpereira\AzureStoragePhpSdk\Tests\Http\Concerns\HasHttpAssertions;
 
+/**
+ * @phpstan-type Method array{endpoint: string, body?: string}
+ */
 class RequestFake implements Request
 {
     use HasHttpAssertions;
@@ -23,7 +26,7 @@ class RequestFake implements Request
 
     protected bool $shouldAuthenticate = true;
 
-    /** @var array<string, array{endpoint: string, body?: string}|null> */
+    /** @var array{get: ?Method, post: ?Method, put: ?Method, delete: ?Method, options: ?Method} */
     protected array $methods = [
         'get'     => null,
         'post'    => null,
