@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Authentication\Contracts\Auth;
 use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Sjpereira\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Sjpereira\AzureStoragePhpSdk\Http\Headers;
 
 uses()->group('authentications');

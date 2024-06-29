@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\Authentication;
 
-use Sjpereira\AzureStoragePhpSdk\Authentication\Contracts\Auth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Sjpereira\AzureStoragePhpSdk\Http\Headers;
 
 final class SharedKeyAuth implements Auth

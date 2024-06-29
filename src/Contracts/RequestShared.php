@@ -6,7 +6,9 @@ namespace Sjpereira\AzureStoragePhpSdk\Contracts;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 
-interface HasRequestShared
+/** @template TRequest of Request */
+interface RequestShared
 {
+    /** @return TRequest */
     public function getRequest(): Request;
 }

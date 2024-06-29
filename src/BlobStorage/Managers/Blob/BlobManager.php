@@ -6,9 +6,9 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs};
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request};
+use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\{RequestException};
+use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 
 /**
  * @phpstan-import-type BlobType from Blob

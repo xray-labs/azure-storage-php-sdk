@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Authentication\Contracts;
+namespace Sjpereira\AzureStoragePhpSdk\Contracts\Authentication;
 
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\Http\Headers;

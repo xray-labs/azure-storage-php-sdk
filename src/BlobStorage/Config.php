@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage;
 
-use Sjpereira\AzureStoragePhpSdk\Authentication\Contracts\Auth;
 use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
+use Sjpereira\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Sjpereira\AzureStoragePhpSdk\Contracts\{Converter, Parser};
 use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
