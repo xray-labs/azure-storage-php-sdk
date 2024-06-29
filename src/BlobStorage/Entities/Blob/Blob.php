@@ -51,8 +51,10 @@ final class Blob
         $this->deleted = to_boolean($blob['Deleted'] ?? false);
     }
 
-    public function get()
+    public function get(array $options = []): string
     {
-        return $this->manager->get($this->name);
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->get($this->name, $options);
     }
 }

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage;
 
 use GuzzleHttp\Client;
-use Sjpereira\AzureStoragePhpSdk\Authentication\Contracts\Auth;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
+use Sjpereira\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request as RequestContract;
 use Sjpereira\AzureStoragePhpSdk\Contracts\{Converter, Parser};
 use Sjpereira\AzureStoragePhpSdk\Http\Request;
@@ -34,5 +35,10 @@ final class BlobStorage
     public function containers(): ContainerManager
     {
         return new ContainerManager($this->request);
+    }
+
+    public function blobs(string $containerName): BlobManager
+    {
+        return new BlobManager($this->request, $containerName);
     }
 }

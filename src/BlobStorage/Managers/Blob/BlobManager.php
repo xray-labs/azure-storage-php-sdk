@@ -15,7 +15,7 @@ use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
  */
 readonly class BlobManager implements Manager
 {
-    public function __construct(protected string $containerName, protected Request $request)
+    public function __construct(protected Request $request, protected string $containerName)
     {
         //
     }
@@ -38,22 +38,30 @@ readonly class BlobManager implements Manager
         return new Blobs($this, $parsed['Blobs']['Blob'] ?? []);
     }
 
-    public function get(string $blobName, array $options = []): Blob
+    public function get(string $blobName, array $options = []): string
     {
         try {
-            $response = $this->request
+            return $this->request
                 ->withOptions($options)
-                ->get("{$this->containerName}/{$blobName}?")
+                ->get("{$this->containerName}/{$blobName}?resttype=blob")
                 ->getBody();
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+    }
 
-        dd($response);
+    public function properties(string $blobName): BlobPropertyManager
+    {
+        return new BlobPropertyManager($this->request, $this->containerName, $blobName, );
+    }
 
-        /** @var BlobType $parsed */
-        // $parsed = $this->request->getConfig()->parser->parse($response);
+    public function metadata(string $blobName): BlobMetadataManager
+    {
+        return new BlobMetadataManager($this->request, $this->containerName, $blobName);
+    }
 
-        // return new Blob($parsed)->setManager($this);
+    public function tags(string $blobName): BlobTagManager
+    {
+        return new BlobTagManager($this->request, $this->containerName, $blobName);
     }
 }

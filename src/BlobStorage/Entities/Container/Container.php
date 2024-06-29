@@ -83,6 +83,6 @@ final class Container
     {
         $this->ensureManagerIsConfigured();
 
-        return new BlobManager($this->name, $this->getManager()->getRequest());
+        return new BlobManager($this->getManager()->getRequest(), $this->name);
     }
 }
