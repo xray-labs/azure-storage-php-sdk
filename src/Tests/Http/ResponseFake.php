@@ -23,6 +23,13 @@ class ResponseFake implements Response
         return $this->headers;
     }
 
+    /** @return array<string, mixed> */
+    public function getHeaderLine(string $header): array
+    {
+        /** @var array<string, mixed> */
+        return $this->headers[$header] ?? [];
+    }
+
     public function getBody(): string
     {
         return $this->body;

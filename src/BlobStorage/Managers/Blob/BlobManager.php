@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 
 /**
  * @phpstan-import-type BlobType from Blob
+ * @phpstan-import-type FileType from File
  */
 readonly class BlobManager implements Manager
 {
@@ -39,13 +40,37 @@ readonly class BlobManager implements Manager
     }
 
     /** @param array<string, scalar> $options */
-    public function get(string $blobName, array $options = []): string
+    public function get(string $blobName, array $options = []): File
     {
         try {
-            return $this->request
+            $response = $this->request
                 ->withOptions($options)
-                ->get("{$this->containerName}/{$blobName}?resttype=blob")
-                ->getBody();
+                ->get("{$this->containerName}/{$blobName}?resttype=blob");
+
+            $body = $response->getBody();
+
+            /** @var FileType $headers */
+            $headers = $response->getHeaders();
+
+            $headers['Name'] = $blobName;
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+
+        return new File($body, (array)$headers);
+    }
+
+    /** @param array<string, scalar> $options */
+    public function put(string $blobName, string $content, array $options = []): void
+    {
+        try {
+            $this->request
+                ->withOptions($options)
+                ->withHeaders([
+                    'x-ms-blob-type' => 'BlockBlob',
+                    'x-ms-blob-content-md5' => base64_encode(md5($content, binary: true)),
+                ])
+                ->put("{$this->containerName}/{$blobName}?resttype=blob", $content);
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }

@@ -9,6 +9,9 @@ interface Response
     /** @return array<string, mixed> */
     public function getHeaders(): array;
 
+    /** @return array<string, mixed> */
+    public function getHeaderLine(string $header): array;
+
     public function getBody(): string;
 
     public function getStatusCode(): int;

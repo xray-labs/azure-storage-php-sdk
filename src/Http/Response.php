@@ -35,6 +35,12 @@ final class Response implements ResponseContract
         return $headers;
     }
 
+    /** @return array<string, mixed> */
+    public function getHeaderLine(string $header): array
+    {
+        return $this->response->getHeader($header);
+    }
+
     public function getBody(): string
     {
         return $this->response->getBody()->getContents();

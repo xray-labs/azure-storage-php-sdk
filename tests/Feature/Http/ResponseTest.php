@@ -17,6 +17,11 @@ it('should get headers', function (): void {
     expect($response->getHeaders())->toBe(['Content-Type' => 'application/json']);
 });
 
+it('should get header line', function (): void {
+    $response = new Response(new GuzzleResponse(200, ['Content-Type' => ['application/json']]));
+    expect($response->getHeaderLine('Content-Type'))->toBe(['application/json']);
+});
+
 it('should assert status code', function (int $statusCode, string $function): void {
     $response = new Response(new GuzzleResponse($statusCode));
     expect($response)
