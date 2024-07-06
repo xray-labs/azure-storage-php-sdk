@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty;
+namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobStorageProperty;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
 

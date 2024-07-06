@@ -52,7 +52,7 @@ final class Blob
     }
 
     /** @param array<string, scalar> $options */
-    public function get(array $options = []): string
+    public function get(array $options = []): File
     {
         $this->ensureManagerIsConfigured();
 

@@ -25,6 +25,8 @@ class Request implements RequestContract
     public function __construct(
         protected ClientInterface $client,
         public Config $config,
+        public string $protocol = 'https',
+        public string $baseDomain = 'blob.core.windows.net'
     ) {
         //
     }
@@ -175,6 +177,6 @@ class Request implements RequestContract
             $endpoint = implode('/', array_map('rawurlencode', explode('/', $endpoint))) . "?{$params}";
         }
 
-        return "https://{$account}.blob.core.windows.net/{$endpoint}";
+        return "{$this->protocol}://{$account}.{$this->baseDomain}/{$endpoint}";
     }
 }

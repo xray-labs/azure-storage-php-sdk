@@ -67,7 +67,7 @@ readonly class BlobManager implements Manager
             $this->request
                 ->withOptions($options)
                 ->withHeaders([
-                    'x-ms-blob-type' => 'BlockBlob',
+                    'x-ms-blob-type'        => 'BlockBlob',
                     'x-ms-blob-content-md5' => base64_encode(md5($content, binary: true)),
                 ])
                 ->put("{$this->containerName}/{$blobName}?resttype=blob", $content);

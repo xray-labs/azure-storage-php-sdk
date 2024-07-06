@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobProperty\Cors;
+namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobStorageProperty\Cors;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
 
