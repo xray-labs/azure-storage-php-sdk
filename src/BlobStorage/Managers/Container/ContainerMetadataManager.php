@@ -49,7 +49,7 @@ readonly class ContainerMetadataManager implements Manager
 
         foreach ($parameters as $key => $value) {
             $this->validateMetadataKey($key);
-            $headers[Resource::CONTAINER_META_PREFIX . $key] = urlencode($value);
+            $headers[Resource::METADATA_PREFIX . $key] = urlencode($value);
         }
 
         try {

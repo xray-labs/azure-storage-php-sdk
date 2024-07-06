@@ -87,9 +87,8 @@ class BlobPageManager implements Manager
 
         try {
             $this->create($file->name, $file->contentLength, $options, [
-                'Content-Type'   => $file->contentType,
-                'Content-Length' => $file->contentLength,
-                'Content-MD5'    => $file->contentMD5,
+                'Content-Type' => $file->contentType,
+                'Content-MD5'  => $file->contentMD5,
             ]);
 
             $this->append($file, 1, options: $options);

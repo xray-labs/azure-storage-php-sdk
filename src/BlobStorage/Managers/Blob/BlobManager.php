@@ -87,7 +87,7 @@ readonly class BlobManager implements Manager
 
     public function properties(string $blobName): BlobPropertyManager
     {
-        return new BlobPropertyManager($this->request, $this->containerName, $blobName, );
+        return new BlobPropertyManager($this->request, $this->containerName, $blobName);
     }
 
     public function metadata(string $blobName): BlobMetadataManager

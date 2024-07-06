@@ -27,7 +27,7 @@ final class Resource
     public const string DELETE_CONTAINER_NAME_KEY    = 'x-ms-deleted-container-name';
     public const string DELETE_CONTAINER_VERSION_KEY = 'x-ms-deleted-container-version';
 
-    public const string CONTAINER_META_PREFIX = 'x-ms-meta-';
+    public const string METADATA_PREFIX = 'x-ms-meta-';
 
     public const string ACCESS_CONTROL_REQUEST_METHOD_KEY  = 'Access-Control-Request-Method';
     public const string ACCESS_CONTROL_REQUEST_HEADERS_KEY = 'Access-Control-Request-Headers';

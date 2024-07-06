@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
+use Psr\Http\Client\RequestExceptionInterface;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobProperty;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 
+/**
+ * @phpstan-import-type BlobPropertyHeaders from BlobProperty
+ */
 class BlobPropertyManager implements Manager
 {
     public function __construct(
@@ -16,4 +22,34 @@ class BlobPropertyManager implements Manager
     ) {
         //
     }
+
+    /** @param array<string, scalar> $options */
+    public function get(array $options = []): BlobProperty
+    {
+        try {
+            /** @var BlobPropertyHeaders $headers */
+            $headers = $this->request
+                ->withOptions($options)
+                ->get("{$this->containerName}/{$this->blobName}?resttype=blob")
+                ->getHeaders();
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+
+        return new BlobProperty((array) $headers);
+    }
+
+    /** @param array<string, scalar> $options */
+    // public function save(BlobProperty $blobProperty, array $options = []): bool
+    // {
+    //     try {
+    //         return $this->request
+    //             ->withOptions($options)
+    //             ->withHeaders(['Content-Type' => 'application/xml'])
+    //             ->put('?comp=properties&restype=service', $blobProperty->toXml())
+    //             ->isAccepted();
+    //     } catch (RequestExceptionInterface $e) {
+    //         throw RequestException::createFromRequestException($e);
+    //     }
+    // }
 }
