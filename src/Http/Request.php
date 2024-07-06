@@ -145,7 +145,10 @@ class Request implements RequestContract
 
         if (!empty($body)) {
             $options['body'] = $body;
-            $headers->setContentLength(strlen($body));
+
+            if (!$headers->has('Content-Length')) {
+                $headers->setContentLength(strlen($body));
+            }
         }
 
         if ($this->shouldAuthenticate) {

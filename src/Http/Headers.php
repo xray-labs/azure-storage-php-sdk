@@ -115,6 +115,11 @@ final class Headers implements Stringable, Arrayable
         return $this;
     }
 
+    public function has(string $header): bool
+    {
+        return (bool) ($this->headers[$header] ?? false);
+    }
+
     public function setContentEncoding(string $contentEncoding): static
     {
         $this->headers['Content-Encoding'] = $contentEncoding;

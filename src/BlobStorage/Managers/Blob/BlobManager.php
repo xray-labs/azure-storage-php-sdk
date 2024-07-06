@@ -47,30 +47,32 @@ readonly class BlobManager implements Manager
                 ->withOptions($options)
                 ->get("{$this->containerName}/{$blobName}?resttype=blob");
 
-            $body = $response->getBody();
+            $content = $response->getBody();
 
             /** @var FileType $headers */
             $headers = $response->getHeaders();
-
-            $headers['Name'] = $blobName;
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
 
-        return new File($body, (array)$headers);
+        return new File($blobName, $content, (array)$headers);
     }
 
     /** @param array<string, scalar> $options */
-    public function put(string $blobName, string $content, array $options = []): void
+    public function put(File $file, array $options = []): void
     {
         try {
             $this->request
                 ->withOptions($options)
                 ->withHeaders([
-                    'x-ms-blob-type'        => 'BlockBlob',
-                    'x-ms-blob-content-md5' => base64_encode(md5($content, binary: true)),
+                    'x-ms-blob-type'         => 'BlockBlob',
+                    'x-ms-blob-content-md5'  => $file->contentMD5,
+                    'x-ms-blob-content-type' => $file->contentType,
+                    'Content-MD5'            => $file->contentMD5,
+                    'Content-Type'           => $file->contentType,
+                    'Content-Length'         => $file->contentLength,
                 ])
-                ->put("{$this->containerName}/{$blobName}?resttype=blob", $content);
+                ->put("{$this->containerName}/{$file->name}?resttype=blob", $file->content);
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }

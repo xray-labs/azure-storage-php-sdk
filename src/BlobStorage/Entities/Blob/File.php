@@ -5,69 +5,75 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
 use DateTimeImmutable;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidFileMimeTypeException;
 
 /**
- * @phpstan-type FileType array{Name?: string, Content-Length?: string, Content-Type?: string, Content-MD5?: string, Last-Modified?: string, Accept-Ranges?: string, ETag?: string, Vary?: string, Server?: string, x-ms-request-id?: string, x-ms-version?: string, x-ms-creation-time?: string, x-ms-lease-status?: string, x-ms-lease-state?: string, x-ms-blob-type?: string, x-ms-server-encrypted?: bool, Date?: string}
+ * @phpstan-type FileType array{Content-Length?: string, Content-Type?: string, Content-MD5?: string, Last-Modified?: string, Accept-Ranges?: string, ETag?: string, Vary?: string, Server?: string, x-ms-request-id?: string, x-ms-version?: string, x-ms-creation-time?: string, x-ms-lease-status?: string, x-ms-lease-state?: string, x-ms-blob-type?: string, x-ms-server-encrypted?: bool, Date?: string}
  */
-final class File
+final readonly class File
 {
-    public readonly string $content;
+    public string $content;
 
-    public readonly string $name;
+    public string $name;
 
-    public readonly string $contentLength;
+    public int $contentLength;
 
-    public readonly string $contentType;
+    public string $contentType;
 
-    public readonly string $contentMD5;
+    public string $contentMD5;
 
-    public readonly string $lastModified;
+    public string $lastModified;
 
-    public readonly string $acceptRanges;
+    public string $acceptRanges;
 
-    public readonly string $etag;
+    public string $etag;
 
-    public readonly string $vary;
+    public string $vary;
 
-    public readonly string $server;
+    public string $server;
 
-    public readonly string $xMsRequestId;
+    public string $xMsRequestId;
 
-    public readonly DateTimeImmutable $xMsVersion;
+    public DateTimeImmutable $xMsVersion;
 
-    public readonly DateTimeImmutable $xMsCreationTime;
+    public DateTimeImmutable $xMsCreationTime;
 
-    public readonly string $xMsLeaseStatus;
+    public string $xMsLeaseStatus;
 
-    public readonly string $xMsLeaseState;
+    public string $xMsLeaseState;
 
-    public readonly string $xMsBlobType;
+    public string $xMsBlobType;
 
-    public readonly bool $xMsServerEncrypted;
+    public bool $xMsServerEncrypted;
 
-    public readonly DateTimeImmutable $date;
+    public DateTimeImmutable $date;
 
-    /** @param FileType $file */
-    public function __construct(string $content, array $file)
+    /** @param FileType $options */
+    public function __construct(string $name, string $content, array $options = [])
     {
-        $this->content            = $content;
-        $this->name               = $file['Name'] ?? '';
-        $this->contentLength      = $file['Content-Length'] ?? '';
-        $this->contentType        = $file['Content-Type'] ?? '';
-        $this->contentMD5         = $file['Content-MD5'] ?? '';
-        $this->lastModified       = $file['Last-Modified'] ?? '';
-        $this->acceptRanges       = $file['Accept-Ranges'] ?? '';
-        $this->etag               = $file['ETag'] ?? '';
-        $this->vary               = $file['Vary'] ?? '';
-        $this->server             = $file['Server'] ?? '';
-        $this->xMsRequestId       = $file['x-ms-request-id'] ?? '';
-        $this->xMsVersion         = new DateTimeImmutable($file['x-ms-version'] ?? 'now');
-        $this->xMsCreationTime    = new DateTimeImmutable($file['x-ms-creation-time'] ?? 'now');
-        $this->xMsLeaseStatus     = $file['x-ms-lease-status'] ?? '';
-        $this->xMsLeaseState      = $file['x-ms-lease-state'] ?? '';
-        $this->xMsBlobType        = $file['x-ms-blob-type'] ?? '';
-        $this->xMsServerEncrypted = to_boolean($file['x-ms-server-encrypted'] ?? true);
-        $this->date               = new DateTimeImmutable($file['Date'] ?? 'now');
+        // if (empty($content)) {
+
+        // }
+
+        $this->content = $content;
+        $this->name    = $name;
+
+        $this->contentLength      = (int) ($options['Content-Length'] ?? strlen($this->content));
+        $this->contentType        = $options['Content-Type'] ?? $this->detectContentType();
+        $this->contentMD5         = $options['Content-MD5'] ?? base64_encode(md5($this->content, binary: true));
+        $this->lastModified       = $options['Last-Modified'] ?? '';
+        $this->acceptRanges       = $options['Accept-Ranges'] ?? '';
+        $this->etag               = $options['ETag'] ?? '';
+        $this->vary               = $options['Vary'] ?? '';
+        $this->server             = $options['Server'] ?? '';
+        $this->xMsRequestId       = $options['x-ms-request-id'] ?? '';
+        $this->xMsVersion         = new DateTimeImmutable($options['x-ms-version'] ?? 'now');
+        $this->xMsCreationTime    = new DateTimeImmutable($options['x-ms-creation-time'] ?? 'now');
+        $this->xMsLeaseStatus     = $options['x-ms-lease-status'] ?? '';
+        $this->xMsLeaseState      = $options['x-ms-lease-state'] ?? '';
+        $this->xMsBlobType        = $options['x-ms-blob-type'] ?? '';
+        $this->xMsServerEncrypted = to_boolean($options['x-ms-server-encrypted'] ?? true);
+        $this->date               = new DateTimeImmutable($options['Date'] ?? 'now');
     }
 
     public function stream(): void
@@ -92,5 +98,21 @@ final class File
         header('Expires: 0');
 
         echo $this->content;
+    }
+
+    private function detectContentType(): string
+    {
+        $file = tmpfile();
+        fwrite($file, $this->content);
+
+        $mimeType = mime_content_type($file);
+
+        fclose($file);
+
+        if (!$mimeType) {
+            throw InvalidFileMimeTypeException::create();
+        }
+
+        return $mimeType;
     }
 }
