@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
 use DateTimeImmutable;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidFileMimeTypeException;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\{CouldNotCreateTempFileException, InvalidFileMimeTypeException};
 
 /**
  * @phpstan-type FileType array{Content-Length?: string, Content-Type?: string, Content-MD5?: string, Last-Modified?: string, Accept-Ranges?: string, ETag?: string, Vary?: string, Server?: string, x-ms-request-id?: string, x-ms-version?: string, x-ms-creation-time?: string, x-ms-lease-status?: string, x-ms-lease-state?: string, x-ms-blob-type?: string, x-ms-server-encrypted?: bool, Date?: string}
@@ -103,7 +103,10 @@ final readonly class File
 
     private function detectContentType(): string
     {
-        $file = tmpfile();
+        if (($file = tmpfile()) === false) {
+            throw CouldNotCreateTempFileException::create('Could not create temporary file');
+        }
+
         fwrite($file, $this->content);
 
         $mimeType = mime_content_type($file);
