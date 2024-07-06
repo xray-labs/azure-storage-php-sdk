@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
 use DateTimeImmutable;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobMetadata;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 
 /**
- * @phpstan-type BlobPropertyHeaders array{Last-Modified?: string, x-ms-creation-time?: string, x-ms-tag-count?: int, x-ms-blob-type?: string, x-ms-copy-completion-time?: string|null, x-ms-copy-status-description?: string|null, x-ms-copy-id?: string|null, x-ms-copy-progress?: string|null, x-ms-copy-source?: string|null, x-ms-copy-status?: string|null, x-ms-incremental-copy?: string|null, x-ms-copy-destination-snapshot?: string|null, x-ms-lease-duration?: string|null, x-ms-lease-state?: string|null, x-ms-lease-status?: string|null, Content-Length?: int, Content-Type?: string|null, ETag?: string, Content-MD5?: string|null, Content-Encoding?: string|null, Content-Language?: string|null, Content-Disposition?: string|null, Cache-Control?: string|null, x-ms-blob-sequence-number?: int, x-ms-request-id?: string|null, x-ms-version?: string|null, Date?: string, Accept-Ranges?: string|null, x-ms-blob-committed-block-count?: string|null, x-ms-server-encrypted?: bool, x-ms-encryption-key-sha256?: string|null, x-ms-encryption-context?: string|null, x-ms-encryption-scope?: string|null, x-ms-access-tier?: string|null, x-ms-access-tier-inferred?: string|null, x-ms-archive-status?: string|null, x-ms-access-tier-change-time?: string|null, x-ms-client-request-id?: string|null, x-ms-rehydrate-priority?: string|null, x-ms-or-policy-id?: string|null, x-ms-last-access-time?: string|null, x-ms-blob-sealed?: string|null, x-ms-immutability-policy-until-date?: string|null, x-ms-immutability-policy-mode?: string|null, x-ms-legal-hold?: string|null, x-ms-owner?: string|null, x-ms-group?: string|null, x-ms-permissions?: string|null, x-ms-acl?: string|null, x-ms-resource-type?: string|null, x-ms-expiry-time?: string|null}
+ * @phpstan-type BlobPropertyHeaders array{Last-Modified?: string, x-ms-creation-time?: string, x-ms-tag-count?: int, x-ms-blob-type?: string, x-ms-copy-completion-time?: string|null, x-ms-copy-status-description?: string|null, x-ms-copy-id?: string|null, x-ms-copy-progress?: string|null, x-ms-copy-source?: string|null, x-ms-copy-status?: string|null, x-ms-incremental-copy?: string|null, x-ms-copy-destination-snapshot?: string|null, x-ms-lease-duration?: string|null, x-ms-lease-state?: string|null, x-ms-lease-status?: string|null, Content-Length?: int, Content-Type?: string|null, ETag?: string, Content-MD5?: string|null, Content-Encoding?: string|null, Content-Language?: string|null, Content-Disposition?: string|null, Cache-Control?: string|null, x-ms-blob-sequence-number?: int, x-ms-request-id?: string|null, x-ms-version?: string|null, Date?: string, Accept-Ranges?: string|null, x-ms-blob-committed-block-count?: string|null, x-ms-server-encrypted?: bool, x-ms-encryption-key-sha256?: string|null, x-ms-encryption-context?: string|null, x-ms-encryption-scope?: string|null, x-ms-access-tier?: string|null, x-ms-access-tier-inferred?: string|null, x-ms-archive-status?: string|null, x-ms-access-tier-change-time?: string|null, x-ms-client-request-id?: string|null, x-ms-rehydrate-priority?: string|null, x-ms-or-policy-id?: string|null, x-ms-last-access-time?: string|null, x-ms-blob-sealed?: string|null, x-ms-immutability-policy-until-date?: string|null, x-ms-immutability-policy-mode?: string|null, x-ms-legal-hold?: string|null, x-ms-owner?: string|null, x-ms-group?: string|null, x-ms-permissions?: string|null, x-ms-acl?: string|null, x-ms-resource-type?: string|null, x-ms-expiry-time?: string|null, leaseId?: string|null, sequenceNumberAction?: string|null, Origin?: string|null}
  * @suppressWarnings(PHPMD)
  */
 final readonly class BlobProperty
@@ -119,6 +118,12 @@ final readonly class BlobProperty
 
     public ?DateTimeImmutable $expiryTime;
 
+    public ?string $leaseId;
+
+    public ?string $sequenceNumberAction;
+
+    public ?string $origin;
+
     /** @param BlobPropertyHeaders $property */
     public function __construct(array $property)
     {
@@ -174,5 +179,29 @@ final readonly class BlobProperty
         $this->expiryTime                  = isset($property['x-ms-expiry-time']) ? new DateTimeImmutable($property['x-ms-expiry-time']) : null;
         $this->acl                         = isset($property['x-ms-acl']) ? array_pad(explode(':', $property['x-ms-acl']), 4, '') : null;
         $this->metadata                    = new BlobMetadata(array_filter((array) $property, fn (string $key) => str_starts_with($key, Resource::METADATA_PREFIX), ARRAY_FILTER_USE_KEY));
+        $this->leaseId                     = $property['leaseId'] ?? null;
+        $this->sequenceNumberAction        = $property['sequenceNumberAction'] ?? null;
+        $this->origin                      = $property['Origin'] ?? null;
+    }
+
+    /**
+     * @return array{x-ms-blob-cache-control?: string, x-ms-blob-content-type?: string, x-ms-blob-content-md5?: string, x-ms-blob-content-encoding?: string, x-ms-blob-content-language?: string, x-ms-lease-id?: string, x-ms-client-request-id?: string, x-ms-blob-content-disposition?: string, Origin?: string, x-ms-blob-content-length?: int, x-ms-sequence-number-action?: string, x-ms-blob-sequence-number?: int}
+     */
+    public function getPropertiesToSave(): array
+    {
+        return array_filter([
+            'x-ms-blob-cache-control'       => $this->cacheControl,
+            'x-ms-blob-content-type'        => $this->contentType,
+            'x-ms-blob-content-md5'         => $this->contentMD5,
+            'x-ms-blob-content-encoding'    => $this->contentEncoding,
+            'x-ms-blob-content-language'    => $this->contentLanguage,
+            'x-ms-lease-id'                 => $this->leaseId,
+            'x-ms-client-request-id'        => $this->clientRequestId,
+            'x-ms-blob-content-disposition' => $this->contentDisposition,
+            'Origin'                        => $this->origin,
+            'x-ms-blob-content-length'      => $this->contentLength,
+            'x-ms-sequence-number-action'   => $this->sequenceNumberAction,
+            'x-ms-blob-sequence-number'     => $this->blobSequenceNumber,
+        ]);
     }
 }

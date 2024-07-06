@@ -40,16 +40,16 @@ class BlobPropertyManager implements Manager
     }
 
     /** @param array<string, scalar> $options */
-    // public function save(BlobProperty $blobProperty, array $options = []): bool
-    // {
-    //     try {
-    //         return $this->request
-    //             ->withOptions($options)
-    //             ->withHeaders(['Content-Type' => 'application/xml'])
-    //             ->put('?comp=properties&restype=service', $blobProperty->toXml())
-    //             ->isAccepted();
-    //     } catch (RequestExceptionInterface $e) {
-    //         throw RequestException::createFromRequestException($e);
-    //     }
-    // }
+    public function save(BlobProperty $blobProperty, array $options = []): bool
+    {
+        try {
+            return $this->request
+                ->withOptions($options)
+                ->withHeaders($blobProperty->getPropertiesToSave())
+                ->put("{$this->containerName}/{$this->blobName}?comp=properties&resttype=blob")
+                ->isOk();
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+    }
 }
