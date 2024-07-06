@@ -25,4 +25,9 @@ class RequestException extends Exception
             default => new self($exception->getMessage(), $exception->getCode(), $exception),
         };
     }
+
+    public static function createFromMessage(string $message): self
+    {
+        return new self($message);
+    }
 }

@@ -16,14 +16,14 @@ it('should be an exception', function () {
 
 it('should create a request exception from a guzzle request exception interface', function (int $statusCode, string $exceptionClass) {
     $guzzleException = new GuzzleRequestException(
-        'Something went wrong',
+        $message = 'Something went wrong',
         new Request('GET', 'http://example.com'),
         new Response($statusCode),
     );
 
     expect(RequestException::createFromRequestException($guzzleException))
         ->toBeInstanceOf($exceptionClass) // @phpstan-ignore-line
-        ->getMessage()->toBe('Something went wrong')
+        ->getMessage()->toBe($message)
         ->getCode()->toBe($statusCode)
         ->getPrevious()->toBe($guzzleException);
 })->with([
@@ -41,3 +41,9 @@ it('should create a request exception from a guzzle request exception interface'
     'Service Unavailable'   => [503, RequestException::class],
     'Gateway Timeout'       => [504, RequestException::class],
 ]);
+
+it('should create a request exception from a message', function () {
+    expect(RequestException::createFromMessage($message = 'Other error message'))
+        ->toBeInstanceOf(RequestException::class)
+        ->getMessage()->toBe($message);
+});

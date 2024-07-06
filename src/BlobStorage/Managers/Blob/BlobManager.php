@@ -59,10 +59,10 @@ readonly class BlobManager implements Manager
     }
 
     /** @param array<string, scalar> $options */
-    public function put(File $file, array $options = []): void
+    public function putBlock(File $file, array $options = []): bool
     {
         try {
-            $this->request
+            return $this->request
                 ->withOptions($options)
                 ->withHeaders([
                     'x-ms-blob-type'         => 'BlockBlob',
@@ -72,10 +72,17 @@ readonly class BlobManager implements Manager
                     'Content-Type'           => $file->contentType,
                     'Content-Length'         => $file->contentLength,
                 ])
-                ->put("{$this->containerName}/{$file->name}?resttype=blob", $file->content);
+                ->put("{$this->containerName}/{$file->name}?resttype=blob", $file->content)
+                ->isCreated();
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+    }
+
+    public function pages(): BlobPageManager
+    {
+        return (new BlobPageManager($this->request, $this->containerName))
+            ->setManager($this);
     }
 
     public function properties(string $blobName): BlobPropertyManager

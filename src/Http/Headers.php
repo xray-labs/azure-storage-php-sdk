@@ -200,7 +200,7 @@ final class Headers implements Stringable, Arrayable
 
     public function toArray(): array
     {
-        $headers = array_filter($this->headers);
+        $headers = array_filter($this->headers, fn (mixed $value) => $value !== null);
 
         return array_merge($headers, $this->additionalHeaders);
     }
