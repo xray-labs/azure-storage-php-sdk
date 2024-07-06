@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobStorageProperty;
+namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\BlobStorageProperty\Cors\Cors;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cors\Cors;
 use Sjpereira\AzureStoragePhpSdk\Contracts\{Arrayable, Xmlable};
 use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
 
