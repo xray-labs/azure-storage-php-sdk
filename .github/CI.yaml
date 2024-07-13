@@ -1,0 +1,38 @@
+name: PHP CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run PHPMD
+        run: ./vendor/bin/phpmd src/ text phpmd.xml
+
+      - name: Run PHP_CodeSniffer
+        run: ./vendor/bin/phpcs --standard=phpcs.xml
+
+      - name: Run Pint Check
+        run: ./vendor/bin/pint --test
+
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyse
+
+      - name: Run Pest
+        run: ./vendor/bin/pest --coverage --min=100 --parallel

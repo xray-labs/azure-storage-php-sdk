@@ -1,0 +1,18 @@
+parameters:
+    level: 9
+    paths:
+        - src/
+        - tests/
+    ignoreErrors:
+        -
+            messages:
+                - '#Call to an undefined method Pest\\PendingCalls\\TestCall\:\:expect\(\)#'
+                - '#Undefined variable\: \$this#'
+                - '#Call to an undefined method Pest(\\Mixins)?\\Expectation\<.+?\>\:\:[a-zA-Z]+?\(\)#'
+                - '#Access to an undefined property Pest(\\Mixins)?\\Expectation\<.+?\>\:\:\$[a-zA-Z]+?#'
+            path: tests/
+        -
+            messages:
+                - '#Parameter \#[0-9]+? \$[a-zA-Z0-9]+? of function array_walk expects callable\(mixed, string\)\: mixed, Closure\(array\)\: mixed given#'
+            path: src/
+    
