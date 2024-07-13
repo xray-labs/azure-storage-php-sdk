@@ -29,7 +29,7 @@ trait HasHttpAssertions
     {
         Assert::assertIsCallable($this->usingAccountCallback, 'Account callback not set');
 
-        $value = call_user_func($this->usingAccountCallback, $this->getConfig()->account);
+        $value = call_user_func($this->usingAccountCallback, $this->getConfig()->auth->getAccount());
         Assert::assertSame($account, $value);
 
         return $this;

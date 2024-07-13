@@ -168,7 +168,7 @@ class Request implements RequestContract
 
     protected function uri(?string $endpoint = null): string
     {
-        $account = $this->config->account;
+        $account = $this->config->auth->getAccount();
 
         if (!is_null($this->usingAccountCallback)) {
             $account = call_user_func($this->usingAccountCallback, $account);

@@ -7,6 +7,7 @@ use GuzzleHttp\Promise\{Promise, PromiseInterface};
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Assert;
 use Psr\Http\Message\{RequestInterface, ResponseInterface};
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Response as HttpResponse;
@@ -15,7 +16,7 @@ use Sjpereira\AzureStoragePhpSdk\Http\Request;
 uses()->group('http');
 
 it('should send get, delete, and options requests', function (string $method, HttpVerb $verb): void {
-    $config = new Config(['account' => 'my_account', 'key' => 'bar']);
+    $config = new Config(new SharedKeyAuth('my_account', 'bar'));
 
     $request = (new Request($config, $client = new Client()))
         ->withAuthentication()
@@ -40,7 +41,7 @@ it('should send get, delete, and options requests', function (string $method, Ht
 ]);
 
 it('should send post and put requests', function (string $method, HttpVerb $verb): void {
-    $config = new Config(['account' => 'my_account', 'key' => 'bar']);
+    $config = new Config(new SharedKeyAuth('my_account', 'bar'));
 
     $request = (new Request($config, $client = new Client()))
         ->withoutAuthentication()
@@ -69,7 +70,7 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
 ]);
 
 it('should get request config', function (): void {
-    $config = new Config(['account' => 'my_account', 'key' => 'bar']);
+    $config = new Config(new SharedKeyAuth('my_account', 'bar'));
 
     expect((new Request($config, new Client()))->getConfig())
         ->toBe($config);

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\{AccountInformation, GeoReplication};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestManager, StoragePropertyManager};
@@ -11,7 +12,7 @@ use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'accounts');
 
 it('should get account\'s managers', function (string $method, string $class) {
-    $request = new RequestFake(new Config(['account' => 'account', 'key' => 'key']));
+    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
     expect(new AccountManager($request))
         ->{$method}()->toBeInstanceOf($class);
@@ -21,7 +22,7 @@ it('should get account\'s managers', function (string $method, string $class) {
 ]);
 
 it('should get account information', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Server'              => ['Server'],
             'x-ms-request-id'     => ['d5a5d3f6-0000-0000-0000-000000000000'],
@@ -57,7 +58,7 @@ it('should get account blob service stats', function () {
     </StorageServiceStats>
     XML;
 
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake($body));
 
     expect((new AccountManager($request))->blobServiceStats(['some' => 'value']))

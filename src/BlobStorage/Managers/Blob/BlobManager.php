@@ -7,6 +7,7 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
@@ -39,6 +40,33 @@ readonly class BlobManager implements Manager
         $parsed = $this->request->getConfig()->parser->parse($response);
 
         return new Blobs($this, $parsed['Blobs']['Blob'] ?? []);
+    }
+
+    /**
+     * Find Blobs by Tags operation finds all blobs in the storage account whose tags match a search expression.
+     * @param array<string, scalar> $options
+     * @return BlobTagQuery<BlobManager, Blobs>
+     */
+    public function findByTag(array $options = []): BlobTagQuery
+    {
+        /** @var BlobTagQuery<BlobManager, Blobs> */
+        return (new BlobTagQuery($this))
+            ->whenBuild(function (string $query) use ($options): Blobs {
+                try {
+                    $response = $this->request
+                        ->withOptions($options)
+                        ->get("{$this->containerName}/?restype=container&comp=blobs&where={$query}")
+                        ->getBody();
+                } catch (RequestExceptionInterface $e) {
+                    throw RequestException::createFromRequestException($e);
+                }
+
+                /** @var array{Blobs?: array{Blob: BlobTypeStan|BlobTypeStan[]}} $parsed */
+                $parsed = $this->request->getConfig()->parser->parse($response);
+
+                return new Blobs($this, $parsed['Blobs']['Blob'] ?? []);
+            });
+
     }
 
     /** @param array<string, scalar> $options */
