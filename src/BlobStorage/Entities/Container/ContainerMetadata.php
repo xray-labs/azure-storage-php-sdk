@@ -20,11 +20,7 @@ final readonly class ContainerMetadata
 
     public DateTimeImmutable $date;
 
-    /**
-     * Undocumented function
-     *
-     * @param array<string> $containerMetadata
-     */
+    /** @param array<string> $containerMetadata */
     public function __construct(array $containerMetadata)
     {
         $this->lastModified = new DateTimeImmutable($containerMetadata['Last-Modified'] ?? 'now');
