@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage;
 
-use GuzzleHttp\Client;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
 use Sjpereira\AzureStoragePhpSdk\Contracts\Authentication\Auth;
@@ -24,7 +23,7 @@ final class BlobStorage
     {
         $config = new Config($options);
 
-        return new self($request ?? new Request(new Client(), $config));
+        return new self($request ?? new Request($config));
     }
 
     public function account(): AccountManager

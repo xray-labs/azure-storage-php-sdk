@@ -23,8 +23,6 @@ final readonly class AccountInformation
     public DateTimeImmutable $date;
 
     /**
-     * Undocumented function
-     *
      * @param array{
      *  Server: ?string,
      *  x-ms-request-id: ?string,
