@@ -28,9 +28,10 @@ it('should assert status code', function (int $statusCode, string $function): vo
         ->$function()->toBeTrue()
         ->getStatusCode()->toBe($statusCode);
 })->with([
-    'OK'       => [200, 'isOk'],
-    'Created'  => [201, 'isCreated'],
-    'Accepted' => [202, 'isAccepted'],
+    'OK'         => [200, 'isOk'],
+    'Created'    => [201, 'isCreated'],
+    'Accepted'   => [202, 'isAccepted'],
+    'No Content' => [204, 'isNoContent'],
 ]);
 
 it('should get body', function (): void {

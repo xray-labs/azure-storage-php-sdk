@@ -17,7 +17,7 @@ uses()->group('http');
 it('should send get, delete, and options requests', function (string $method, HttpVerb $verb): void {
     $config = new Config(['account' => 'my_account', 'key' => 'bar']);
 
-    $request = (new Request($client = new Client(), $config))
+    $request = (new Request($config, $client = new Client()))
         ->withAuthentication()
         ->usingAccount(fn (): string => 'foo')
         ->withOptions(['foo' => 'bar']);
@@ -42,7 +42,7 @@ it('should send get, delete, and options requests', function (string $method, Ht
 it('should send post and put requests', function (string $method, HttpVerb $verb): void {
     $config = new Config(['account' => 'my_account', 'key' => 'bar']);
 
-    $request = (new Request($client = new Client(), $config))
+    $request = (new Request($config, $client = new Client()))
         ->withoutAuthentication()
         ->withHeaders(['foo' => 'bar']);
 
@@ -71,7 +71,7 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
 it('should get request config', function (): void {
     $config = new Config(['account' => 'my_account', 'key' => 'bar']);
 
-    expect((new Request(new Client(), $config))->getConfig())
+    expect((new Request($config, new Client()))->getConfig())
         ->toBe($config);
 });
 
