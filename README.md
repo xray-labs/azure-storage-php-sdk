@@ -9,16 +9,26 @@ Integrate with Azure's cloud storage services
 ## Installation
 
 ```bash
-composer require blablabla/blablabla
+composer require sjpereira/azure-storage-php-sdk
 ```
 
 ## Usage
 
-TODO
+Setup Blob Storage
 
-## Contributing
+```php
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\{BlobStorage, Config};
+use Sjpereira\AzureStoragePhpSdk\Http\Request;
 
-Contributions are welcome! Please follow the guidelines in [CONTRIBUTING.md](CONTRIBUTING.md).
+$request = new Request(new Config([
+    'account' => 'your_account_name',
+    'key'     => 'your_account_key',
+]));
+
+$blobStorage = new BlobStorage($request);
+```
+
+[Storage Account](docs/StorageAccount.md)
 
 ## License
 

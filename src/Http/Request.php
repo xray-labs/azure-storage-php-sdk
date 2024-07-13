@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\Http;
 
 use Closure;
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
@@ -12,6 +13,8 @@ use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request as RequestContract, Res
 
 class Request implements RequestContract
 {
+    protected ClientInterface $client;
+
     /** @var array<string, scalar> */
     protected array $options = [];
 
@@ -23,12 +26,12 @@ class Request implements RequestContract
     protected bool $shouldAuthenticate = true;
 
     public function __construct(
-        protected ClientInterface $client,
         public Config $config,
+        ?ClientInterface $client = null,
         public string $protocol = 'https',
         public string $baseDomain = 'blob.core.windows.net'
     ) {
-        //
+        $this->client = $client ?? new Client();
     }
 
     public function usingAccount(Closure $callback): static
