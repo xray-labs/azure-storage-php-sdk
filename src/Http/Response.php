@@ -9,9 +9,10 @@ use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Response as ResponseContract;
 
 final class Response implements ResponseContract
 {
-    public const int STATUS_OK       = 200;
-    public const int STATUS_CREATED  = 201;
-    public const int STATUS_ACCEPTED = 202;
+    public const int STATUS_OK         = 200;
+    public const int STATUS_CREATED    = 201;
+    public const int STATUS_ACCEPTED   = 202;
+    public const int STATUS_NO_CONTENT = 204;
 
     public function __construct(protected ResponseInterface $response)
     {
@@ -64,5 +65,10 @@ final class Response implements ResponseContract
     public function isAccepted(): bool
     {
         return $this->getStatusCode() === self::STATUS_ACCEPTED;
+    }
+
+    public function isNoContent(): bool
+    {
+        return $this->getStatusCode() === self::STATUS_NO_CONTENT;
     }
 }

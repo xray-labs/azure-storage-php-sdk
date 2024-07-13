@@ -21,4 +21,6 @@ interface Response
     public function isCreated(): bool;
 
     public function isAccepted(): bool;
+
+    public function isNoContent(): bool;
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\Tests\Http;
 
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Response;
+use Sjpereira\AzureStoragePhpSdk\Http\Response as BaseResponse;
 
 class ResponseFake implements Response
 {
@@ -42,16 +43,21 @@ class ResponseFake implements Response
 
     public function isOk(): bool
     {
-        return $this->getStatusCode() === 200;
+        return $this->getStatusCode() === BaseResponse::STATUS_OK;
     }
 
     public function isCreated(): bool
     {
-        return $this->getStatusCode() === 201;
+        return $this->getStatusCode() === BaseResponse::STATUS_CREATED;
     }
 
     public function isAccepted(): bool
     {
-        return $this->getStatusCode() === 202;
+        return $this->getStatusCode() === BaseResponse::STATUS_ACCEPTED;
+    }
+
+    public function isNoContent(): bool
+    {
+        return $this->getStatusCode() === BaseResponse::STATUS_NO_CONTENT;
     }
 }
