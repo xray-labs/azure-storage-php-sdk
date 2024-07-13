@@ -84,9 +84,9 @@ it('should parse all the given headers into the headers class', function () {
 it('should get all canonical headers from the headers class', function () {
     $additionalHeaders = [
         'another-header'                                    => 'other-value',
-        Resource::AUTH_DATE_KEY                             => 'Fri, 14 Jun 2024 00:00:00 GMT',
+        Resource::AUTH_DATE                                 => 'Fri, 14 Jun 2024 00:00:00 GMT',
         Resource::CANONICAL_HEADER_PREFIX . 'should-create' => false,
-        Resource::AUTH_VERSION_KEY                          => '2021-06-08',
+        Resource::AUTH_VERSION                              => '2021-06-08',
         Resource::CANONICAL_HEADER_PREFIX . 'should-delete' => true,
         'new-header'                                        => 'new-value',
     ];

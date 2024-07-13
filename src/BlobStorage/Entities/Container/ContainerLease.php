@@ -38,11 +38,11 @@ final class ContainerLease
         $this->lastModified = new DateTimeImmutable($containerLease['Last-Modified'] ?? 'now');
         $this->etag         = $containerLease['ETag'] ?? '';
         $this->server       = $containerLease['Server'] ?? '';
-        $this->requestId    = $containerLease[Resource::REQUEST_ID_KEY] ?? '';
-        $this->version      = $containerLease[Resource::AUTH_VERSION_KEY] ?? '';
+        $this->requestId    = $containerLease[Resource::REQUEST_ID] ?? '';
+        $this->version      = $containerLease[Resource::AUTH_VERSION] ?? '';
         $this->date         = new DateTimeImmutable($containerLease['Date'] ?? 'now');
 
-        $this->leaseId = $containerLease[Resource::LEASE_ID_KEY]
+        $this->leaseId = $containerLease[Resource::LEASE_ID]
             ?? null;
     }
 

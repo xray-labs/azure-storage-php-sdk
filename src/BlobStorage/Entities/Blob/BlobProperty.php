@@ -190,18 +190,18 @@ final readonly class BlobProperty
     public function getPropertiesToSave(): array
     {
         return array_filter([
-            'x-ms-blob-cache-control'       => $this->cacheControl,
-            'x-ms-blob-content-type'        => $this->contentType,
-            'x-ms-blob-content-md5'         => $this->contentMD5,
-            'x-ms-blob-content-encoding'    => $this->contentEncoding,
-            'x-ms-blob-content-language'    => $this->contentLanguage,
-            'x-ms-lease-id'                 => $this->leaseId,
-            'x-ms-client-request-id'        => $this->clientRequestId,
-            'x-ms-blob-content-disposition' => $this->contentDisposition,
-            'Origin'                        => $this->origin,
-            'x-ms-blob-content-length'      => $this->contentLength,
-            'x-ms-sequence-number-action'   => $this->sequenceNumberAction,
-            'x-ms-blob-sequence-number'     => $this->blobSequenceNumber,
+            Resource::BLOB_CACHE_CONTROL       => $this->cacheControl,
+            Resource::BLOB_CONTENT_TYPE        => $this->contentType,
+            Resource::BLOB_CONTENT_MD5         => $this->contentMD5,
+            Resource::BLOB_CONTENT_ENCODING    => $this->contentEncoding,
+            Resource::BLOB_CONTENT_LANGUAGE    => $this->contentLanguage,
+            Resource::LEASE_ID                 => $this->leaseId,
+            Resource::CLIENT_REQUEST_ID        => $this->clientRequestId,
+            Resource::BLOB_CONTENT_DISPOSITION => $this->contentDisposition,
+            Resource::ORIGIN                   => $this->origin,
+            Resource::BLOB_CONTENT_LENGTH      => $this->contentLength,
+            Resource::SEQUENCE_NUMBER_ACTION   => $this->sequenceNumberAction,
+            Resource::BLOB_SEQUENCE_NUMBER     => $this->blobSequenceNumber,
         ]);
     }
 }

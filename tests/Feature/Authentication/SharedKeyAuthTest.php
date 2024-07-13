@@ -99,13 +99,13 @@ it('should get correctly the authentication signature for all canonical headers'
     expect($auth->getAuthentication($verb, $headers, '/'))
         ->toBe("SharedKey {$account}:{$signature}");
 })->with([
-    'Auth Date'          => [Resource::AUTH_DATE_KEY, '2024-06-10T00:00:00.000Z'],
-    'Auth Version'       => [Resource::AUTH_VERSION_KEY, '2021-06-08'],
-    'Client Request Id'  => [Resource::CLIENT_REQUEST_ID_KEY, 'client-request-id'],
-    'Request Id'         => [Resource::REQUEST_ID_KEY, 'request-id'],
-    'Lease Id'           => [Resource::LEASE_ID_KEY, 'lease-id'],
-    'Lease Action'       => [Resource::LEASE_ACTION_KEY, 'renew'],
-    'Lease Break Period' => [Resource::LEASE_BREAK_PERIOD_KEY, 'break-period'],
-    'Lease Duration'     => [Resource::LEASE_DURATION_KEY, 'duration'],
-    'Lease Proposed Id'  => [Resource::LEASE_PROPOSED_ID_KEY, 'proposed-id'],
+    'Auth Date'          => [Resource::AUTH_DATE, '2024-06-10T00:00:00.000Z'],
+    'Auth Version'       => [Resource::AUTH_VERSION, '2021-06-08'],
+    'Client Request Id'  => [Resource::CLIENT_REQUEST_ID, 'client-request-id'],
+    'Request Id'         => [Resource::REQUEST_ID, 'request-id'],
+    'Lease Id'           => [Resource::LEASE_ID, 'lease-id'],
+    'Lease Action'       => [Resource::LEASE_ACTION, 'renew'],
+    'Lease Break Period' => [Resource::LEASE_BREAK_PERIOD, 'break-period'],
+    'Lease Duration'     => [Resource::LEASE_DURATION, 'duration'],
+    'Lease Proposed Id'  => [Resource::LEASE_PROPOSED_ID, 'proposed-id'],
 ]);

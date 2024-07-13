@@ -5,22 +5,20 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, File};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\File;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 
-/**
- * @phpstan-import-type BlobType from Blob
- * @phpstan-import-type FileType from File
- */
 class BlobPageManager implements Manager
 {
     /** @use HasManager<BlobManager> */
     use HasManager;
 
-    public const int PAGE_SIZE = 512;
+    public const int PAGE_SIZE_BYTES = 512;
 
     public function __construct(protected readonly Request $request, protected readonly string $containerName)
     {
@@ -39,8 +37,8 @@ class BlobPageManager implements Manager
             return $this->request
                 ->withOptions($options)
                 ->withHeaders(array_merge([
-                    'x-ms-blob-type'           => 'PageBlob',
-                    'x-ms-blob-content-length' => $length,
+                    Resource::BLOB_TYPE           => BlobType::PAGE->value,
+                    Resource::BLOB_CONTENT_LENGTH => $length,
                 ], $headers))
                 ->put("{$this->containerName}/{$name}?resttype=blob")
                 ->isCreated();
@@ -128,14 +126,14 @@ class BlobPageManager implements Manager
 
         $file = $this->getManager()->get($name);
 
-        $this->clear($name, 1, (int)($file->contentLength / self::PAGE_SIZE), $options);
+        $this->clear($name, 1, (int)($file->contentLength / self::PAGE_SIZE_BYTES), $options);
     }
 
     /** @return array{startByte: int, endByte: int} */
     private function getPageRange(int $page): array
     {
-        $endByte   = $page * self::PAGE_SIZE - 1;
-        $startByte = $endByte - self::PAGE_SIZE + 1;
+        $endByte   = $page * self::PAGE_SIZE_BYTES - 1;
+        $startByte = $endByte - self::PAGE_SIZE_BYTES + 1;
 
         return [
             'startByte' => $startByte,
@@ -145,7 +143,7 @@ class BlobPageManager implements Manager
 
     private function validatePageSize(int $startByte, int $endByte, ?int $fileSize = null): void
     {
-        if ($endByte < self::PAGE_SIZE - 1 || $startByte < 0) {
+        if ($endByte < self::PAGE_SIZE_BYTES - 1 || $startByte < 0) {
             throw InvalidArgumentException::create('The start page should be greater than 0');
         }
 
@@ -160,7 +158,7 @@ class BlobPageManager implements Manager
 
     private function validatePageBytesBoundary(int $length): void
     {
-        if ($length % self::PAGE_SIZE !== 0) {
+        if ($length % self::PAGE_SIZE_BYTES !== 0) {
             throw InvalidArgumentException::create('Page blob size must be aligned to a 512-byte boundary.');
         }
     }

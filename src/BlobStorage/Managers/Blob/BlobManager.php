@@ -6,12 +6,14 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 
 /**
- * @phpstan-import-type BlobType from Blob
+ * @phpstan-import-type BlobType from Blob as BlobTypeStan
  * @phpstan-import-type FileType from File
  */
 readonly class BlobManager implements Manager
@@ -33,7 +35,7 @@ readonly class BlobManager implements Manager
             throw RequestException::createFromRequestException($e);
         }
 
-        /** @var array{Blobs?: array{Blob: BlobType|BlobType[]}} $parsed */
+        /** @var array{Blobs?: array{Blob: BlobTypeStan|BlobTypeStan[]}} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
         return new Blobs($this, $parsed['Blobs']['Blob'] ?? []);
@@ -65,12 +67,12 @@ readonly class BlobManager implements Manager
             return $this->request
                 ->withOptions($options)
                 ->withHeaders([
-                    'x-ms-blob-type'         => 'BlockBlob',
-                    'x-ms-blob-content-md5'  => $file->contentMD5,
-                    'x-ms-blob-content-type' => $file->contentType,
-                    'Content-MD5'            => $file->contentMD5,
-                    'Content-Type'           => $file->contentType,
-                    'Content-Length'         => $file->contentLength,
+                    Resource::BLOB_TYPE         => BlobType::BLOCK->value,
+                    Resource::BLOB_CONTENT_MD5  => $file->contentMD5,
+                    Resource::BLOB_CONTENT_TYPE => $file->contentType,
+                    Resource::CONTENT_MD5       => $file->contentMD5,
+                    Resource::CONTENT_TYPE      => $file->contentType,
+                    Resource::CONTENT_LENGTH    => $file->contentLength,
                 ])
                 ->put("{$this->containerName}/{$file->name}?resttype=blob", $file->content)
                 ->isCreated();

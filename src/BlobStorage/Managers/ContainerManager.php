@@ -121,8 +121,8 @@ readonly class ContainerManager implements Manager, RequestShared
         try {
             return $this->request
                 ->withHeaders([
-                    Resource::DELETE_CONTAINER_NAME_KEY    => $name,
-                    Resource::DELETE_CONTAINER_VERSION_KEY => $version,
+                    Resource::DELETE_CONTAINER_NAME    => $name,
+                    Resource::DELETE_CONTAINER_VERSION => $version,
                 ])
                 ->put("{$name}?comp=undelete&restype=container")
                 ->isCreated();

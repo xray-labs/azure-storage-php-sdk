@@ -29,9 +29,9 @@ it('should send get, delete, and options requests', function (string $method, Ht
         $verb->value,
         'https://foo.blob.core.windows.net/endpoint?',
         fn (array $options): bool => $options['foo'] === 'bar'
-            && array_key_exists(Resource::AUTH_DATE_KEY, $options['headers'])
-            && array_key_exists(Resource::AUTH_HEADER_KEY, $options['headers'])
-            && array_key_exists(Resource::AUTH_VERSION_KEY, $options['headers'])
+            && array_key_exists(Resource::AUTH_DATE, $options['headers'])
+            && array_key_exists(Resource::AUTH_HEADER, $options['headers'])
+            && array_key_exists(Resource::AUTH_VERSION, $options['headers'])
     );
 })->with([
     'With GET method'     => ['get', HttpVerb::GET],
@@ -59,9 +59,9 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
         'https://my_account.blob.core.windows.net/endpoint?',
         fn (array $options): bool => $options['headers']['foo'] === 'bar'
             && $options['body'] === $body
-            && array_key_exists(Resource::AUTH_DATE_KEY, $options['headers'])
-            && !array_key_exists(Resource::AUTH_HEADER_KEY, $options['headers'])
-            && array_key_exists(Resource::AUTH_VERSION_KEY, $options['headers'])
+            && array_key_exists(Resource::AUTH_DATE, $options['headers'])
+            && !array_key_exists(Resource::AUTH_HEADER, $options['headers'])
+            && array_key_exists(Resource::AUTH_VERSION, $options['headers'])
     );
 })->with([
     'With PUT method'  => ['put', HttpVerb::PUT],

@@ -139,8 +139,8 @@ class Request implements RequestContract
         $options = $this->options;
 
         $headers = Headers::parse(array_merge($this->headers, [
-            Resource::AUTH_DATE_KEY    => $this->config->auth->getDate(),
-            Resource::AUTH_VERSION_KEY => Resource::VERSION,
+            Resource::AUTH_DATE    => $this->config->auth->getDate(),
+            Resource::AUTH_VERSION => Resource::VERSION,
         ]));
 
         if (!empty($body)) {
@@ -153,7 +153,7 @@ class Request implements RequestContract
 
         if ($this->shouldAuthenticate) {
             $headers = $headers->withAdditionalHeaders([
-                Resource::AUTH_HEADER_KEY => $this->config->auth->getAuthentication($verb, $headers, $resource),
+                Resource::AUTH_HEADER => $this->config->auth->getAuthentication($verb, $headers, $resource),
             ]);
         } else {
             $this->withAuthentication();

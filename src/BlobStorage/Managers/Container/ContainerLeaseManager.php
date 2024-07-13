@@ -24,9 +24,9 @@ class ContainerLeaseManager implements Manager
     {
         /** @var array{'Last-Modified'?: string, ETag?: string, Server?: string, Date?: string, 'x-ms-request-id'?: string, 'x-ms-version'?: string, 'x-ms-lease-id'?: string} $headers */
         $headers = $this->request(array_filter([
-            Resource::LEASE_ACTION_KEY   => 'acquire',
-            Resource::LEASE_DURATION_KEY => $duration,
-            Resource::LEASE_ID_KEY       => $leaseId,
+            Resource::LEASE_ACTION   => 'acquire',
+            Resource::LEASE_DURATION => $duration,
+            Resource::LEASE_ID       => $leaseId,
         ]))->getHeaders();
 
         return (new ContainerLease($headers))
@@ -37,8 +37,8 @@ class ContainerLeaseManager implements Manager
     {
         /** @var array{'Last-Modified'?: string, ETag?: string, Server?: string, Date?: string, 'x-ms-request-id'?: string, 'x-ms-version'?: string, 'x-ms-lease-id'?: string} $headers */
         $headers = $this->request([
-            Resource::LEASE_ACTION_KEY => 'renew',
-            Resource::LEASE_ID_KEY     => $leaseId,
+            Resource::LEASE_ACTION => 'renew',
+            Resource::LEASE_ID     => $leaseId,
         ])->getHeaders();
 
         return (new ContainerLease($headers))
@@ -49,9 +49,9 @@ class ContainerLeaseManager implements Manager
     {
         /** @var array{'Last-Modified'?: string, ETag?: string, Server?: string, Date?: string, 'x-ms-request-id'?: string, 'x-ms-version'?: string, 'x-ms-lease-id'?: string} $headers */
         $headers = $this->request([
-            Resource::LEASE_ACTION_KEY      => 'change',
-            Resource::LEASE_ID_KEY          => $fromLeaseId,
-            Resource::LEASE_PROPOSED_ID_KEY => $toLeaseId,
+            Resource::LEASE_ACTION      => 'change',
+            Resource::LEASE_ID          => $fromLeaseId,
+            Resource::LEASE_PROPOSED_ID => $toLeaseId,
         ])->getHeaders();
 
         return (new ContainerLease($headers))
@@ -62,8 +62,8 @@ class ContainerLeaseManager implements Manager
     {
         /** @var array{'Last-Modified'?: string, ETag?: string, Server?: string, Date?: string, 'x-ms-request-id'?: string, 'x-ms-version'?: string, 'x-ms-lease-id'?: string} $headers */
         $headers = $this->request([
-            Resource::LEASE_ACTION_KEY => 'release',
-            Resource::LEASE_ID_KEY     => $leaseId,
+            Resource::LEASE_ACTION => 'release',
+            Resource::LEASE_ID     => $leaseId,
         ])->getHeaders();
 
         return (new ContainerLease($headers))
@@ -74,8 +74,8 @@ class ContainerLeaseManager implements Manager
     {
         /** @var array{'Last-Modified'?: string, ETag?: string, Server?: string, Date?: string, 'x-ms-request-id'?: string, 'x-ms-version'?: string, 'x-ms-lease-id'?: string} $headers */
         $headers = $this->request(array_filter([
-            Resource::LEASE_ACTION_KEY => 'break',
-            Resource::LEASE_ID_KEY     => $leaseId,
+            Resource::LEASE_ACTION => 'break',
+            Resource::LEASE_ID     => $leaseId,
         ]))->getHeaders();
 
         return (new ContainerLease($headers))
