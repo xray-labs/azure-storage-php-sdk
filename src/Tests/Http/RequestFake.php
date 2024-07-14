@@ -7,7 +7,7 @@ namespace Sjpereira\AzureStoragePhpSdk\Tests\Http;
 use Closure;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
-use Sjpereira\AzureStoragePhpSdk\Tests\Http\Concerns\HasHttpAssertions;
+use Sjpereira\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions};
 
 /**
  * @phpstan-type Method array{endpoint: string, body?: string}
@@ -15,6 +15,7 @@ use Sjpereira\AzureStoragePhpSdk\Tests\Http\Concerns\HasHttpAssertions;
 class RequestFake implements Request
 {
     use HasHttpAssertions;
+    use HasAuthAssertions;
 
     /** @var array<string, scalar> */
     protected array $options = [];

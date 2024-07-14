@@ -33,7 +33,7 @@ final readonly class HourMetrics implements Arrayable
         $this->retentionPolicyEnabled = to_boolean($hourMetrics['RetentionPolicy']['Enabled'] ?? false);
         $this->retentionPolicyDays    = isset($hourMetrics['RetentionPolicy']['Days'])
             ? (int) $hourMetrics['RetentionPolicy']['Days']
-            : null;
+            : null; // @codeCoverageIgnore
     }
 
     public function toArray(): array

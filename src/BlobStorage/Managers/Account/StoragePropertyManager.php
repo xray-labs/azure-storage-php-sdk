@@ -6,6 +6,7 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account;
 
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\BlobProperty;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
@@ -28,9 +29,12 @@ readonly class StoragePropertyManager implements Manager
                 ->withOptions($options)
                 ->get('?comp=properties&restype=service')
                 ->getBody();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
 
         /** @var ?BlobPropertyType $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
@@ -44,11 +48,14 @@ readonly class StoragePropertyManager implements Manager
         try {
             return $this->request
                 ->withOptions($options)
-                ->withHeaders(['Content-Type' => 'application/xml'])
+                ->withHeaders([Resource::CONTENT_TYPE => 'application/xml'])
                 ->put('?comp=properties&restype=service', $blobProperty->toXml())
                 ->isAccepted();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 }

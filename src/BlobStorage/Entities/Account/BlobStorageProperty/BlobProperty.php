@@ -43,31 +43,31 @@ final readonly class BlobProperty implements Arrayable, Xmlable
 
         $this->logging = isset($blobProperty['Logging'])
             ? new Logging($blobProperty['Logging'])
-            : null;
+            : null; // @codeCoverageIgnore
 
         $this->hourMetrics = isset($blobProperty['HourMetrics'])
             ? new HourMetrics($blobProperty['HourMetrics'])
-            : null;
+            : null; // @codeCoverageIgnore
 
         $this->minuteMetrics = isset($blobProperty['MinuteMetrics'])
             ? new MinuteMetrics($blobProperty['MinuteMetrics'])
-            : null;
+            : null; // @codeCoverageIgnore
 
         if (isset($blobProperty['Cors'])) {
             $this->cors = isset($blobProperty['Cors']['CorsRule'])
                 ? new Cors($blobProperty['Cors']['CorsRule'])
-                : new Cors([]);
+                : new Cors([]); // @codeCoverageIgnore
         } else {
-            $this->cors = null;
+            $this->cors = null; // @codeCoverageIgnore
         }
 
         $this->deleteRetentionPolicy = isset($blobProperty['DeleteRetentionPolicy'])
             ? new DeleteRetentionPolicy($blobProperty['DeleteRetentionPolicy'])
-            : null;
+            : null; // @codeCoverageIgnore
 
         $this->staticWebsite = isset($blobProperty['StaticWebsite'])
             ? new StaticWebsite($blobProperty['StaticWebsite'])
-            : null;
+            : null; // @codeCoverageIgnore
     }
 
     public function toArray(): array

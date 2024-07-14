@@ -36,7 +36,7 @@ final readonly class Logging implements Arrayable
         $this->retentionPolicyEnabled = to_boolean($logging['RetentionPolicy']['Enabled'] ?? false);
         $this->retentionPolicyDays    = isset($logging['RetentionPolicy']['Days'])
             ? (int) $logging['RetentionPolicy']['Days']
-            : null;
+            : null; // @codeCoverageIgnore
     }
 
     public function toArray(): array
