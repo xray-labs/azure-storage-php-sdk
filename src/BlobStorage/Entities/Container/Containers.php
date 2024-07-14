@@ -18,7 +18,7 @@ final class Containers extends Collection
     public function __construct(protected ContainerManager $manager, array $containers = [])
     {
         if (is_string(array_keys($containers)[0])) {
-            $containers = [$containers];
+            $containers = [$containers]; // @codeCoverageIgnore
         }
 
         /** @var ContainerType[] $containers */

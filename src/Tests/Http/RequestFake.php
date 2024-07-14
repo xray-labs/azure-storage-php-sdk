@@ -7,7 +7,7 @@ namespace Sjpereira\AzureStoragePhpSdk\Tests\Http;
 use Closure;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
-use Sjpereira\AzureStoragePhpSdk\Tests\Http\Concerns\HasHttpAssertions;
+use Sjpereira\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions};
 
 /**
  * @phpstan-type Method array{endpoint: string, body?: string}
@@ -15,6 +15,7 @@ use Sjpereira\AzureStoragePhpSdk\Tests\Http\Concerns\HasHttpAssertions;
 class RequestFake implements Request
 {
     use HasHttpAssertions;
+    use HasAuthAssertions;
 
     /** @var array<string, scalar> */
     protected array $options = [];
@@ -134,5 +135,18 @@ class RequestFake implements Request
         ];
 
         return $this->fakeResponse ?? new ResponseFake();
+    }
+
+    public function uri(?string $endpoint = null): string
+    {
+        $account = $this->config->auth->getAccount();
+
+        if (!is_null($endpoint)) {
+            [$endpoint, $params] = array_pad(explode('?', $endpoint, 2), 2, '');
+
+            $endpoint = implode('/', array_map('rawurlencode', explode('/', $endpoint))) . "?{$params}";
+        }
+
+        return "http://{$account}.microsoft.azure/{$endpoint}";
     }
 }

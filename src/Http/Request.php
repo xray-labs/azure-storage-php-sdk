@@ -135,6 +135,25 @@ class Request implements RequestContract
         );
     }
 
+    public function uri(?string $endpoint = null): string
+    {
+        $account = $this->config->auth->getAccount();
+
+        if (!is_null($this->usingAccountCallback)) {
+            $account = call_user_func($this->usingAccountCallback, $account);
+
+            $this->usingAccountCallback = null;
+        }
+
+        if (!is_null($endpoint)) {
+            [$endpoint, $params] = array_pad(explode('?', $endpoint, 2), 2, '');
+
+            $endpoint = implode('/', array_map('rawurlencode', explode('/', $endpoint))) . "?{$params}";
+        }
+
+        return "{$this->protocol}://{$account}.{$this->baseDomain}/{$endpoint}";
+    }
+
     /** @return array<string, mixed> */
     protected function getOptions(HttpVerb $verb, string $resource, string $body = ''): array
     {
@@ -164,24 +183,5 @@ class Request implements RequestContract
         $options['headers'] = $headers->toArray();
 
         return $options;
-    }
-
-    protected function uri(?string $endpoint = null): string
-    {
-        $account = $this->config->account;
-
-        if (!is_null($this->usingAccountCallback)) {
-            $account = call_user_func($this->usingAccountCallback, $account);
-
-            $this->usingAccountCallback = null;
-        }
-
-        if (!is_null($endpoint)) {
-            [$endpoint, $params] = array_pad(explode('?', $endpoint, 2), 2, '');
-
-            $endpoint = implode('/', array_map('rawurlencode', explode('/', $endpoint))) . "?{$params}";
-        }
-
-        return "{$this->protocol}://{$account}.{$this->baseDomain}/{$endpoint}";
     }
 }

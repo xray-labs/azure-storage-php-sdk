@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Resource};
 use Sjpereira\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Sjpereira\AzureStoragePhpSdk\Http\Headers;
 
@@ -16,10 +16,7 @@ it('should implements Auth interface', function () {
 });
 
 it('should get date formatted correctly', function () {
-    $auth = new SharedKeyAuth(new Config([
-        'account' => 'account',
-        'key'     => base64_encode('key'),
-    ]));
+    $auth = new SharedKeyAuth('account', 'key');
 
     expect($auth->getDate())
         ->toBe(gmdate('D, d M Y H:i:s T'));
@@ -28,10 +25,7 @@ it('should get date formatted correctly', function () {
 it('should get correctly the authentication signature for all http methods', function (HttpVerb $verb) {
     $decodedKey = 'my-decoded-account-key';
 
-    $auth = new SharedKeyAuth(new Config([
-        'account' => $account = 'account',
-        'key'     => base64_encode($decodedKey),
-    ]));
+    $auth = new SharedKeyAuth($account = 'account', base64_encode($decodedKey));
 
     $headers      = new Headers();
     $stringToSign = "{$verb->value}\n{$headers->toString()}\n\n/{$account}/";
@@ -53,10 +47,7 @@ it('should get correctly the authentication signature for all http methods', fun
 it('should get correctly the authentication signature for all headers', function (string $headerMethod, int|string $headerValue) {
     $decodedKey = 'my-decoded-account-key';
 
-    $auth = new SharedKeyAuth(new Config([
-        'account' => $account = 'account',
-        'key'     => base64_encode($decodedKey),
-    ]));
+    $auth = new SharedKeyAuth($account = 'account', base64_encode($decodedKey));
 
     $verb = HttpVerb::GET;
 
@@ -84,10 +75,7 @@ it('should get correctly the authentication signature for all headers', function
 it('should get correctly the authentication signature for all canonical headers', function (string $headerMethod, string $headerValue) {
     $decodedKey = 'my-decoded-account-key';
 
-    $auth = new SharedKeyAuth(new Config([
-        'account' => $account = 'account',
-        'key'     => base64_encode($decodedKey),
-    ]));
+    $auth = new SharedKeyAuth($account = 'account', base64_encode($decodedKey));
 
     $verb = HttpVerb::GET;
 

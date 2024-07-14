@@ -35,6 +35,9 @@ final class Resource
     public const string ACCESS_CONTROL_REQUEST_METHOD  = 'Access-Control-Request-Method';
     public const string ACCESS_CONTROL_REQUEST_HEADERS = 'Access-Control-Request-Headers';
 
+    public const string PAGE_WRITE = 'x-ms-page-write';
+    public const string RANGE      = 'x-ms-range';
+
     public const string BLOB_CACHE_CONTROL       = 'x-ms-blob-cache-control';
     public const string BLOB_CONTENT_TYPE        = 'x-ms-blob-content-type';
     public const string BLOB_CONTENT_MD5         = 'x-ms-blob-content-md5';
@@ -44,6 +47,14 @@ final class Resource
     public const string BLOB_CONTENT_LENGTH      = 'x-ms-blob-content-length';
     public const string BLOB_SEQUENCE_NUMBER     = 'x-ms-blob-sequence-number';
     public const string BLOB_TYPE                = 'x-ms-blob-type';
+
+    public const string UNDELETE_SOURCE  = 'x-ms-undelete-source';
+    public const string DELETE_SNAPSHOTS = 'x-ms-delete-snapshots';
+
+    public const string EXPIRY_OPTION = 'x-ms-expiry-option';
+    public const string EXPIRY_TIME   = 'x-ms-expiry-time';
+
+    public const string COPY_SOURCE = 'x-ms-copy-source';
 
     public const string SEQUENCE_NUMBER_ACTION = 'x-ms-sequence-number-action';
 

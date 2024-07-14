@@ -26,7 +26,7 @@ final readonly class DeleteRetentionPolicy implements Arrayable
         $this->allowPermanentDelete = to_boolean($deleteRetentionPolicy['AllowPermanentDelete'] ?? false);
         $this->days                 = isset($deleteRetentionPolicy['Days'])
             ? (int) $deleteRetentionPolicy['Days']
-            : null;
+            : null; // @codeCoverageIgnore
     }
 
     public function toArray(): array

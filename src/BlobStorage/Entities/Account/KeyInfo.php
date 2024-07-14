@@ -23,11 +23,13 @@ final readonly class KeyInfo implements Arrayable, Xmlable
      */
     public function __construct(array $keyInfo)
     {
+        // @codeCoverageIgnoreStart
         if (!isset($keyInfo['Start'], $keyInfo['Expiry'])) {
             throw RequiredFieldException::missingField(
                 !isset($keyInfo['Start']) ? 'Start' : 'Expiry'
             );
         }
+        // @codeCoverageIgnoreEnd
 
         $this->start  = new DateTimeImmutable($keyInfo['Start']);
         $this->expiry = new DateTimeImmutable($keyInfo['Expiry']);

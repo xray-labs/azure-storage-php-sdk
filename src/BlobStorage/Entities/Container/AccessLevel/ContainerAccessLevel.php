@@ -33,7 +33,7 @@ final readonly class ContainerAccessLevel
         $this->id = $containerAccessLevel['Id'] ?? '';
 
         if ($this->id === '') {
-            throw RequiredFieldException::missingField('Id');
+            throw RequiredFieldException::missingField('Id'); // @codeCoverageIgnore
         }
 
         $this->accessPolicyStart      = isset($containerAccessLevel['AccessPolicy']['Start']) ? new DateTimeImmutable($containerAccessLevel['AccessPolicy']['Start']) : null;

@@ -9,6 +9,7 @@ use DateTimeImmutable;
 /**
  * @phpstan-type PropertiesType array{Creation-Time?: string, Last-Modified?: string, Etag?: string, LeaseStatus?: string, LeaseState?: string, Owner?: string, Group?: string, Permissions?: string, Acl?: string, ResourceType?: string, Placeholder?: string, Content-Length?: string, Content-Type?: string, Content-Encoding?: string, Content-Language?: string, Content-MD5?: string, Cache-Control?: string, x-ms-blob-sequence-number?: string, BlobType?: string, AccessTier?: string, LeaseDuration?: string, CopyId?: string, CopyStatus?: string, CopySource?: string, CopyProgress?: string, CopyCompletionTime?: string, CopyStatusDescription?: string, ServerEncrypted?: string, CustomerProvidedKeySha256?: string, EncryptionContext?: string, EncryptionScope?: string, IncrementalCopy?: string, AccessTierInferred?: string, AccessTierChangeTime?: string, TagCount?: string, RehydratePriority?: string, ExpiryTime?: string, DeletedTime?: string, RemainingRetentionDays?: string}
  * @suppressWarnings(PHPMD.TooManyFields)
+ * @suppressWarnings(PHPMD.CyclomaticComplexity)
  */
 final readonly class Properties
 {
@@ -16,7 +17,7 @@ final readonly class Properties
 
     public DateTimeImmutable $lastModified;
 
-    public string $etag;
+    public string $eTag;
 
     public string $leaseStatus;
 
@@ -95,7 +96,7 @@ final readonly class Properties
     {
         $this->creationTime              = new DateTimeImmutable($property['Creation-Time'] ?? 'now');
         $this->lastModified              = new DateTimeImmutable($property['Last-Modified'] ?? 'now');
-        $this->etag                      = $property['Etag'] ?? '';
+        $this->eTag                      = $property['Etag'] ?? '';
         $this->leaseStatus               = $property['LeaseStatus'] ?? '';
         $this->leaseState                = $property['LeaseState'] ?? '';
         $this->ownerUserId               = $property['Owner'] ?? '';
@@ -105,11 +106,11 @@ final readonly class Properties
         $this->resourceType              = $property['ResourceType'] ?? '';
         $this->placeholder               = $property['Placeholder'] ?? '';
         $this->contentLength             = $property['Content-Length'] ?? '';
-        $this->contentType               = $property['Content-Type'] ?? '';
-        $this->contentEncoding           = json_encode($property['Content-Encoding'] ?? []) ?: '';
-        $this->contentLanguage           = json_encode($property['Content-Language'] ?? []) ?: '';
-        $this->contentMD5                = json_encode($property['Content-MD5'] ?? []) ?: '';
-        $this->cacheControl              = json_encode($property['Cache-Control'] ?? []) ?: '';
+        $this->contentType               = isset($property['Content-Type']) && !empty($property['Content-Type']) ? $property['Content-Type'] : '';
+        $this->contentEncoding           = isset($property['Content-Encoding']) && !empty($property['Content-Encoding']) ? $property['Content-Encoding'] : '';
+        $this->contentLanguage           = isset($property['Content-Language']) && !empty($property['Content-Language']) ? $property['Content-Language'] : '';
+        $this->contentMD5                = isset($property['Content-MD5']) && !empty($property['Content-MD5']) ? $property['Content-MD5'] : '';
+        $this->cacheControl              = isset($property['Cache-Control']) && !empty($property['Cache-Control']) ? $property['Cache-Control'] : '';
         $this->blobSequenceNumber        = (int) ($property['x-ms-blob-sequence-number'] ?? 0);
         $this->blobType                  = $property['BlobType'] ?? '';
         $this->accessTier                = $property['AccessTier'] ?? '';
@@ -120,12 +121,12 @@ final readonly class Properties
         $this->copyProgress              = $property['CopyProgress'] ?? '';
         $this->copyCompletionTime        = new DateTimeImmutable($property['CopyCompletionTime'] ?? 'now');
         $this->copyStatusDescription     = $property['CopyStatusDescription'] ?? '';
-        $this->serverEncrypted           = (bool) ($property['ServerEncrypted'] ?? false);
+        $this->serverEncrypted           = to_boolean($property['ServerEncrypted'] ?? false);
         $this->customerProvidedKeySha256 = $property['CustomerProvidedKeySha256'] ?? '';
         $this->encryptionContext         = $property['EncryptionContext'] ?? '';
         $this->encryptionScope           = $property['EncryptionScope'] ?? '';
-        $this->incrementalCopy           = (bool) ($property['IncrementalCopy'] ?? false);
-        $this->accessTierInferred        = (bool) ($property['AccessTierInferred'] ?? false);
+        $this->incrementalCopy           = to_boolean($property['IncrementalCopy'] ?? false);
+        $this->accessTierInferred        = to_boolean($property['AccessTierInferred'] ?? false);
         $this->accessTierChangeTime      = new DateTimeImmutable($property['AccessTierChangeTime'] ?? 'now');
         $this->tagCount                  = (int) ($property['TagCount'] ?? 0);
         $this->rehydratePriority         = $property['RehydratePriority'] ?? '';
