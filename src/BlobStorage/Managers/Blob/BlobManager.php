@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use DateTime;
+use DateTimeImmutable;
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\{BlobType, ExpirationOption};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\{BlobIncludeOption, BlobType, ExpirationOption};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
@@ -25,13 +26,26 @@ readonly class BlobManager implements Manager
         //
     }
 
-    /** @param array<string, scalar> $options */
-    public function list(array $options = [], bool $withDeleted = false): Blobs
+    /**
+     * @param array<string, scalar> $options
+     * @param string[] $includes
+     */
+    public function list(array $options = [], array $includes = []): Blobs
     {
+        if (array_diff($includes, $availableOptions = BlobIncludeOption::toArray()) !== []) {
+            throw InvalidArgumentException::create(sprintf("Invalid include option. \nValid options: %s", implode(', ', $availableOptions)));
+        }
+
+        $include = '';
+
+        if (!empty($includes)) {
+            $include = sprintf('&include=%s', implode(',', $includes));
+        }
+
         try {
             $response = $this->request
                 ->withOptions($options)
-                ->get("{$this->containerName}/?restype=container&comp=list")
+                ->get("{$this->containerName}/?restype=container&comp=list{$include}")
                 ->getBody();
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
@@ -133,11 +147,22 @@ readonly class BlobManager implements Manager
         }
     }
 
-    public function delete(string $blobName): bool
+    /**
+     * @param boolean $force If true, Delete the base blob and all of its snapshots.
+     */
+    public function delete(string $blobName, ?DateTimeImmutable $snapshot = null, bool $force = false): bool
     {
+        $snapshotHeader = $snapshot ? sprintf('&snapshot=%s', convert_to_RFC3339_micro($snapshot)) : '';
+
+        $deleteSnapshotHeader = $snapshot ? sprintf('&%s=only', Resource::DELETE_SNAPSHOTS) : '';
+
+        if ($force) {
+            $deleteSnapshotHeader = sprintf('&%s=include', Resource::DELETE_SNAPSHOTS);
+        }
+
         try {
             return $this->request
-                ->delete("{$this->containerName}/{$blobName}?resttype=blob")
+                ->delete("{$this->containerName}/{$blobName}?resttype=blob{$snapshotHeader}{$deleteSnapshotHeader}")
                 ->isAccepted();
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
@@ -150,6 +175,17 @@ readonly class BlobManager implements Manager
             return $this->request
                 ->put("{$this->containerName}/{$blobName}?comp=undelete&resttype=blob")
                 ->isOk();
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+    }
+
+    public function createSnapshot(string $blobName): bool
+    {
+        try {
+            return $this->request
+                ->put("{$this->containerName}/{$blobName}?comp=snapshot&resttype=blob")
+                ->isCreated();
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
@@ -183,24 +219,13 @@ readonly class BlobManager implements Manager
 
     protected function validateExpirationTime(ExpirationOption $expirationOption, null|int|DateTime $expiryTime = null): void
     {
-        if ($expirationOption === ExpirationOption::NEVER_EXPIRE && $expiryTime !== null) {
-            throw InvalidArgumentException::create('The expiration time must be null when the option is never expire.');
-        }
-
-        if ($expirationOption !== ExpirationOption::NEVER_EXPIRE && $expiryTime === null) {
-            throw InvalidArgumentException::create('The expiration time must be informed when the option is not never expire.');
-        }
-
-        if ($expiryTime instanceof DateTime && $expirationOption !== ExpirationOption::ABSOLUTE) {
-            throw InvalidArgumentException::create('The expiration time must be informed in milliseconds.');
-        }
-
-        if (is_int($expiryTime) && $expirationOption === ExpirationOption::ABSOLUTE) {
-            throw InvalidArgumentException::create('The expiration time must be an instance of DateTime.');
-        }
-
-        if (is_int($expiryTime) && $expiryTime < 0) {
-            throw InvalidArgumentException::create('The expiration time must be a positive integer.');
-        }
+        match (true) {
+            $expirationOption === ExpirationOption::NEVER_EXPIRE && $expiryTime !== null        => throw InvalidArgumentException::create('The expiration time must be null when the option is never expire.'),
+            $expirationOption !== ExpirationOption::NEVER_EXPIRE && $expiryTime === null        => throw InvalidArgumentException::create('The expiration time must be informed when the option is not never expire.'),
+            is_int($expiryTime) && $expirationOption === ExpirationOption::ABSOLUTE             => throw InvalidArgumentException::create('The expiration time must be an instance of DateTime.'),
+            is_int($expiryTime) && $expiryTime < 0                                              => throw InvalidArgumentException::create('The expiration time must be a positive integer.'),
+            $expiryTime instanceof DateTime && $expirationOption !== ExpirationOption::ABSOLUTE => throw InvalidArgumentException::create('The expiration time must be informed in milliseconds.'),
+            default                                                                             => true,
+        };
     }
 }

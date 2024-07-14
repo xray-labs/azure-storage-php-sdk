@@ -105,7 +105,7 @@ final readonly class Properties
         $this->resourceType              = $property['ResourceType'] ?? '';
         $this->placeholder               = $property['Placeholder'] ?? '';
         $this->contentLength             = $property['Content-Length'] ?? '';
-        $this->contentType               = $property['Content-Type'] ?? '';
+        $this->contentType               = json_encode($property['Content-Type'] ?? []) ?: '';
         $this->contentEncoding           = json_encode($property['Content-Encoding'] ?? []) ?: '';
         $this->contentLanguage           = json_encode($property['Content-Language'] ?? []) ?: '';
         $this->contentMD5                = json_encode($property['Content-MD5'] ?? []) ?: '';

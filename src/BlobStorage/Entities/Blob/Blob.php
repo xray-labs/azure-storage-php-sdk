@@ -23,7 +23,7 @@ final class Blob
 
     public readonly string $name;
 
-    public readonly DateTimeImmutable $snapshot;
+    public readonly ?DateTimeImmutable $snapshot;
 
     public readonly DateTimeImmutable $versionId;
 
@@ -44,7 +44,7 @@ final class Blob
         }
 
         $this->name             = $name;
-        $this->snapshot         = new DateTimeImmutable($blob['Snapshot'] ?? 'now');
+        $this->snapshot         = isset($blob['Snapshot']) ? new DateTimeImmutable($blob['Snapshot']) : null;
         $this->versionId        = new DateTimeImmutable($blob['Version'] ?? 'now');
         $this->isCurrentVersion = to_boolean($blob['IsCurrentVersion'] ?? true);
 
@@ -69,11 +69,14 @@ final class Blob
         return $this->getManager()->properties($this->name)->get($options);
     }
 
-    public function delete(): bool
+    /**
+     * @param boolean $force If true, Delete the base blob and all of its snapshots.
+     */
+    public function delete(bool $force = false): bool
     {
         $this->ensureManagerIsConfigured();
 
-        return $this->getManager()->delete($this->name);
+        return $this->getManager()->delete($this->name, $this->snapshot, $force);
     }
 
     public function restore(): bool
@@ -81,6 +84,13 @@ final class Blob
         $this->ensureManagerIsConfigured();
 
         return $this->getManager()->restore($this->name);
+    }
+
+    public function createSnapshot(): bool
+    {
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->createSnapshot($this->name);
     }
 
     public function tags(): BlobTagManager
