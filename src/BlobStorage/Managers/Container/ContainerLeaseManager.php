@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container;
 
 use Psr\Http\Client\RequestExceptionInterface;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateContainerName;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerLease;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
@@ -13,11 +14,13 @@ use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 
 class ContainerLeaseManager implements Manager
 {
+    use ValidateContainerName;
+
     public function __construct(
         protected Request $request,
         protected string $container,
     ) {
-        //
+        $this->validateContainerName($this->container);
     }
 
     public function acquire(int $duration = -1, ?string $leaseId = null): ContainerLease
@@ -28,6 +31,8 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_DURATION => $duration,
             Resource::LEASE_ID       => $leaseId,
         ]))->getHeaders();
+
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
 
         return (new ContainerLease($headers))
             ->setManager($this);
@@ -40,6 +45,8 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_ACTION => 'renew',
             Resource::LEASE_ID     => $leaseId,
         ])->getHeaders();
+
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
 
         return (new ContainerLease($headers))
             ->setManager($this);
@@ -54,6 +61,8 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_PROPOSED_ID => $toLeaseId,
         ])->getHeaders();
 
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+
         return (new ContainerLease($headers))
             ->setManager($this);
     }
@@ -65,6 +74,8 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_ACTION => 'release',
             Resource::LEASE_ID     => $leaseId,
         ])->getHeaders();
+
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
 
         return (new ContainerLease($headers))
             ->setManager($this);
@@ -78,6 +89,8 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_ID     => $leaseId,
         ]))->getHeaders();
 
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+
         return (new ContainerLease($headers))
             ->setManager($this);
     }
@@ -89,8 +102,11 @@ class ContainerLeaseManager implements Manager
             return $this->request
                 ->withHeaders($headers)
                 ->put("{$this->container}?comp=lease&restype=container");
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 }

@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container;
 
 use Psr\Http\Client\RequestExceptionInterface;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Concerns\{ValidateContainerName, ValidateMetadataKey};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerMetadata;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
+use Sjpereira\AzureStoragePhpSdk\Exceptions\{RequestException};
 
 readonly class ContainerMetadataManager implements Manager
 {
+    use ValidateMetadataKey;
+    use ValidateContainerName;
+
     public function __construct(protected Request $request)
     {
         //
@@ -24,16 +28,21 @@ readonly class ContainerMetadataManager implements Manager
      */
     public function get(string $container, array $options = []): ContainerMetadata
     {
+        $this->validateContainerName($container);
+
         try {
             $response = $this->request
                 ->withOptions($options)
                 ->get("{$container}?comp=metadata&restype=container")
                 ->getHeaders();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
 
-        array_walk($response, fn (array &$value) => $value = current($value));
+        array_walk($response, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
 
         /** @var array<string> $response */
         return new ContainerMetadata($response);
@@ -45,6 +54,8 @@ readonly class ContainerMetadataManager implements Manager
      */
     public function save(string $container, array $parameters): bool
     {
+        $this->validateContainerName($container);
+
         $headers = [];
 
         foreach ($parameters as $key => $value) {
@@ -57,23 +68,11 @@ readonly class ContainerMetadataManager implements Manager
                 ->withHeaders($headers)
                 ->put("{$container}?restype=container&comp=metadata")
                 ->isOk();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
-    }
-
-    protected function validateMetadataKey(string $key): void
-    {
-        $message = "Invalid metadata key: {$key}.";
-
-        if (is_numeric($key[0])) {
-            throw InvalidArgumentException::create("{$message} Metadata keys cannot start with a number.");
-        }
-
-        $name = preg_replace('/[^a-z0-9_]/i', '', $key);
-
-        if ($key !== $name) {
-            throw InvalidArgumentException::create("{$message} Only alphanumeric characters and underscores are allowed.");
-        }
+        // @codeCoverageIgnoreEnd
     }
 }
