@@ -13,3 +13,10 @@ if (!function_exists('to_boolean')) {
         return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 }
+
+if (!function_exists('convert_to_RFC1123')) {
+    function convert_to_RFC1123(DateTime $dateTime): string
+    {
+        return (clone $dateTime)->setTimezone(new DateTimeZone('GMT'))->format('D, d M Y H:i:s') . ' GMT';
+    }
+}

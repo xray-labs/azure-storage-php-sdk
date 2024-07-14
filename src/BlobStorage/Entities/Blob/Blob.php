@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
+use DateTime;
 use DateTimeImmutable;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\ExpirationOption;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{BlobLeaseManager, BlobManager, BlobTagManager};
 use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
@@ -57,5 +59,49 @@ final class Blob
         $this->ensureManagerIsConfigured();
 
         return $this->getManager()->get($this->name, $options);
+    }
+
+    /** @param array<string, scalar> $options */
+    public function getProperties(array $options = []): BlobProperty
+    {
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->properties($this->name)->get($options);
+    }
+
+    public function delete(): bool
+    {
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->delete($this->name);
+    }
+
+    public function restore(): bool
+    {
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->restore($this->name);
+    }
+
+    public function tags(): BlobTagManager
+    {
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->tags($this->name);
+    }
+
+    public function lease(): BlobLeaseManager
+    {
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->lease($this->name);
+    }
+
+    /** @param array<string, scalar> $options */
+    public function setExpiry(ExpirationOption $option, null|int|DateTime $expiry, array $options = []): bool
+    {
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->setExpiry($this->name, $option, $expiry, $options);
     }
 }

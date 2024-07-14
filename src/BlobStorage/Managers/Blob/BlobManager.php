@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
+use DateTime;
 use Psr\Http\Client\RequestExceptionInterface;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\{BlobType, ExpirationOption};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
+use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 
 /**
  * @phpstan-import-type BlobType from Blob as BlobTypeStan
@@ -109,6 +110,56 @@ readonly class BlobManager implements Manager
         }
     }
 
+    /** @param array<string, scalar> $options */
+    public function setExpiry(string $blobName, ExpirationOption $expirationOption, null|int|DateTime $expiryTime = null, array $options = []): bool
+    {
+        $this->validateExpirationTime($expirationOption, $expiryTime);
+
+        $formattedExpirationTime = $expiryTime instanceof DateTime
+            ? convert_to_RFC1123($expiryTime)
+            : $expiryTime;
+
+        try {
+            return $this->request
+                ->withOptions($options)
+                ->withHeaders(array_filter([
+                    Resource::EXPIRY_OPTION => $expirationOption->value,
+                    Resource::EXPIRY_TIME   => $formattedExpirationTime,
+                ]))
+                ->put("{$this->containerName}/{$blobName}?resttype=blob&comp=expiry")
+                ->isOk();
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+    }
+
+    public function delete(string $blobName): bool
+    {
+        try {
+            return $this->request
+                ->delete("{$this->containerName}/{$blobName}?resttype=blob")
+                ->isAccepted();
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+    }
+
+    public function restore(string $blobName): bool
+    {
+        try {
+            return $this->request
+                ->put("{$this->containerName}/{$blobName}?comp=undelete&resttype=blob")
+                ->isOk();
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+    }
+
+    public function lease(string $blobName): BlobLeaseManager
+    {
+        return new BlobLeaseManager($this->request, $this->containerName, $blobName);
+    }
+
     public function pages(): BlobPageManager
     {
         return (new BlobPageManager($this->request, $this->containerName))
@@ -128,5 +179,28 @@ readonly class BlobManager implements Manager
     public function tags(string $blobName): BlobTagManager
     {
         return new BlobTagManager($this->request, $this->containerName, $blobName);
+    }
+
+    protected function validateExpirationTime(ExpirationOption $expirationOption, null|int|DateTime $expiryTime = null): void
+    {
+        if ($expirationOption === ExpirationOption::NEVER_EXPIRE && $expiryTime !== null) {
+            throw InvalidArgumentException::create('The expiration time must be null when the option is never expire.');
+        }
+
+        if ($expirationOption !== ExpirationOption::NEVER_EXPIRE && $expiryTime === null) {
+            throw InvalidArgumentException::create('The expiration time must be informed when the option is not never expire.');
+        }
+
+        if ($expiryTime instanceof DateTime && $expirationOption !== ExpirationOption::ABSOLUTE) {
+            throw InvalidArgumentException::create('The expiration time must be informed in milliseconds.');
+        }
+
+        if (is_int($expiryTime) && $expirationOption === ExpirationOption::ABSOLUTE) {
+            throw InvalidArgumentException::create('The expiration time must be an instance of DateTime.');
+        }
+
+        if (is_int($expiryTime) && $expiryTime < 0) {
+            throw InvalidArgumentException::create('The expiration time must be a positive integer.');
+        }
     }
 }
