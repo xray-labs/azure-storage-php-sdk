@@ -11,6 +11,8 @@ interface Auth
 {
     public function getDate(): string;
 
+    public function getAccount(): string;
+
     public function getAuthentication(
         HttpVerb $verb,
         Headers $headers,

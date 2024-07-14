@@ -135,4 +135,17 @@ class RequestFake implements Request
 
         return $this->fakeResponse ?? new ResponseFake();
     }
+
+    public function uri(?string $endpoint = null): string
+    {
+        $account = $this->config->auth->getAccount();
+
+        if (!is_null($endpoint)) {
+            [$endpoint, $params] = array_pad(explode('?', $endpoint, 2), 2, '');
+
+            $endpoint = implode('/', array_map('rawurlencode', explode('/', $endpoint))) . "?{$params}";
+        }
+
+        return "http://{$account}.microsoft.azure/{$endpoint}";
+    }
 }

@@ -20,4 +20,6 @@ interface Request extends HasConfig, HttpMethods
 
     /** @param array<string, scalar> $headers */
     public function withHeaders(array $headers = []): static;
+
+    public function uri(?string $endpoint = null): string;
 }
