@@ -80,6 +80,7 @@ it('should save the blob property', function () {
     $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_NO_CONTENT));
 
+    // @phpstan-ignore-next-line
     $blobProperty = new BlobProperty([
         'Logging' => [
             'Read'            => false,

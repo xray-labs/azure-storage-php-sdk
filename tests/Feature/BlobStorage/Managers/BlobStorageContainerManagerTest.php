@@ -19,7 +19,7 @@ it('should get container\'s managers', function (string $method, string $class) 
     $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
     expect((new ContainerManager($request))->{$method}())
-        ->toBeInstanceOf($class);
+        ->toBeInstanceOf($class); // @phpstan-ignore-line
 })->with([
     'Access Level' => ['accessLevel', ContainerAccessLevelManager::class],
     'Metadata'     => ['metadata', ContainerMetadataManager::class],
@@ -117,11 +117,14 @@ it('should list all the containers', function (bool $withDeleted) {
         ->toBeInstanceOf(Containers::class)
         ->toHaveCount(2)
         ->each(function (Expectation $container, int $index): void {
+            /** @var Container $value */
+            $value = $container->value;
+
             $container->toBeInstanceOf(Container::class)
                 ->name->toBe('name' . ($index + 1))
                 ->deleted->toBeFalse()
                 ->version->toBe('version')
-                ->and($container->value->properties)
+                ->and($value->properties)
                 ->toBeInstanceOf(Properties::class)
                 ->lastModified->format('Y-m-d H:i:s')->toBe('2024-06-10 00:00:00')
                 ->eTag->toBe('etag')

@@ -32,7 +32,7 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_ID       => $leaseId,
         ]))->getHeaders();
 
-        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         return (new ContainerLease($headers))
             ->setManager($this);
@@ -46,7 +46,7 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_ID     => $leaseId,
         ])->getHeaders();
 
-        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         return (new ContainerLease($headers))
             ->setManager($this);
@@ -61,7 +61,7 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_PROPOSED_ID => $toLeaseId,
         ])->getHeaders();
 
-        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         return (new ContainerLease($headers))
             ->setManager($this);
@@ -75,7 +75,7 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_ID     => $leaseId,
         ])->getHeaders();
 
-        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         return (new ContainerLease($headers))
             ->setManager($this);
@@ -89,7 +89,7 @@ class ContainerLeaseManager implements Manager
             Resource::LEASE_ID     => $leaseId,
         ]))->getHeaders();
 
-        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         return (new ContainerLease($headers))
             ->setManager($this);

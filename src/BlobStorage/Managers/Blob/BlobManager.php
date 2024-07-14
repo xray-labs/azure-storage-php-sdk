@@ -107,7 +107,7 @@ readonly class BlobManager implements Manager
         // @codeCoverageIgnoreEnd
 
         $headers = (array) $headers;
-        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         return new File($blobName, $content, $headers);
     }

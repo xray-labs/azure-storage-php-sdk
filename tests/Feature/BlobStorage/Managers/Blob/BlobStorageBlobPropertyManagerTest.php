@@ -69,6 +69,7 @@ it('should get the blob\'s properties', function () {
 it('should save the blob property', function () {
     $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
+    // @phpstan-ignore-next-line
     $blobProperty = new BlobProperty([
         'Last-Modified'      => '2021-01-01T00:00:00.0000000Z',
         'ETag'               => '0x8D8D8D8D8D8D8D9',

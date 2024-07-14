@@ -1,7 +1,7 @@
 <?php
 
 use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File, Properties};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{BlobManager, BlobMetadataManager, BlobPageManager, BlobPropertyManager, BlobTagManager};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
@@ -14,7 +14,7 @@ it('should get the blob\'s managers', function (string $method, string $class) {
     $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
     expect((new BlobManager($request, 'container'))->{$method}('blob'))
-        ->toBeInstanceOf($class);
+        ->toBeInstanceOf($class); // @phpstan-ignore-line
 })->with([
     'Properties' => ['properties', BlobPropertyManager::class],
     'Metadata'   => ['metadata', BlobMetadataManager::class],
@@ -134,7 +134,8 @@ it('should list all blobs', function () {
         ->snapshot->format('Y-m-d\TH:i:s')->toBe('2021-01-01T00:00:00')
         ->versionId->format('Y-m-d\TH:i:s')->toBe('2021-01-01T00:00:00')
         ->isCurrentVersion->toBeTrue()
-        ->and($result->first()->properties)
+        ->and($result->first()?->properties)
+        ->toBeInstanceOf(Properties::class)
         ->lastModified->format('Y-m-d\TH:i:s')->toBe('2021-01-01T00:00:00')
         ->contentLength->toBe('10')
         ->contentType->toBe('plain/text')

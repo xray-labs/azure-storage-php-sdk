@@ -50,7 +50,7 @@ class BlobTagManager implements Manager
         $tags    = $parsed['TagSet']['Tag'];
         $headers = (array) $headers;
 
-        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         return new BlobTag($tags, $headers);
     }
