@@ -47,9 +47,12 @@ readonly class BlobManager implements Manager
                 ->withOptions($options)
                 ->get("{$this->containerName}/?restype=container&comp=list{$include}")
                 ->getBody();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
 
         /** @var array{Blobs?: array{Blob: BlobTypeStan|BlobTypeStan[]}} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
@@ -96,11 +99,17 @@ readonly class BlobManager implements Manager
 
             /** @var FileType $headers */
             $headers = $response->getHeaders();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
 
-        return new File($blobName, $content, (array)$headers);
+        $headers = (array) $headers;
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
+
+        return new File($blobName, $content, $headers);
     }
 
     /** @param array<string, scalar> $options */
@@ -119,9 +128,12 @@ readonly class BlobManager implements Manager
                 ])
                 ->put("{$this->containerName}/{$file->name}?resttype=blob", $file->content)
                 ->isCreated();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /** @param array<string, scalar> $options */

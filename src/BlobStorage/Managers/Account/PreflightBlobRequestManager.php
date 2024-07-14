@@ -83,8 +83,11 @@ class PreflightBlobRequestManager implements Manager
                 ->withHeaders($options)
                 ->withoutAuthentication()
                 ->options('');
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 }

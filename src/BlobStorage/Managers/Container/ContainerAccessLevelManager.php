@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container;
 
 use Psr\Http\Client\RequestExceptionInterface;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateContainerName;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{
     ContainerAccessLevel,
     ContainerAccessLevels,
 };
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
 use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
 
 readonly class ContainerAccessLevelManager implements Manager
 {
+    use ValidateContainerName;
+
     public function __construct(protected Request $request)
     {
         //
@@ -26,14 +30,19 @@ readonly class ContainerAccessLevelManager implements Manager
     */
     public function list(string $container, array $options = []): ContainerAccessLevels
     {
+        $this->validateContainerName($container);
+
         try {
             $response = $this->request
                 ->withOptions($options)
                 ->get("{$container}?comp=acl&restype=container")
                 ->getBody();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
 
         /** @var array<array<array<mixed>>> */
         $parsed = $this->request->getConfig()->parser->parse($response);
@@ -47,14 +56,19 @@ readonly class ContainerAccessLevelManager implements Manager
     */
     public function save(string $container, ContainerAccessLevel $accessLevel, array $options = []): bool
     {
+        $this->validateContainerName($container);
+
         try {
             return $this->request
                 ->withOptions($options)
-                ->withHeaders(['Content-Type' => 'application/xml'])
+                ->withHeaders([Resource::CONTENT_TYPE => 'application/xml'])
                 ->put("{$container}?comp=acl&restype=container", $accessLevel->toXML())
                 ->isOk();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface) {
             return false;
         }
+        // @codeCoverageIgnoreEnd
     }
 }

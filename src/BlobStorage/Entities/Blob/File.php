@@ -23,11 +23,11 @@ final readonly class File
 
     public string $contentMD5;
 
-    public string $lastModified;
+    public DateTimeImmutable $lastModified;
 
     public string $acceptRanges;
 
-    public string $etag;
+    public string $eTag;
 
     public string $vary;
 
@@ -52,19 +52,15 @@ final readonly class File
     /** @param FileType $options */
     public function __construct(string $name, string $content, array $options = [])
     {
-        // if (empty($content)) {
-
-        // }
-
         $this->content = $content;
         $this->name    = $name;
 
         $this->contentLength      = (int) ($options['Content-Length'] ?? strlen($this->content));
         $this->contentType        = $options['Content-Type'] ?? $this->detectContentType();
         $this->contentMD5         = $options['Content-MD5'] ?? base64_encode(md5($this->content, binary: true));
-        $this->lastModified       = $options['Last-Modified'] ?? '';
+        $this->lastModified       = new DateTimeImmutable($options['Last-Modified'] ?? 'now');
         $this->acceptRanges       = $options['Accept-Ranges'] ?? '';
-        $this->etag               = $options['ETag'] ?? '';
+        $this->eTag               = $options['ETag'] ?? '';
         $this->vary               = $options['Vary'] ?? '';
         $this->server             = $options['Server'] ?? '';
         $this->xMsRequestId       = $options['x-ms-request-id'] ?? '';

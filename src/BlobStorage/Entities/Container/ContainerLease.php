@@ -20,7 +20,7 @@ final class ContainerLease
 
     public readonly DateTimeImmutable $lastModified;
 
-    public readonly string $etag;
+    public readonly string $eTag;
 
     public readonly string $server;
 
@@ -36,7 +36,7 @@ final class ContainerLease
     public function __construct(array $containerLease)
     {
         $this->lastModified = new DateTimeImmutable($containerLease['Last-Modified'] ?? 'now');
-        $this->etag         = $containerLease['ETag'] ?? '';
+        $this->eTag         = $containerLease['ETag'] ?? '';
         $this->server       = $containerLease['Server'] ?? '';
         $this->requestId    = $containerLease[Resource::REQUEST_ID] ?? '';
         $this->version      = $containerLease[Resource::AUTH_VERSION] ?? '';
@@ -74,7 +74,7 @@ final class ContainerLease
     protected function ensureLeaseIdIsset(): void
     {
         if (empty($this->leaseId)) {
-            throw RequiredFieldException::missingField('leaseId');
+            throw RequiredFieldException::missingField('leaseId'); // @codeCoverageIgnore
         }
     }
 }

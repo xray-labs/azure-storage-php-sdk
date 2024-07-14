@@ -35,6 +35,9 @@ final class Resource
     public const string ACCESS_CONTROL_REQUEST_METHOD  = 'Access-Control-Request-Method';
     public const string ACCESS_CONTROL_REQUEST_HEADERS = 'Access-Control-Request-Headers';
 
+    public const string PAGE_WRITE = 'x-ms-page-write';
+    public const string RANGE      = 'x-ms-range';
+
     public const string BLOB_CACHE_CONTROL       = 'x-ms-blob-cache-control';
     public const string BLOB_CONTENT_TYPE        = 'x-ms-blob-content-type';
     public const string BLOB_CONTENT_MD5         = 'x-ms-blob-content-md5';

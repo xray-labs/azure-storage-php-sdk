@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\{AccountInformation, GeoReplication};
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\{AccountInformation, GeoReplication, KeyInfo, UserDelegationKey};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestManager, StoragePropertyManager};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\AccountManager;
 use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
@@ -69,4 +69,42 @@ it('should get account blob service stats', function () {
     $request->assertUsingAccount('account-secondary')
         ->assertSentWithOptions(['some' => 'value'])
         ->assertGet('?comp=stats&restype=service');
+});
+
+it('should get account user delegation key', function () {
+    $body = <<<XML
+    <?xml version="1.0"?>
+    <AccountInfo>
+        <UserDelegationKey>
+            <SignedOid>oid</SignedOid>
+            <SignedTid>tid</SignedTid>
+            <SignedStart>2020-01-01T00:00:00.0000000Z</SignedStart>
+            <SignedExpiry>2020-01-02T00:00:00.0000000Z</SignedExpiry>
+            <SignedService>service</SignedService>
+            <SignedVersion>version</SignedVersion>
+            <Value>value</Value>
+        </UserDelegationKey>
+    </AccountInfo>
+    XML;
+
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+        ->withFakeResponse(new ResponseFake($body));
+
+    $keyInfo = new KeyInfo([
+        'Start'  => '2020-01-01T00:00:00.0000000Z',
+        'Expiry' => '2020-01-02T00:00:00.0000000Z',
+    ]);
+
+    expect((new AccountManager($request))->userDelegationKey($keyInfo, ['some' => 'value']))
+        ->toBeInstanceOf(UserDelegationKey::class)
+        ->signedOid->toBe('oid')
+        ->signedTid->toBe('tid')
+        ->signedStart->format('Y-m-d\TH:i:s')->toBe('2020-01-01T00:00:00')
+        ->signedExpiry->format('Y-m-d\TH:i:s')->toBe('2020-01-02T00:00:00')
+        ->signedService->toBe('service')
+        ->signedVersion->toBe('version')
+        ->value->toBe('value');
+
+    $request->assertPost('?comp=userdelegationkey&restype=service')
+        ->assertSentWithOptions(['some' => 'value']);
 });

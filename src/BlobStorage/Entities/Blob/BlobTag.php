@@ -132,7 +132,6 @@ final readonly class BlobTag implements Xmlable
                 }
 
                 $this->validateTagKey($key = $tag['Key']);
-
                 $this->validateTagValue($tag['Value']);
 
                 $tagsParsed[$key] = $tag['Value'];

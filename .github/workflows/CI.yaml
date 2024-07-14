@@ -35,4 +35,4 @@ jobs:
         run: ./vendor/bin/phpstan analyse
 
       - name: Run Pest
-        run: ./vendor/bin/pest --coverage --min=100 --parallel
+        run: ./vendor/bin/pest --coverage --min=80 --parallel

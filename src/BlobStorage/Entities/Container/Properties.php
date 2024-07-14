@@ -13,7 +13,7 @@ final readonly class Properties
 {
     public DateTimeImmutable $lastModified;
 
-    public string $etag;
+    public string $eTag;
 
     public string $leaseStatus;
 
@@ -37,7 +37,7 @@ final readonly class Properties
     public function __construct(array $property)
     {
         $this->lastModified                          = new DateTimeImmutable($property['Last-Modified'] ?? 'now');
-        $this->etag                                  = $property['Etag'] ?? '';
+        $this->eTag                                  = $property['Etag'] ?? '';
         $this->leaseStatus                           = $property['LeaseStatus'] ?? '';
         $this->leaseState                            = $property['LeaseState'] ?? '';
         $this->defaultEncryptionScope                = $property['DefaultEncryptionScope'] ?? '';

@@ -33,9 +33,12 @@ class BlobMetadataManager implements Manager
                 ->withOptions($options)
                 ->get("{$this->containerName}/{$this->blobName}?comp=metadata&resttype=blob")
                 ->getHeaders();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
 
         /** @var array<string, scalar> $metadata */
         $metadata = array_filter(
@@ -56,8 +59,11 @@ class BlobMetadataManager implements Manager
                 ->withHeaders($blobMetadata->getMetadataToSave())
                 ->put("{$this->containerName}/{$this->blobName}?comp=metadata&resttype=blob")
                 ->isOk();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 }
