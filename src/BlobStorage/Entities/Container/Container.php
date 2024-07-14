@@ -36,7 +36,7 @@ final class Container
         $name = ($container['Name'] ?? '');
 
         if (empty($name)) {
-            throw RequiredFieldException::missingField('Name'); // @codeCoverageIgnore
+            throw RequiredFieldException::missingField('Name');
         }
 
         $this->name       = $name;

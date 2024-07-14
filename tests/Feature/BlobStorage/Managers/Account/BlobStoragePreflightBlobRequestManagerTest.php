@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\PreflightBlobRequestManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
@@ -10,7 +11,7 @@ use Sjpereira\AzureStoragePhpSdk\Tests\Http\RequestFake;
 uses()->group('blob-storage', 'managers', 'account');
 
 it('should send a request to the preflight blob', function (string $method, HttpVerb $verb) {
-    $request = new RequestFake(new Config(['account' => 'account', 'key' => 'key']));
+    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
     $origin  = 'http://example.com';
 
     (new PreflightBlobRequestManager($request))

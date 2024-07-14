@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cors\Cors;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\{BlobProperty, DeleteRetentionPolicy, HourMetrics, Logging, MinuteMetrics, StaticWebsite};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\StoragePropertyManager;
@@ -54,7 +55,7 @@ it('should get the blob property', function () {
     </StorageServiceProperties>
     XML;
 
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake($body));
 
     $response = (new StoragePropertyManager($request))->get();
@@ -76,7 +77,7 @@ it('should get the blob property', function () {
 });
 
 it('should save the blob property', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_NO_CONTENT));
 
     $blobProperty = new BlobProperty([

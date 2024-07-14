@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{ContainerAccessLevel, ContainerAccessLevels};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
@@ -24,7 +25,7 @@ it('should list all container access levels', function () {
     </EnumerationResults>
     XML;
 
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake($body));
 
     $result = (new ContainerAccessLevelManager($request))
@@ -45,7 +46,7 @@ it('should list all container access levels', function () {
 });
 
 it('should save the container access level', function () {
-    $request = new RequestFake(new Config(['account' => 'account', 'key' => 'key']));
+    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
     $accessLevel = new ContainerAccessLevel([
         'Id'           => 'id',

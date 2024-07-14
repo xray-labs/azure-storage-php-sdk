@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobMetadata;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobMetadataManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
@@ -10,7 +11,7 @@ use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'blobs');
 
 it('should get the blob\'s metadata', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Content-Length'                      => 1024,
             'Last-Modified'                       => '2021-01-01T00:00:00.0000000Z',
@@ -48,7 +49,7 @@ it('should get the blob\'s metadata', function () {
 });
 
 it('should save the blob\'s metadata', function () {
-    $request = new RequestFake(new Config(['account' => 'account', 'key' => 'key']));
+    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
     $blobMetadata = new BlobMetadata([
         Resource::METADATA_PREFIX . 'test'    => 'valid',

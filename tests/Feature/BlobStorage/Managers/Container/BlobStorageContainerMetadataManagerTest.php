@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerMetadata;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerMetadataManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
@@ -11,7 +12,7 @@ use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'containers');
 
 it('should get the container\'s metadata', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'   => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'            => ['etag'],
@@ -35,7 +36,7 @@ it('should get the container\'s metadata', function () {
 });
 
 it('should throw an exception if the metadata key is invalid', function (string $key, string $message) {
-    $request = new RequestFake(new Config(['account' => 'account', 'key' => 'key']));
+    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
     expect(fn () => (new ContainerMetadataManager($request))->save('container', [
         'valid' => 'valid',
@@ -47,7 +48,7 @@ it('should throw an exception if the metadata key is invalid', function (string 
 ]);
 
 it('should save the container\'s metadata', function () {
-    $request = new RequestFake(new Config(['account' => 'account', 'key' => 'key']));
+    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
     expect((new ContainerMetadataManager($request))->save($container = 'container', [
         'test'    => 'test',

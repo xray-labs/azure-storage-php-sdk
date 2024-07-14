@@ -87,7 +87,7 @@ it('should get account user delegation key', function () {
     </AccountInfo>
     XML;
 
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake($body));
 
     $keyInfo = new KeyInfo([

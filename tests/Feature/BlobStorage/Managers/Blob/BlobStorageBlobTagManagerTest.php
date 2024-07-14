@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobTag;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobTagManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
@@ -23,7 +24,7 @@ it('should get the blob\'s tags', function () {
     </Tags>
     XML;
 
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake($body, headers: [
             'Content-Length'  => ['10'],
             'Content-Type'    => ['application/xml'],
@@ -55,7 +56,7 @@ it('should get the blob\'s tags', function () {
 });
 
 it('should put a new blob tag', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_NO_CONTENT));
 
     $blobTag = new BlobTag(['key' => 'value']);

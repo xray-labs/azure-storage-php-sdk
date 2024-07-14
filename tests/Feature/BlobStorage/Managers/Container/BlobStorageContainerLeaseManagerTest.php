@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerLease;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerLeaseManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
@@ -10,7 +11,7 @@ use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'containers');
 
 it('should acquire a new lease', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'   => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'            => ['etag'],
@@ -42,7 +43,7 @@ it('should acquire a new lease', function () {
 });
 
 it('should renew a lease', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'   => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'            => ['etag'],
@@ -72,7 +73,7 @@ it('should renew a lease', function () {
 });
 
 it('should change a lease', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'   => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'            => ['etag'],
@@ -103,7 +104,7 @@ it('should change a lease', function () {
 });
 
 it('should release a lease', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'   => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'            => ['etag'],
@@ -133,7 +134,7 @@ it('should release a lease', function () {
 });
 
 it('should break a lease', function (?string $leaseId) {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'   => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'            => ['etag'],

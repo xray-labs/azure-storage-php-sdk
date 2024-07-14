@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Pest\Expectation;
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\Properties;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\{Container, ContainerProperties, Containers};
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\{ContainerAccessLevelManager, ContainerLeaseManager, ContainerMetadataManager};
@@ -15,7 +16,7 @@ use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'containers');
 
 it('should get container\'s managers', function (string $method, string $class) {
-    $request = new RequestFake(new Config(['account' => 'account', 'key' => 'key']));
+    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
     expect((new ContainerManager($request))->{$method}())
         ->toBeInstanceOf($class);
@@ -25,7 +26,7 @@ it('should get container\'s managers', function (string $method, string $class) 
 ]);
 
 it('should get container properties', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'                                  => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'                                           => ['etag'],
@@ -107,7 +108,7 @@ it('should list all the containers', function (bool $withDeleted) {
     </EnumerationResults>
     XML;
 
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake($xml));
 
     $result = (new ContainerManager($request))->list(['some' => 'value'], $withDeleted);
@@ -123,7 +124,7 @@ it('should list all the containers', function (bool $withDeleted) {
                 ->and($container->value->properties)
                 ->toBeInstanceOf(Properties::class)
                 ->lastModified->format('Y-m-d H:i:s')->toBe('2024-06-10 00:00:00')
-                ->etag->toBe('etag')
+                ->eTag->toBe('etag')
                 ->leaseStatus->toBe('lease-status')
                 ->leaseState->toBe('lease-state')
                 ->defaultEncryptionScope->toBe('default-encryption-scope')
@@ -143,7 +144,7 @@ it('should list all the containers', function (bool $withDeleted) {
 ]);
 
 it('should not be able to request when a container name is invalid', function (string $method) {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])));
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
 
     $container = 'container#Name.';
 
@@ -157,14 +158,14 @@ it('should not be able to request when a container name is invalid', function (s
 ]);
 
 it('should lease a container', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])));
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
 
     expect((new ContainerManager($request))->lease('container'))
         ->toBeInstanceOf(ContainerLeaseManager::class);
 });
 
 it('should create a new container', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     expect((new ContainerManager($request))->create($container = 'container'))
@@ -174,7 +175,7 @@ it('should create a new container', function () {
 });
 
 it('should delete an existing container', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_ACCEPTED));
 
     expect((new ContainerManager($request))->delete($container = 'container'))
@@ -184,7 +185,7 @@ it('should delete an existing container', function () {
 });
 
 it('should restore a deleted container', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     expect((new ContainerManager($request))->restore($container = 'container', $version = 'version'))

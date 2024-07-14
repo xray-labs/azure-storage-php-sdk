@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobProperty;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobPropertyManager;
@@ -10,7 +11,7 @@ use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'blobs');
 
 it('should get the blob\'s properties', function () {
-    $request = (new RequestFake(new Config(['account' => 'account', 'key' => 'key'])))
+    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'                  => '2021-01-01T00:00:00.0000000Z',
             'ETag'                           => '0x8D8D8D8D8D8D8D9',
@@ -66,7 +67,7 @@ it('should get the blob\'s properties', function () {
 });
 
 it('should save the blob property', function () {
-    $request = new RequestFake(new Config(['account' => 'account', 'key' => 'key']));
+    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
 
     $blobProperty = new BlobProperty([
         'Last-Modified'      => '2021-01-01T00:00:00.0000000Z',
