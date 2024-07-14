@@ -150,9 +150,13 @@ readonly class BlobManager implements Manager
     /**
      * @param boolean $force If true, Delete the base blob and all of its snapshots.
      */
-    public function delete(string $blobName, ?DateTimeImmutable $snapshot = null, bool $force = false): bool
+    public function delete(string $blobName, null|DateTimeImmutable|string $snapshot = null, bool $force = false): bool
     {
-        $snapshotHeader = $snapshot ? sprintf('&snapshot=%s', convert_to_RFC3339_micro($snapshot)) : '';
+        if ($snapshot instanceof DateTimeImmutable) {
+            $snapshot = convert_to_RFC3339_micro($snapshot);
+        }
+
+        $snapshotHeader = $snapshot ? sprintf('?snapshot=%s', urlencode($snapshot)) : '';
 
         $deleteSnapshotHeader = $snapshot ? sprintf('&%s=only', Resource::DELETE_SNAPSHOTS) : '';
 
@@ -186,6 +190,30 @@ readonly class BlobManager implements Manager
             return $this->request
                 ->put("{$this->containerName}/{$blobName}?comp=snapshot&resttype=blob")
                 ->isCreated();
+        } catch (RequestExceptionInterface $e) {
+            throw RequestException::createFromRequestException($e);
+        }
+    }
+
+    /** @param array<string, scalar> $options */
+    public function copy(string $sourceCopy, string $blobName, array $options = [], null|DateTimeImmutable|string $snapshot = null): bool
+    {
+        if ($snapshot instanceof DateTimeImmutable) {
+            $snapshot = convert_to_RFC3339_micro($snapshot);
+        }
+
+        $snapshotHeader = $snapshot ? sprintf('?snapshot=%s', urlencode($snapshot)) : '';
+
+        $sourceUri = $this->request->uri("{$this->containerName}/{$sourceCopy}{$snapshotHeader}");
+
+        try {
+            return $this->request
+                ->withOptions($options)
+                ->withHeaders([
+                    Resource::COPY_SOURCE => $sourceUri,
+                ])
+                ->put("{$this->containerName}/{$blobName}?resttype=blob")
+                ->isAccepted();
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }

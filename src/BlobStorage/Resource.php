@@ -51,6 +51,8 @@ final class Resource
     public const string EXPIRY_OPTION = 'x-ms-expiry-option';
     public const string EXPIRY_TIME   = 'x-ms-expiry-time';
 
+    public const string COPY_SOURCE = 'x-ms-copy-source';
+
     public const string SEQUENCE_NUMBER_ACTION = 'x-ms-sequence-number-action';
 
     public static function canonicalize(string $uri): string

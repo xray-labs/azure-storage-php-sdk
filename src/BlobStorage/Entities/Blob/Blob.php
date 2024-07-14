@@ -25,7 +25,11 @@ final class Blob
 
     public readonly ?DateTimeImmutable $snapshot;
 
+    public readonly ?string $snapshotOriginalRaw;
+
     public readonly DateTimeImmutable $versionId;
+
+    public readonly ?string $versionIdOriginalRaw;
 
     public readonly bool $isCurrentVersion;
 
@@ -43,10 +47,12 @@ final class Blob
             throw RequiredFieldException::missingField('Name');
         }
 
-        $this->name             = $name;
-        $this->snapshot         = isset($blob['Snapshot']) ? new DateTimeImmutable($blob['Snapshot']) : null;
-        $this->versionId        = new DateTimeImmutable($blob['Version'] ?? 'now');
-        $this->isCurrentVersion = to_boolean($blob['IsCurrentVersion'] ?? true);
+        $this->name                 = $name;
+        $this->snapshot             = isset($blob['Snapshot']) ? new DateTimeImmutable($blob['Snapshot']) : null;
+        $this->snapshotOriginalRaw  = $blob['Snapshot'] ?? null;
+        $this->versionId            = new DateTimeImmutable($blob['Version'] ?? 'now');
+        $this->versionIdOriginalRaw = $blob['Version'] ?? null;
+        $this->isCurrentVersion     = to_boolean($blob['IsCurrentVersion'] ?? true);
 
         $this->properties = new Properties($blob['Properties'] ?? []);
 
@@ -76,7 +82,15 @@ final class Blob
     {
         $this->ensureManagerIsConfigured();
 
-        return $this->getManager()->delete($this->name, $this->snapshot, $force);
+        return $this->getManager()->delete($this->name, $this->snapshotOriginalRaw, $force);
+    }
+
+    /** @param array<string, scalar> $options */
+    public function copy(string $destination, array $options = []): bool
+    {
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->copy($this->name, $destination, $options, $this->snapshotOriginalRaw);
     }
 
     public function restore(): bool
