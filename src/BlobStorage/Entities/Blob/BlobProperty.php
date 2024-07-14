@@ -49,7 +49,7 @@ final readonly class BlobProperty
 
     public string $contentType;
 
-    public string $etag;
+    public string $eTag;
 
     public ?string $contentMD5;
 
@@ -144,7 +144,7 @@ final readonly class BlobProperty
         $this->leaseStatus                 = $property['x-ms-lease-status'] ?? null;
         $this->contentLength               = (int) ($property['Content-Length'] ?? 0);
         $this->contentType                 = $property['Content-Type'] ?? '';
-        $this->etag                        = $property['ETag'] ?? '';
+        $this->eTag                        = $property['ETag'] ?? '';
         $this->contentMD5                  = $property['Content-MD5'] ?? null;
         $this->contentEncoding             = $property['Content-Encoding'] ?? null;
         $this->contentLanguage             = $property['Content-Language'] ?? null;

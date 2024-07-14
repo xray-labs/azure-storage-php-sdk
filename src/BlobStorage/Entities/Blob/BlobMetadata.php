@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
 use DateTimeImmutable;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateMetadataKey;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 /**
  * @phpstan-type BlobMetadataHeaders array{Content-Length?: string, Last-Modified?: string, ETag?: string, Vary?: string, Server?: string, x-ms-request-id?: string, x-ms-version?: string, Date?: string}
  */
 final readonly class BlobMetadata
 {
+    use ValidateMetadataKey;
+
     public ?int $contentLength;
 
     public ?DateTimeImmutable $lastModified;
@@ -91,20 +93,5 @@ final readonly class BlobMetadata
         }
 
         return array_filter($metadata, fn (mixed $value) => $value !== null);
-    }
-
-    protected function validateMetadataKey(string $key): void
-    {
-        $message = "Invalid metadata key: {$key}.";
-
-        if (is_numeric($key[0])) {
-            throw InvalidArgumentException::create("{$message} Metadata keys cannot start with a number.");
-        }
-
-        $name = preg_replace('/[^a-z0-9_]/i', '', $key);
-
-        if ($key !== $name) {
-            throw InvalidArgumentException::create("{$message} Only alphanumeric characters and underscores are allowed.");
-        }
     }
 }

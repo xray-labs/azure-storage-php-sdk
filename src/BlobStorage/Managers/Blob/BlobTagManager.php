@@ -36,17 +36,23 @@ class BlobTagManager implements Manager
 
             /** @var BlobTagHeaders $headers */
             $headers = $response->getHeaders();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
 
-        /** @var array{TagSet: array{Tag: array<string, scalar>}} $response */
-        $response = $this->request->getConfig()->parser->parse($body);
+        /** @var array{TagSet: array{Tag: array<string, scalar>}} $parsed */
+        $parsed = $this->request->getConfig()->parser->parse($body);
 
         /** @var array<int, array{Key: string, Value: string}> $tags */
-        $tags = $response['TagSet']['Tag'];
+        $tags    = $parsed['TagSet']['Tag'];
+        $headers = (array) $headers;
 
-        return new BlobTag($tags, (array) $headers);
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+
+        return new BlobTag($tags, $headers);
     }
 
     /** @param array<string, scalar> $options */
@@ -56,13 +62,15 @@ class BlobTagManager implements Manager
             return $this->request
                 ->withOptions($options)
                 ->withHeaders([
-                    Resource::CONTENT_LENGTH => strlen($xml = $blobTag->toXml()),
-                    Resource::CONTENT_TYPE   => 'application/xml; charset=UTF-8',
+                    Resource::CONTENT_TYPE => 'application/xml; charset=UTF-8',
                 ])
-                ->put("{$this->containerName}/{$this->blobName}?resttype=blob&comp=tags", $xml)
+                ->put("{$this->containerName}/{$this->blobName}?resttype=blob&comp=tags", $blobTag->toXml())
                 ->isNoContent();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 }

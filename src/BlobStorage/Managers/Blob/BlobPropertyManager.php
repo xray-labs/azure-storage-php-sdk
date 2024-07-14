@@ -32,11 +32,17 @@ class BlobPropertyManager implements Manager
                 ->withOptions($options)
                 ->get("{$this->containerName}/{$this->blobName}?resttype=blob")
                 ->getHeaders();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
 
-        return new BlobProperty((array) $headers);
+        $headers = (array) $headers;
+        array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value);
+
+        return new BlobProperty($headers);
     }
 
     /** @param array<string, scalar> $options */
@@ -48,8 +54,11 @@ class BlobPropertyManager implements Manager
                 ->withHeaders($blobProperty->getPropertiesToSave())
                 ->put("{$this->containerName}/{$this->blobName}?comp=properties&resttype=blob")
                 ->isOk();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 }

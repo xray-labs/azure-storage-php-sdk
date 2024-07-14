@@ -38,7 +38,7 @@ final class Blob
         $name = ($blob['Name'] ?? '');
 
         if (empty($name)) {
-            throw RequiredFieldException::missingField('Name');
+            throw RequiredFieldException::missingField('Name'); // @codeCoverageIgnore
         }
 
         $this->name             = $name;

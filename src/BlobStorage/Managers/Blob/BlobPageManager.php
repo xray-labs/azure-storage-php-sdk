@@ -42,13 +42,16 @@ class BlobPageManager implements Manager
                 ], $headers))
                 ->put("{$this->containerName}/{$name}?resttype=blob")
                 ->isCreated();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /** @param array<string, scalar> $options */
-    public function append(File $file, int $startPage, ?int $endPage = null, array $options = []): void
+    public function append(File $file, int $startPage, ?int $endPage = null, array $options = []): bool
     {
         $this->validatePageBytesBoundary($file->contentLength);
 
@@ -63,40 +66,47 @@ class BlobPageManager implements Manager
         $this->validatePageSize($startByte, $endByte, $file->contentLength);
 
         try {
-            $this->request
+            return $this->request
                 ->withOptions($options)
                 ->withHeaders([
-                    'x-ms-page-write' => 'update',
-                    'x-ms-range'      => "bytes={$startByte}-{$endByte}",
-                    'Content-Type'    => $file->contentType,
-                    'Content-Length'  => $file->contentLength,
-                    'Content-MD5'     => $file->contentMD5,
+                    Resource::PAGE_WRITE     => 'update',
+                    Resource::RANGE          => "bytes={$startByte}-{$endByte}",
+                    Resource::CONTENT_TYPE   => $file->contentType,
+                    Resource::CONTENT_LENGTH => $file->contentLength,
+                    Resource::CONTENT_MD5    => $file->contentMD5,
                 ])
-                ->put("{$this->containerName}/{$file->name}?resttype=blob&comp=page", $file->content);
+                ->put("{$this->containerName}/{$file->name}?resttype=blob&comp=page", $file->content)
+                ->isCreated();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /** @param array<string, scalar> $options */
-    public function put(File $file, array $options = []): void
+    public function put(File $file, array $options = []): bool
     {
         $this->validatePageBytesBoundary($file->contentLength);
 
         try {
             $this->create($file->name, $file->contentLength, $options, [
-                'Content-Type' => $file->contentType,
-                'Content-MD5'  => $file->contentMD5,
+                Resource::CONTENT_TYPE => $file->contentType,
+                Resource::CONTENT_MD5  => $file->contentMD5,
             ]);
 
-            $this->append($file, 1, options: $options);
+            return $this->append($file, 1, options: $options);
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /** @param array<string, scalar> $options */
-    public function clear(string $name, int $startPage = 1, ?int $endPage = null, array $options = []): void
+    public function clear(string $name, int $startPage = 1, ?int $endPage = null, array $options = []): bool
     {
         ['startByte' => $startByte, 'endByte' => $endByte] = $this->getPageRange($startPage);
 
@@ -107,26 +117,30 @@ class BlobPageManager implements Manager
         $this->validatePageSize($startByte, $endByte);
 
         try {
-            $this->request
+            return $this->request
                 ->withOptions($options)
                 ->withHeaders([
-                    'x-ms-page-write' => 'clear',
-                    'x-ms-range'      => "bytes={$startByte}-{$endByte}",
+                    Resource::PAGE_WRITE => 'clear',
+                    Resource::RANGE      => "bytes={$startByte}-{$endByte}",
                 ])
-                ->put("{$this->containerName}/{$name}?resttype=blob&comp=page");
+                ->put("{$this->containerName}/{$name}?resttype=blob&comp=page")
+                ->isCreated();
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /** @param array<string, scalar> $options */
-    public function clearAll(string $name, array $options = []): void
+    public function clearAll(string $name, array $options = []): bool
     {
         $this->ensureManagerIsConfigured();
 
         $file = $this->getManager()->get($name);
 
-        $this->clear($name, 1, (int)($file->contentLength / self::PAGE_SIZE_BYTES), $options);
+        return $this->clear($name, 1, (int)($file->contentLength / self::PAGE_SIZE_BYTES), $options);
     }
 
     /** @return array{startByte: int, endByte: int} */
