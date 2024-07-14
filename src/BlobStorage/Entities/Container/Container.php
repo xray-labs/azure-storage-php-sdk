@@ -6,6 +6,7 @@ namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\ContainerAccessLevels;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
+use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerLeaseManager;
 use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
 use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
 use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
@@ -77,6 +78,13 @@ final class Container
         $this->ensureManagerIsConfigured();
 
         return $this->getManager()->restore($this->name, $this->version);
+    }
+
+    public function lease(): ContainerLeaseManager
+    {
+        $this->ensureManagerIsConfigured();
+
+        return $this->getManager()->lease($this->name);
     }
 
     public function blobs(): BlobManager

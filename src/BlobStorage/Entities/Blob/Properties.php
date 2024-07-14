@@ -105,7 +105,7 @@ final readonly class Properties
         $this->resourceType              = $property['ResourceType'] ?? '';
         $this->placeholder               = $property['Placeholder'] ?? '';
         $this->contentLength             = $property['Content-Length'] ?? '';
-        $this->contentType               = $property['Content-Type'] ?? '';
+        $this->contentType               = isset($property['Content-Type']) && !empty($property['Content-Type']) ? $property['Content-Type'] : '';
         $this->contentEncoding           = isset($property['Content-Encoding']) && !empty($property['Content-Encoding']) ? $property['Content-Encoding'] : '';
         $this->contentLanguage           = isset($property['Content-Language']) && !empty($property['Content-Language']) ? $property['Content-Language'] : '';
         $this->contentMD5                = isset($property['Content-MD5']) && !empty($property['Content-MD5']) ? $property['Content-MD5'] : '';

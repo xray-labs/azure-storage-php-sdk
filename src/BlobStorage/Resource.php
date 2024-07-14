@@ -48,6 +48,14 @@ final class Resource
     public const string BLOB_SEQUENCE_NUMBER     = 'x-ms-blob-sequence-number';
     public const string BLOB_TYPE                = 'x-ms-blob-type';
 
+    public const string UNDELETE_SOURCE  = 'x-ms-undelete-source';
+    public const string DELETE_SNAPSHOTS = 'x-ms-delete-snapshots';
+
+    public const string EXPIRY_OPTION = 'x-ms-expiry-option';
+    public const string EXPIRY_TIME   = 'x-ms-expiry-time';
+
+    public const string COPY_SOURCE = 'x-ms-copy-source';
+
     public const string SEQUENCE_NUMBER_ACTION = 'x-ms-sequence-number-action';
 
     public static function canonicalize(string $uri): string

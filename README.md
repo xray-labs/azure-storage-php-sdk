@@ -2,6 +2,8 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+[![PHP CI](https://github.com/sjspereira/azure-storage-php-sdk/actions/workflows/CI.yaml/badge.svg)](https://github.com/sjspereira/azure-storage-php-sdk/actions/workflows/CI.yaml)
+
 ## Description
 
 Integrate with Azure's cloud storage services
