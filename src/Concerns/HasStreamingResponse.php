@@ -28,7 +28,7 @@ trait HasStreamingResponse
         header("Content-Type: {$file->getContentType()}");
         header("Content-Length: {$file->getContentLength()}");
         header('Cache-Control: no-cache, must-revalidate');
-        header('Expires: ' . ($expires ?? 0));
+        header("Expires: {$expires}");
 
         return with($file->getContent(), function (string $content): void {
             if (!is_running_in_console()) {

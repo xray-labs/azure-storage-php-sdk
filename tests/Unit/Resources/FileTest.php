@@ -14,6 +14,7 @@ it('should not be able to create a file without a name', function () {
 })->throws(InvalidArgumentException::class, '[name] cannot be empty');
 
 it('should get file information', function (string $method, string|bool|int|DateTimeImmutable $expected) {
+    /** @phpstan-ignore-next-line */
     $file = new File('name', 'content', [
         'Content-Type'          => 'text/plain',
         'Content-Length'        => 7,

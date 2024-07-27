@@ -30,12 +30,15 @@ it('should get the authentication account', function () {
 });
 
 it('should get correctly the authentication signature from a login request', function () {
+    /** @var string $body */
+    $body = json_encode([
+        'token_type'   => $tokeType = 'Bearer',
+        'access_token' => $token    = 'token',
+        'expires_in'   => 3600,
+    ]);
+
     $client = (new ClientFake())
-        ->withResponseFake(json_encode([
-            'token_type'   => $tokeType = 'Bearer',
-            'access_token' => $token    = 'token',
-            'expires_in'   => 3600,
-        ]));
+        ->withResponseFake($body);
 
     $auth = (new MicrosoftEntraId('account', 'directory', $application = 'application', $secret = 'secret'))
         ->withRequestClient($client);

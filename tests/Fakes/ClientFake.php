@@ -18,10 +18,12 @@ class ClientFake implements ClientInterface
 
     protected int $status = 200;
 
+    /** @var array<string, scalar> */
     protected array $headers = [];
 
     protected ?string $body = null;
 
+    /** @param array<string, scalar> $headers */
     public function withResponseFake(?string $body = null, array $headers = [], int $status = 200): self
     {
         $this->status  = $status;
@@ -34,6 +36,7 @@ class ClientFake implements ClientInterface
     /** @param array<string, scalar> $options */
     public function send(RequestInterface $request, array $options = []): ResponseInterface
     {
+        /** @phpstan-ignore-next-line */
         return new Response($this->status, $this->headers, $this->body);
     }
 
@@ -52,6 +55,7 @@ class ClientFake implements ClientInterface
             'options' => $options,
         ];
 
+        /** @phpstan-ignore-next-line */
         return new Response($this->status, $this->headers, $this->body);
     }
 
