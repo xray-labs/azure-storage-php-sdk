@@ -2,4 +2,4 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities;

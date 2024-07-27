@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Contracts;
+namespace Xray\AzureStoragePhpSdk\Contracts;
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\UnableToParseException;
+use Xray\AzureStoragePhpSdk\Exceptions\UnableToParseException;
 
 interface Parser
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\ContainerAccessLevels;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerLeaseManager;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
-use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\ContainerAccessLevels;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerLeaseManager;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
+use Xray\AzureStoragePhpSdk\Concerns\HasManager;
+use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 /**
  * @phpstan-import-type PropertiesType from Properties

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Concerns\{ValidateContainerName, ValidateMetadataKey};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerMetadata;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\{RequestException};
+use Xray\AzureStoragePhpSdk\BlobStorage\Concerns\{ValidateContainerName, ValidateMetadataKey};
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerMetadata;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Exceptions\{RequestException};
 
 readonly class ContainerMetadataManager implements Manager
 {

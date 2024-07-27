@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
-use Sjpereira\AzureStoragePhpSdk\Http\Headers;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\Http\Headers;
 
 uses()->group('http');
 

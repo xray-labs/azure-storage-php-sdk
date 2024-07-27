@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
 use DateTimeImmutable;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobLeaseManager;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobLeaseManager;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Concerns\HasManager;
+use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 /**
  * @phpstan-type BlobLeaseType array{'Last-Modified'?: string, ETag?: string, Server?: string, Date?: string, 'x-ms-request-id'?: string, 'x-ms-version'?: string, 'x-ms-lease-id'?: string}

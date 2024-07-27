@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use Sjpereira\AzureStoragePhpSdk\Http\Response;
+use Xray\AzureStoragePhpSdk\Http\Response;
 
 uses()->group('http');
 

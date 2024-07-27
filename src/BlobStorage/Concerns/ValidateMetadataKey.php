@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Concerns;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Concerns;
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 trait ValidateMetadataKey
 {

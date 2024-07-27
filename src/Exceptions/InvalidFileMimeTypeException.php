@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Exceptions;
+namespace Xray\AzureStoragePhpSdk\Exceptions;
 
 use Exception;
 

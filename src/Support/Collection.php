@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Support;
+namespace Xray\AzureStoragePhpSdk\Support;
 
 use ArrayAccess;
 use ArrayIterator;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Http;
+namespace Xray\AzureStoragePhpSdk\Http;
 
 use Closure;
 use GuzzleHttp\{Client, ClientInterface};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request as RequestContract, Response as ResponseContract};
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
+use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\Contracts\Http\{Request as RequestContract, Response as ResponseContract};
 
 class Request implements RequestContract
 {

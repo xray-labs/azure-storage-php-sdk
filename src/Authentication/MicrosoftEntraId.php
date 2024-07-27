@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Authentication;
+namespace Xray\AzureStoragePhpSdk\Authentication;
 
 use DateTime;
 use GuzzleHttp\Client;
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Authentication\Auth;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
-use Sjpereira\AzureStoragePhpSdk\Http\{Headers};
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
+use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
+use Xray\AzureStoragePhpSdk\Http\{Headers};
 
 final class MicrosoftEntraId implements Auth
 {

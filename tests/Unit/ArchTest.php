@@ -1,21 +1,21 @@
 <?php
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
 
 arch('it should not use dumping functions')
     ->expect(['dd', 'dump', 'die', 'exit', 'var_dump', 'var_export'])
     ->not->toBeUsed();
 
 arch('should use strict types everywhere')
-    ->expect('Sjpereira\\AzureStoragePhpSdk')
+    ->expect('Xray\\AzureStoragePhpSdk')
     ->toUseStrictTypes();
 
 arch('it should all entities be final')
-    ->expect('Sjpereira\\AzureStoragePhpSdk\\BlobStorage\\Entities')
+    ->expect('Xray\\AzureStoragePhpSdk\\BlobStorage\\Entities')
     ->classes()
     ->toBeFinal();
 
 arch('it should all manger implements Manage interface')
-    ->expect('Sjpereira\\AzureStoragePhpSdk\\BlobStorage\\Managers')
+    ->expect('Xray\\AzureStoragePhpSdk\\BlobStorage\\Managers')
     ->classes()
     ->toImplement(Manager::class);

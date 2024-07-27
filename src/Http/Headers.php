@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Http;
+namespace Xray\AzureStoragePhpSdk\Http;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Contracts\{Arrayable, Stringable};
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Contracts\{Arrayable, Stringable};
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 /**
  * @property-read ?string $contentEncoding

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Contracts\Http;
+namespace Xray\AzureStoragePhpSdk\Contracts\Http;
 
 interface Response
 {

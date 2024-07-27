@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\ManagerNotSetException;
+use Xray\AzureStoragePhpSdk\Concerns\HasManager;
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Exceptions\ManagerNotSetException;
 
 uses()->group('concerns', 'traits');
 

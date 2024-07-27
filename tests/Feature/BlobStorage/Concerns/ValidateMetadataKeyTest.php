@@ -1,7 +1,7 @@
 <?php
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateMetadataKey;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateMetadataKey;
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 uses()->group('blob-storage', 'concerns');
 

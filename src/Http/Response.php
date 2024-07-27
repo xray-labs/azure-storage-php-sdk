@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Http;
+namespace Xray\AzureStoragePhpSdk\Http;
 
 use Psr\Http\Message\ResponseInterface;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Response as ResponseContract;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Response as ResponseContract;
 
 final class Response implements ResponseContract
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Parsers;
+namespace Xray\AzureStoragePhpSdk\Parsers;
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Parser;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\UnableToParseException;
+use Xray\AzureStoragePhpSdk\Contracts\Parser;
+use Xray\AzureStoragePhpSdk\Exceptions\UnableToParseException;
 
 class XmlParser implements Parser
 {

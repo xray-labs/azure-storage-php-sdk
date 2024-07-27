@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 use Pest\Expectation;
-use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\Properties;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\{Container, ContainerProperties, Containers};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\{ContainerAccessLevelManager, ContainerLeaseManager, ContainerMetadataManager};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
-use Sjpereira\AzureStoragePhpSdk\Http\Response as BaseResponse;
-use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\Properties;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\{Container, ContainerProperties, Containers};
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\{ContainerAccessLevelManager, ContainerLeaseManager, ContainerMetadataManager};
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
+use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
+use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 uses()->group('blob-storage', 'managers', 'containers');
 
