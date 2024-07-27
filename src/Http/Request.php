@@ -12,6 +12,7 @@ use Xray\AzureStoragePhpSdk\Concerns\Http\{HasAuthenticatedRequest, HasSharingMe
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\{Request as RequestContract, Response as ResponseContract};
 
+/** @suppressWarnings(PHPMD.ExcessiveParameterList) */
 class Request implements RequestContract
 {
     use HasAuthenticatedRequest;
