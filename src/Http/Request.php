@@ -8,11 +8,21 @@ use Closure;
 use GuzzleHttp\{Client, ClientInterface};
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\{Request as RequestContract, Response as ResponseContract};
+use Xray\AzureStoragePhpSdk\Http\Concerns\HasAuthenticatedRequest;
 
 class Request implements RequestContract
 {
-    protected ClientInterface $client;
+    use HasAuthenticatedRequest;
+
+    protected readonly ClientInterface $client;
+
+    protected readonly Config $config;
+
+    protected readonly string $protocol;
+
+    protected readonly string $domain;
 
     /** @var array<string, scalar> */
     protected array $options = [];
@@ -20,17 +30,19 @@ class Request implements RequestContract
     /** @var array<string, scalar> */
     protected array $headers = [];
 
-    protected ?Closure $usingAccountCallback = null;
-
-    protected bool $shouldAuthenticate = true;
-
     public function __construct(
-        public Config $config,
+        protected readonly Auth $auth,
+        ?Config $config = null,
         ?ClientInterface $client = null,
-        public string $protocol = 'https',
-        public string $baseDomain = 'blob.core.windows.net'
+        ?string $protocol = null,
+        ?string $domain = null,
     ) {
-        $this->client = $client ?? new Client();
+        validate_protocol($protocol ??= 'https');
+
+        $this->client   = $client ?? new Client();
+        $this->config   = $config ?? new Config();
+        $this->protocol = $protocol;
+        $this->domain   = $domain ?? 'blob.core.windows.net';
     }
 
     public function usingAccount(Closure $callback): static
@@ -43,18 +55,6 @@ class Request implements RequestContract
     public function getConfig(): Config
     {
         return $this->config;
-    }
-
-    public function withAuthentication(bool $shouldAuthenticate = true): static
-    {
-        $this->shouldAuthenticate = $shouldAuthenticate;
-
-        return $this;
-    }
-
-    public function withoutAuthentication(): static
-    {
-        return $this->withAuthentication(false);
     }
 
     /** @param array<string, scalar> $options */
@@ -137,7 +137,7 @@ class Request implements RequestContract
 
     public function uri(?string $endpoint = null): string
     {
-        $account = $this->config->auth->getAccount();
+        $account = $this->auth->getAccount();
 
         if (!is_null($this->usingAccountCallback)) {
             $account = call_user_func($this->usingAccountCallback, $account);
@@ -151,7 +151,7 @@ class Request implements RequestContract
             $endpoint = implode('/', array_map('rawurlencode', explode('/', $endpoint))) . "?{$params}";
         }
 
-        return "{$this->protocol}://{$account}.{$this->baseDomain}/{$endpoint}";
+        return "{$this->protocol}://{$account}.{$this->domain}/{$endpoint}";
     }
 
     /** @return array<string, mixed> */
@@ -160,21 +160,21 @@ class Request implements RequestContract
         $options = $this->options;
 
         $headers = Headers::parse(array_merge($this->headers, [
-            Resource::AUTH_DATE    => $this->config->auth->getDate(),
+            Resource::AUTH_DATE    => $this->auth->getDate(),
             Resource::AUTH_VERSION => Resource::VERSION,
         ]));
 
         if (!empty($body)) {
             $options['body'] = $body;
 
-            if (!$headers->has('Content-Length')) {
+            if (!$headers->has(Resource::CONTENT_LENGTH)) {
                 $headers->setContentLength(strlen($body));
             }
         }
 
         if ($this->shouldAuthenticate) {
             $headers = $headers->withAdditionalHeaders([
-                Resource::AUTH_HEADER => $this->config->auth->getAuthentication($verb, $headers, $resource),
+                Resource::AUTH_HEADER => $this->auth->getAuthentication($verb, $headers, $resource),
             ]);
         } else {
             $this->withAuthentication();

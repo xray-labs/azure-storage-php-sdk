@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{ContainerAccessLevel, ContainerAccessLevels};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 uses()->group('blob-storage', 'managers', 'containers');
@@ -25,7 +24,7 @@ it('should list all container access levels', function () {
     </EnumerationResults>
     XML;
 
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($body));
 
     $result = (new ContainerAccessLevelManager($request))
@@ -46,7 +45,7 @@ it('should list all container access levels', function () {
 });
 
 it('should save the container access level', function () {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     $accessLevel = new ContainerAccessLevel([
         'Id'           => 'id',

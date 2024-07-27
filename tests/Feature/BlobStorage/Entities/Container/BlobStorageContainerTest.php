@@ -1,7 +1,5 @@
 <?php
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Xray\AzureStoragePhpSdk\BlobStorage\Config;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\ContainerAccessLevels;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\{Container, ContainerMetadata, ContainerProperties};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
@@ -38,7 +36,7 @@ it('should call manager\'s list access level', function () {
     </EnumerationResults>
     XML;
 
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($body));
 
     $manager = new ContainerManager($request);
@@ -55,7 +53,7 @@ it('should call manager\'s list access level', function () {
 });
 
 it('should get the container\'s properties', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'                                  => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'                                           => ['etag'],
@@ -86,7 +84,7 @@ it('should get the container\'s properties', function () {
 });
 
 it('should get the container\'s metadata', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'   => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'            => ['etag'],
@@ -110,7 +108,7 @@ it('should get the container\'s metadata', function () {
 });
 
 it('should delete the container', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_ACCEPTED));
 
     $manager = new ContainerManager($request);
@@ -126,7 +124,7 @@ it('should delete the container', function () {
 });
 
 it('should restore the deleted container', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     $manager = new ContainerManager($request);
@@ -142,7 +140,7 @@ it('should restore the deleted container', function () {
 });
 
 it('should lease the container', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     $manager = new ContainerManager($request);
 
@@ -157,7 +155,7 @@ it('should lease the container', function () {
 });
 
 it('should get the blobs from the container', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     $manager = new ContainerManager($request);
 

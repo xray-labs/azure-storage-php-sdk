@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cors\Cors;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\{BlobProperty, DeleteRetentionPolicy, HourMetrics, Logging, MinuteMetrics, StaticWebsite};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\StoragePropertyManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
@@ -55,7 +54,7 @@ it('should get the blob property', function () {
     </StorageServiceProperties>
     XML;
 
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($body));
 
     $response = (new StoragePropertyManager($request))->get();
@@ -77,7 +76,7 @@ it('should get the blob property', function () {
 });
 
 it('should save the blob property', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_NO_CONTENT));
 
     // @phpstan-ignore-next-line

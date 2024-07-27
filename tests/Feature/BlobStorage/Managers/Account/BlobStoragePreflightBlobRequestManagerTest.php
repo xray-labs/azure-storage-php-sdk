@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\PreflightBlobRequestManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 
 uses()->group('blob-storage', 'managers', 'account');
 
 it('should send a request to the preflight blob', function (string $method, HttpVerb $verb) {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
     $origin  = 'http://example.com';
 
     (new PreflightBlobRequestManager($request))

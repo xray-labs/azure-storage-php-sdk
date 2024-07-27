@@ -1,18 +1,17 @@
 <?php
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, Properties};
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{BlobManager, BlobMetadataManager, BlobPageManager, BlobPropertyManager, BlobTagManager};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 uses()->group('blob-storage', 'managers', 'blobs');
 
 it('should get the blob\'s managers', function (string $method, string $class) {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     expect((new BlobManager($request, 'container'))->{$method}('blob'))
         ->toBeInstanceOf($class); // @phpstan-ignore-line
@@ -23,14 +22,14 @@ it('should get the blob\'s managers', function (string $method, string $class) {
 ]);
 
 it('should get blob pages manager', function () {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     expect((new BlobManager($request, 'container'))->pages())
         ->toBeInstanceOf(BlobPageManager::class);
 });
 
 it('should create a new blob block', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     $file = new File('name', 'content');
@@ -51,7 +50,7 @@ it('should create a new blob block', function () {
 });
 
 it('should get a blob', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($body = 'blob content', headers: [
             'Content-Length'        => ['10'],
             'Content-Type'          => ['plain/text'],
@@ -121,7 +120,7 @@ it('should list all blobs', function () {
     </EnumerationResults>
     XML;
 
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($body));
 
     $result = (new BlobManager($request, $container = 'container'))->list(['option' => 'value']);

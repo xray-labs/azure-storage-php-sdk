@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerMetadata;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerMetadataManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 uses()->group('blob-storage', 'managers', 'containers');
 
 it('should get the container\'s metadata', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'   => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'            => ['etag'],
@@ -36,7 +35,7 @@ it('should get the container\'s metadata', function () {
 });
 
 it('should throw an exception if the metadata key is invalid', function (string $key, string $message) {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     expect(fn () => (new ContainerMetadataManager($request))->save('container', [
         'valid' => 'valid',
@@ -48,7 +47,7 @@ it('should throw an exception if the metadata key is invalid', function (string 
 ]);
 
 it('should save the container\'s metadata', function () {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     expect((new ContainerMetadataManager($request))->save($container = 'container', [
         'test'    => 'test',

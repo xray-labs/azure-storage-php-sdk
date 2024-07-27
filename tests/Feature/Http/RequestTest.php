@@ -16,9 +16,9 @@ use Xray\AzureStoragePhpSdk\Http\Request;
 uses()->group('http');
 
 it('should send get, delete, and options requests', function (string $method, HttpVerb $verb): void {
-    $config = new Config(new SharedKeyAuth('my_account', 'bar'));
+    $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($config, $client = new Client()))
+    $request = (new Request($auth, client: $client = new Client()))
         ->withAuthentication()
         ->usingAccount(fn (): string => 'foo')
         ->withOptions(['foo' => 'bar']);
@@ -41,9 +41,9 @@ it('should send get, delete, and options requests', function (string $method, Ht
 ]);
 
 it('should send post and put requests', function (string $method, HttpVerb $verb): void {
-    $config = new Config(new SharedKeyAuth('my_account', 'bar'));
+    $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($config, $client = new Client()))
+    $request = (new Request($auth, client: $client = new Client()))
         ->withoutAuthentication()
         ->withHeaders(['foo' => 'bar']);
 
@@ -70,10 +70,18 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
 ]);
 
 it('should get request config', function (): void {
-    $config = new Config(new SharedKeyAuth('my_account', 'bar'));
+    $auth   = new SharedKeyAuth('my_account', 'bar');
+    $config = new Config();
 
-    expect((new Request($config, new Client()))->getConfig())
+    expect((new Request($auth, $config, new Client()))->getConfig())
         ->toBe($config);
+});
+
+it('should get request auth', function (): void {
+    $auth = new SharedKeyAuth('my_account', 'bar');
+
+    expect((new Request($auth, client: new Client()))->getAuth())
+        ->toBe($auth);
 });
 
 class Client implements ClientInterface

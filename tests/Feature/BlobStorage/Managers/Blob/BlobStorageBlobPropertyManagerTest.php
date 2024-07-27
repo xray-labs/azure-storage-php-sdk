@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Xray\AzureStoragePhpSdk\BlobStorage\Config;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobProperty;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobPropertyManager;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
@@ -11,7 +9,7 @@ use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'blobs');
 
 it('should get the blob\'s properties', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'                  => '2021-01-01T00:00:00.0000000Z',
             'ETag'                           => '0x8D8D8D8D8D8D8D9',
@@ -67,7 +65,7 @@ it('should get the blob\'s properties', function () {
 });
 
 it('should save the blob property', function () {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     // @phpstan-ignore-next-line
     $blobProperty = new BlobProperty([

@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobMetadata;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobMetadataManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 uses()->group('blob-storage', 'managers', 'blobs');
 
 it('should get the blob\'s metadata', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(headers: [
             'Content-Length'                      => 1024,
             'Last-Modified'                       => '2021-01-01T00:00:00.0000000Z',
@@ -49,7 +48,7 @@ it('should get the blob\'s metadata', function () {
 });
 
 it('should save the blob\'s metadata', function () {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     $blobMetadata = new BlobMetadata([
         Resource::METADATA_PREFIX . 'test'    => 'valid',

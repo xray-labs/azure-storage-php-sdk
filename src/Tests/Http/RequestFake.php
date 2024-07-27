@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\Tests\Http;
 
 use Closure;
+use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Config;
+use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
 use Xray\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions};
 
@@ -16,6 +18,10 @@ class RequestFake implements Request
 {
     use HasHttpAssertions;
     use HasAuthAssertions;
+
+    protected readonly Auth $auth;
+
+    protected readonly Config $config;
 
     /** @var array<string, scalar> */
     protected array $options = [];
@@ -38,9 +44,10 @@ class RequestFake implements Request
 
     protected ?ResponseFake $fakeResponse = null;
 
-    public function __construct(protected Config $config)
+    public function __construct(?Auth $auth = null, ?Config $config = null)
     {
-        //
+        $this->auth   = $auth ?? new SharedKeyAuth('account', 'key');
+        $this->config = $config ?? new Config();
     }
 
     public function withFakeResponse(ResponseFake $fakeResponse): static
@@ -55,6 +62,11 @@ class RequestFake implements Request
         $this->usingAccountCallback = $callback;
 
         return $this;
+    }
+
+    public function getAuth(): Auth
+    {
+        return $this->auth;
     }
 
     public function getConfig(): Config
@@ -139,7 +151,7 @@ class RequestFake implements Request
 
     public function uri(?string $endpoint = null): string
     {
-        $account = $this->config->auth->getAccount();
+        $account = $this->auth->getAccount();
 
         if (!is_null($endpoint)) {
             [$endpoint, $params] = array_pad(explode('?', $endpoint, 2), 2, '');

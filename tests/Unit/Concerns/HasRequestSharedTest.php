@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Xray\AzureStoragePhpSdk\BlobStorage\Config;
 use Xray\AzureStoragePhpSdk\Concerns\HasRequestShared;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
@@ -11,7 +9,7 @@ use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 uses()->group('concerns', 'traits');
 
 it('should have a request shared property', function () {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
     $class   = new class ($request) {
         /** @use HasRequestShared<RequestFake> */
         use HasRequestShared;

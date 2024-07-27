@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{BlobManager, BlobPageManager};
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
@@ -14,13 +13,13 @@ use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'blobs');
 
 it('should throw an exception if the page is out of boundary', function () {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     expect((new BlobPageManager($request, 'container'))->create('blob', 1025));
 })->throws(InvalidArgumentException::class, 'Page blob size must be aligned to a 512-byte boundary.');
 
 it('should create a new blob page', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     $name    = 'blob';
@@ -40,7 +39,7 @@ it('should create a new blob page', function () {
 });
 
 it('should not append a page if the page size is invalid', function (int $startPage, int $endPage, string $message) {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     $file    = new File('name', str_repeat('a', 1536));
     $options = ['foo' => 'bar'];
@@ -54,7 +53,7 @@ it('should not append a page if the page size is invalid', function (int $startP
 ]);
 
 it('should append an additional page', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     $file      = new File('name', str_repeat('a', 1024));
@@ -77,7 +76,7 @@ it('should append an additional page', function () {
 });
 
 it('should put a new blob page', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     $file    = new File('name', str_repeat('a', 1024));
@@ -100,7 +99,7 @@ it('should put a new blob page', function () {
 });
 
 it('should clear a blob page', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     $name      = 'blob';
@@ -120,11 +119,10 @@ it('should clear a blob page', function () {
 });
 
 it('should clear all the file\'s pages', function () {
-    $config      = new Config(new SharedKeyAuth('account', 'key'));
-    $blobRequest = (new RequestFake($config))
+    $blobRequest = (new RequestFake())
         ->withFakeResponse(new ResponseFake(str_repeat('a', 1536)));
 
-    $request = (new RequestFake($config))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     $name    = 'blob';
