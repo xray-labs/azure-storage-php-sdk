@@ -10,7 +10,7 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerMetadata;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 use Xray\AzureStoragePhpSdk\Contracts\Manager;
-use Xray\AzureStoragePhpSdk\Exceptions\{RequestException};
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
 readonly class ContainerMetadataManager implements Manager
 {

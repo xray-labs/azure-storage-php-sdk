@@ -1,7 +1,5 @@
 <?php
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Xray\AzureStoragePhpSdk\BlobStorage\Config;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobLease;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobLeaseManager;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
@@ -119,7 +117,7 @@ function prepareForBlobLeaseManagerTest(array $blobLeaseHeaders = []): array
         'x-ms-lease-id'   => 'lalsncjwej-29389dksd-dwwdwd',
     ], $blobLeaseHeaders);
 
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(headers: $blobLeaseHeaders));
 
     // @phpstan-ignore-next-line

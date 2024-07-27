@@ -1,7 +1,5 @@
 <?php
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Xray\AzureStoragePhpSdk\BlobStorage\Config;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery as QueriesBlobTagQuery;
 use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequiredFieldException};
@@ -10,7 +8,7 @@ use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake};
 uses()->group('blob-storage', 'queries');
 
 it('should create a query', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     $manager = (new BlobManager($request, 'container'));
 
@@ -29,7 +27,7 @@ it('should create a query', function () {
 });
 
 it('should set the whenBuild callback', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     $manager = (new BlobManager($request, 'container'));
 
@@ -43,7 +41,7 @@ it('should set the whenBuild callback', function () {
 });
 
 it('should throw an exception when the whenBuild callback is not set', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     $manager = (new BlobManager($request, 'container'));
 
@@ -53,7 +51,7 @@ it('should throw an exception when the whenBuild callback is not set', function 
 })->throws(RequiredFieldException::class, 'Field [callback] is required');
 
 it('should build the query', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     $manager = (new BlobManager($request, 'container'));
 
@@ -70,7 +68,7 @@ it('should build the query', function () {
 });
 
 it('should throw an exception when the operator is invalid', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     $manager = (new BlobManager($request, 'container'));
 

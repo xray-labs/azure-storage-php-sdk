@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Http\Headers;
+use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 
 uses()->group('authentications');
 
@@ -22,17 +23,26 @@ it('should get date formatted correctly', function () {
         ->toBe(gmdate('D, d M Y H:i:s T'));
 });
 
+it('should get the authentication account', function () {
+    $auth = new SharedKeyAuth('account', 'key');
+
+    expect($auth->getAccount())
+        ->toBe('account');
+});
+
 it('should get correctly the authentication signature for all http methods', function (HttpVerb $verb) {
     $decodedKey = 'my-decoded-account-key';
 
     $auth = new SharedKeyAuth($account = 'account', base64_encode($decodedKey));
 
-    $headers      = new Headers();
-    $stringToSign = "{$verb->value}\n{$headers->toString()}\n\n/{$account}/";
+    $request = (new RequestFake())
+        ->withVerb($verb);
+
+    $stringToSign = "{$request->getVerb()->value}\n{$request->getHttpHeaders()->toString()}\n\n/{$account}/";
 
     $signature = base64_encode(hash_hmac('sha256', $stringToSign, $decodedKey, true));
 
-    expect($auth->getAuthentication($verb, $headers, '/'))
+    expect($auth->getAuthentication($request))
         ->toBe("SharedKey {$account}:{$signature}");
 })->with([
     'GET'     => [HttpVerb::GET],
@@ -49,14 +59,15 @@ it('should get correctly the authentication signature for all headers', function
 
     $auth = new SharedKeyAuth($account = 'account', base64_encode($decodedKey));
 
-    $verb = HttpVerb::GET;
+    $request = (new RequestFake())
+        ->withVerb(HttpVerb::GET)
+        ->withHttpHeaders((new Headers())->{$headerMethod}($headerValue));
 
-    $headers      = (new Headers())->{$headerMethod}($headerValue);
-    $stringToSign = "{$verb->value}\n{$headers->toString()}\n\n/{$account}/";
+    $stringToSign = "{$request->getVerb()->value}\n{$request->getHttpHeaders()->toString()}\n\n/{$account}/";
 
     $signature = base64_encode(hash_hmac('sha256', $stringToSign, $decodedKey, true));
 
-    expect($auth->getAuthentication($verb, $headers, '/'))
+    expect($auth->getAuthentication($request))
         ->toBe("SharedKey {$account}:{$signature}");
 })->with([
     'Content Encoding'    => ['setContentEncoding', 'utf-8'],
@@ -77,14 +88,15 @@ it('should get correctly the authentication signature for all canonical headers'
 
     $auth = new SharedKeyAuth($account = 'account', base64_encode($decodedKey));
 
-    $verb = HttpVerb::GET;
+    $request = (new RequestFake())
+        ->withVerb(HttpVerb::GET)
+        ->withHttpHeaders((new Headers())->withAdditionalHeaders([$headerMethod => $headerValue]));
 
-    $headers      = (new Headers())->withAdditionalHeaders([$headerMethod => $headerValue]);
-    $stringToSign = "{$verb->value}\n{$headers->toString()}\n{$headers->getCanonicalHeaders()}\n/{$account}/";
+    $stringToSign = "{$request->getVerb()->value}\n{$request->getHttpHeaders()->toString()}\n{$request->getHttpHeaders()->getCanonicalHeaders()}\n/{$account}/";
 
     $signature = base64_encode(hash_hmac('sha256', $stringToSign, $decodedKey, true));
 
-    expect($auth->getAuthentication($verb, $headers, '/'))
+    expect($auth->getAuthentication($request))
         ->toBe("SharedKey {$account}:{$signature}");
 })->with([
     'Auth Date'          => [Resource::AUTH_DATE, '2024-06-10T00:00:00.000Z'],

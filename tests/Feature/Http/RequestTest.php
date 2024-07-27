@@ -2,23 +2,19 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Promise\{Promise, PromiseInterface};
-use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\Assert;
-use Psr\Http\Message\{RequestInterface, ResponseInterface};
 use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 use Xray\AzureStoragePhpSdk\Contracts\Http\Response as HttpResponse;
-use Xray\AzureStoragePhpSdk\Http\Request;
+use Xray\AzureStoragePhpSdk\Http\{Headers, Request};
+use Xray\Tests\Fakes\ClientFake;
 
 uses()->group('http');
 
 it('should send get, delete, and options requests', function (string $method, HttpVerb $verb): void {
-    $config = new Config(new SharedKeyAuth('my_account', 'bar'));
+    $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($config, $client = new Client()))
+    $request = (new Request($auth, client: $client = new ClientFake()))
         ->withAuthentication()
         ->usingAccount(fn (): string => 'foo')
         ->withOptions(['foo' => 'bar']);
@@ -41,9 +37,9 @@ it('should send get, delete, and options requests', function (string $method, Ht
 ]);
 
 it('should send post and put requests', function (string $method, HttpVerb $verb): void {
-    $config = new Config(new SharedKeyAuth('my_account', 'bar'));
+    $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($config, $client = new Client()))
+    $request = (new Request($auth, client: $client = new ClientFake()))
         ->withoutAuthentication()
         ->withHeaders(['foo' => 'bar']);
 
@@ -70,59 +66,57 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
 ]);
 
 it('should get request config', function (): void {
-    $config = new Config(new SharedKeyAuth('my_account', 'bar'));
+    $auth   = new SharedKeyAuth('my_account', 'bar');
+    $config = new Config();
 
-    expect((new Request($config, new Client()))->getConfig())
+    expect((new Request($auth, $config, new ClientFake()))->getConfig())
         ->toBe($config);
 });
 
-class Client implements ClientInterface
-{
-    /** @var array<string, array{uri: string, options: array<string, scalar>}> */
-    protected array $requests = [];
+it('should get request auth', function (): void {
+    $auth = new SharedKeyAuth('my_account', 'bar');
 
-    /** @param array<string, scalar> $options */
-    public function send(RequestInterface $request, array $options = []): ResponseInterface
-    {
-        return new Response();
-    }
+    expect((new Request($auth, client: new ClientFake()))->getAuth())
+        ->toBe($auth);
+});
 
-    /** @param array<string, scalar> $options */
-    public function sendAsync(RequestInterface $request, array $options = []): PromiseInterface
-    {
-        return new Promise();
-    }
+it('should get the http verb from request', function (HttpVerb $verb) {
+    $auth = new SharedKeyAuth('my_account', 'bar');
 
-    /** @param array<string, scalar> $options */
-    public function request(string $method, mixed $uri, array $options = []): ResponseInterface
-    {
-        /** @phpstan-ignore-next-line */
-        $this->requests[$method] = [
-            'uri'     => $uri,
-            'options' => $options,
-        ];
+    $request = (new Request($auth, client: new ClientFake()))
+        ->withVerb($verb);
 
-        return new Response();
-    }
+    expect($request->getVerb())
+        ->toBeInstanceOf(HttpVerb::class)
+        ->toEqual($verb);
+})->with(fn () => HttpVerb::cases());
 
-    /** @param array<string, scalar> $options */
-    public function requestAsync(string $method, mixed $uri, array $options = []): PromiseInterface
-    {
-        return new Promise();
-    }
+it('should get the resource from request', function (): void {
+    $auth = new SharedKeyAuth('my_account', 'bar');
 
-    public function getConfig(?string $option = null): mixed
-    {
-        return [];
-    }
+    $request = (new Request($auth, client: new ClientFake()))
+        ->withResource('endpoint');
 
-    public function assertRequestSent(string $method, string $uri, ?Closure $options = null): void
-    {
-        Assert::assertArrayHasKey($method, $this->requests, 'Request not sent');
-        Assert::assertSame($uri, $this->requests[$method]['uri'], 'Invalid URI');
+    expect($request->getResource())
+        ->toEqual('endpoint');
+});
 
-        if (!is_null($options)) {
-            Assert::assertTrue($options($this->requests[$method]['options']), 'Invalid options');
-        }
-    }
-}
+it('should get the headers from request', function (): void {
+    $auth = new SharedKeyAuth('my_account', 'bar');
+
+    $request = (new Request($auth, client: new ClientFake()))
+        ->withHttpHeaders(new Headers());
+
+    expect($request->getHttpHeaders())
+        ->toBeInstanceOf(Headers::class);
+});
+
+it('should get the body from request', function (): void {
+    $auth = new SharedKeyAuth('my_account', 'bar');
+
+    $request = (new Request($auth, client: new ClientFake()))
+        ->withBody('body');
+
+    expect($request->getBody())
+        ->toBe('body');
+});

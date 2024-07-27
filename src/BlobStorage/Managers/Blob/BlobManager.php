@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use DateTime;
-use DateTimeImmutable;
 use Psr\Http\Client\RequestExceptionInterface;
-use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs};
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{BlobIncludeOption, BlobType, ExpirationOption};
 use Xray\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 use Xray\AzureStoragePhpSdk\Contracts\Manager;
 use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
@@ -122,13 +122,13 @@ readonly class BlobManager implements Manager
                 ->withOptions($options)
                 ->withHeaders([
                     Resource::BLOB_TYPE         => BlobType::BLOCK->value,
-                    Resource::BLOB_CONTENT_MD5  => $file->contentMD5,
-                    Resource::BLOB_CONTENT_TYPE => $file->contentType,
-                    Resource::CONTENT_MD5       => $file->contentMD5,
-                    Resource::CONTENT_TYPE      => $file->contentType,
-                    Resource::CONTENT_LENGTH    => $file->contentLength,
+                    Resource::BLOB_CONTENT_MD5  => $file->getContentMD5(),
+                    Resource::BLOB_CONTENT_TYPE => $file->getContentType(),
+                    Resource::CONTENT_MD5       => $file->getContentMD5(),
+                    Resource::CONTENT_TYPE      => $file->getContentType(),
+                    Resource::CONTENT_LENGTH    => $file->getContentLength(),
                 ])
-                ->put("{$this->containerName}/{$file->name}?resttype=blob", $file->content)
+                ->put("{$this->containerName}/{$file->getFilename()}?resttype=blob", $file->getContent())
                 ->isCreated();
 
             // @codeCoverageIgnoreStart
@@ -166,9 +166,9 @@ readonly class BlobManager implements Manager
     /**
      * @param boolean $force If true, Delete the base blob and all of its snapshots.
      */
-    public function delete(string $blobName, null|DateTimeImmutable|string $snapshot = null, bool $force = false): bool
+    public function delete(string $blobName, null|DateTime|string $snapshot = null, bool $force = false): bool
     {
-        if ($snapshot instanceof DateTimeImmutable) {
+        if ($snapshot instanceof DateTime) {
             $snapshot = convert_to_RFC3339_micro($snapshot);
         }
 
@@ -218,9 +218,9 @@ readonly class BlobManager implements Manager
     }
 
     /** @param array<string, scalar> $options */
-    public function copy(string $sourceCopy, string $blobName, array $options = [], null|DateTimeImmutable|string $snapshot = null): bool
+    public function copy(string $sourceCopy, string $blobName, array $options = [], null|DateTime|string $snapshot = null): bool
     {
-        if ($snapshot instanceof DateTimeImmutable) {
+        if ($snapshot instanceof DateTime) {
             $snapshot = convert_to_RFC3339_micro($snapshot);
         }
 

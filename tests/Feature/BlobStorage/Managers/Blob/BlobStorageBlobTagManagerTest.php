@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobTag;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobTagManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
@@ -24,7 +23,7 @@ it('should get the blob\'s tags', function () {
     </Tags>
     XML;
 
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($body, headers: [
             'Content-Length'  => ['10'],
             'Content-Type'    => ['application/xml'],
@@ -56,7 +55,7 @@ it('should get the blob\'s tags', function () {
 });
 
 it('should put a new blob tag', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_NO_CONTENT));
 
     $blobTag = new BlobTag(['key' => 'value']);
