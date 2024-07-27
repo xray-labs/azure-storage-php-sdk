@@ -1,5 +1,7 @@
 <?php
 
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+
 define('RFC3339_MICRO', 'Y-m-d\TH:i:s.u\Z');
 
 if (!function_exists('with')) {
@@ -23,6 +25,23 @@ if (!function_exists('is_running_in_console')) {
     function is_running_in_console(): bool
     {
         return in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
+    }
+}
+
+if (!function_exists('validate_protocol')) {
+    function validate_protocol(string $value): true
+    {
+        $validProtocols = ['http', 'https'];
+
+        if (!in_array($value, $validProtocols, true)) {
+            throw InvalidArgumentException::create(sprintf(
+                'Invalid protocol: %s. Valid protocols: %s',
+                $value,
+                implode(', ', $validProtocols),
+            ));
+        }
+
+        return true;
     }
 }
 

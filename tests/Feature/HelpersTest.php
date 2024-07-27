@@ -1,5 +1,7 @@
 <?php
 
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+
 uses()->group('helpers');
 
 it('should check with function', function () {
@@ -18,6 +20,17 @@ it('should check with function', function () {
 it('should check if it\'s running in console', function () {
     expect(is_running_in_console())->toBeTrue();
 });
+
+it('should fail when an invalid protocol is validated', function () {
+    validate_protocol('invalid');
+})->throws(InvalidArgumentException::class, 'Invalid protocol: invalid. Valid protocols: http, https');
+
+it('should pass when a valid protocol is validated', function (string $protocol) {
+    expect(validate_protocol($protocol))->toBeTrue();
+})->with([
+    'HTTP'  => ['http'],
+    'HTTPS' => ['https'],
+]);
 
 it('should convert camel case string to be used in the headers', function (string $value, string $expected) {
     expect(str_camel_to_header($value))->toBe($expected);
