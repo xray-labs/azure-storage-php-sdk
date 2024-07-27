@@ -1,6 +1,6 @@
 {
     "name": "xray/azure-storage-php-sdk",
-    "description": "Integrate with Azure's cloud storage services",
+    "description": "Azure Storage PHP SDK",
     "type": "library",
     "license": "MIT",
     "scripts": {

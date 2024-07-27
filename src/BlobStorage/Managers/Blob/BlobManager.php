@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use DateTime;
-use DateTimeImmutable;
 use Psr\Http\Client\RequestExceptionInterface;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs};
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{BlobIncludeOption, BlobType, ExpirationOption};
@@ -76,9 +75,11 @@ readonly class BlobManager implements Manager
                         ->withOptions($options)
                         ->get("{$this->containerName}/?restype=container&comp=blobs&where={$query}")
                         ->getBody();
+                    // @codeCoverageIgnoreStart
                 } catch (RequestExceptionInterface $e) {
                     throw RequestException::createFromRequestException($e);
                 }
+                // @codeCoverageIgnoreEnd
 
                 /** @var array{Blobs?: array{Blob: BlobTypeStan|BlobTypeStan[]}} $parsed */
                 $parsed = $this->request->getConfig()->parser->parse($response);
@@ -155,21 +156,23 @@ readonly class BlobManager implements Manager
                 ]))
                 ->put("{$this->containerName}/{$blobName}?resttype=blob&comp=expiry")
                 ->isOk();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /**
      * @param boolean $force If true, Delete the base blob and all of its snapshots.
      */
-    public function delete(string $blobName, null|DateTimeImmutable|string $snapshot = null, bool $force = false): bool
+    public function delete(string $blobName, null|DateTime|string $snapshot = null, bool $force = false): bool
     {
-        if ($snapshot instanceof DateTimeImmutable) {
+        if ($snapshot instanceof DateTime) {
             $snapshot = convert_to_RFC3339_micro($snapshot);
         }
 
-        $snapshotHeader = $snapshot ? sprintf('?snapshot=%s', urlencode($snapshot)) : '';
+        $snapshotHeader = $snapshot ? sprintf('&snapshot=%s', urlencode($snapshot)) : '';
 
         $deleteSnapshotHeader = $snapshot ? sprintf('&%s=only', Resource::DELETE_SNAPSHOTS) : '';
 
@@ -181,9 +184,11 @@ readonly class BlobManager implements Manager
             return $this->request
                 ->delete("{$this->containerName}/{$blobName}?resttype=blob{$snapshotHeader}{$deleteSnapshotHeader}")
                 ->isAccepted();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     public function restore(string $blobName): bool
@@ -192,9 +197,11 @@ readonly class BlobManager implements Manager
             return $this->request
                 ->put("{$this->containerName}/{$blobName}?comp=undelete&resttype=blob")
                 ->isOk();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     public function createSnapshot(string $blobName): bool
@@ -203,15 +210,17 @@ readonly class BlobManager implements Manager
             return $this->request
                 ->put("{$this->containerName}/{$blobName}?comp=snapshot&resttype=blob")
                 ->isCreated();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /** @param array<string, scalar> $options */
-    public function copy(string $sourceCopy, string $blobName, array $options = [], null|DateTimeImmutable|string $snapshot = null): bool
+    public function copy(string $sourceCopy, string $blobName, array $options = [], null|DateTime|string $snapshot = null): bool
     {
-        if ($snapshot instanceof DateTimeImmutable) {
+        if ($snapshot instanceof DateTime) {
             $snapshot = convert_to_RFC3339_micro($snapshot);
         }
 
@@ -227,9 +236,11 @@ readonly class BlobManager implements Manager
                 ])
                 ->put("{$this->containerName}/{$blobName}?resttype=blob")
                 ->isAccepted();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     public function lease(string $blobName): BlobLeaseManager
