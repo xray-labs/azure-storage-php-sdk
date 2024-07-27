@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
+namespace Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
 class FailedAuthenticationException extends RequestException
 {

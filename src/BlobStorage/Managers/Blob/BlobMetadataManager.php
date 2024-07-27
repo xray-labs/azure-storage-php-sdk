@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobMetadata;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobMetadata;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
 /**
  * @phpstan-import-type BlobMetadataHeaders from BlobMetadata

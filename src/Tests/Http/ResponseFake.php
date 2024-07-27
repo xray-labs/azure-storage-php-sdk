@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Tests\Http;
+namespace Xray\AzureStoragePhpSdk\Tests\Http;
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Response;
-use Sjpereira\AzureStoragePhpSdk\Http\Response as BaseResponse;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Response;
+use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 
 class ResponseFake implements Response
 {

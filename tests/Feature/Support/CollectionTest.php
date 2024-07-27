@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Support\Collection;
+use Xray\AzureStoragePhpSdk\Support\Collection;
 
 uses()->group('supports');
 

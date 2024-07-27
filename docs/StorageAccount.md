@@ -3,8 +3,8 @@
 Getting the storage account information
 
 ```php
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{BlobStorage, Config};
-use Sjpereira\AzureStoragePhpSdk\Http\Request;
+use Xray\AzureStoragePhpSdk\BlobStorage\{BlobStorage, Config};
+use Xray\AzureStoragePhpSdk\Http\Request;
 
 $request = new Request(new Config([
     'account' => 'your_account_name',
@@ -14,5 +14,5 @@ $request = new Request(new Config([
 $blobStorage = new BlobStorage($request);
 
 $blobStorage->account()->information();
-// returns Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\AccountInformation;
+// returns Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\AccountInformation;
 ```

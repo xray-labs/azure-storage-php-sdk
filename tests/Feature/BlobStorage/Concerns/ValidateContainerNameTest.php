@@ -1,7 +1,7 @@
 <?php
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateContainerName;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateContainerName;
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 uses()->group('blob-storage', 'concerns');
 

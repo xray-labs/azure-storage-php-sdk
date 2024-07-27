@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\CouldNotCreateTempFileException;
+use Xray\AzureStoragePhpSdk\Exceptions\CouldNotCreateTempFileException;
 
 uses()->group('exceptions');
 

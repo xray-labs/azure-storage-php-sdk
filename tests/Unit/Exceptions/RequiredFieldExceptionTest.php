@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 uses()->group('exceptions');
 

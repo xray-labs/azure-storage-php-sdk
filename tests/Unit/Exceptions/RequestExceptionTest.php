@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 use GuzzleHttp\Psr7\{Request, Response};
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException\FailedAuthenticationException;
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException\FailedAuthenticationException;
 
 uses()->group('exceptions');
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
-use Sjpereira\AzureStoragePhpSdk\Support\Collection;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
+use Xray\AzureStoragePhpSdk\Support\Collection;
 
 /**
  * @phpstan-import-type BlobType from Blob

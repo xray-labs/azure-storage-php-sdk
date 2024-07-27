@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use DateTime;
 use DateTimeImmutable;
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\{BlobIncludeOption, BlobType, ExpirationOption};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{BlobIncludeOption, BlobType, ExpirationOption};
+use Xray\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 
 /**
  * @phpstan-import-type BlobType from Blob as BlobTypeStan

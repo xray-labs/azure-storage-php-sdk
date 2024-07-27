@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 uses()->group('exceptions');
 

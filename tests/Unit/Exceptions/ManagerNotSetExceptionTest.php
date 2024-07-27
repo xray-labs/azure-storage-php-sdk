@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\ManagerNotSetException;
+use Xray\AzureStoragePhpSdk\Exceptions\ManagerNotSetException;
 
 uses()->group('exceptions');
 

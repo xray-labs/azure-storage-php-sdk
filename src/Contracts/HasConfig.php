@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Contracts;
+namespace Xray\AzureStoragePhpSdk\Contracts;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
+use Xray\AzureStoragePhpSdk\BlobStorage\Config;
 
 interface HasConfig
 {

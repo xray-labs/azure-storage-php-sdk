@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\UnableToParseException;
+use Xray\AzureStoragePhpSdk\Exceptions\UnableToParseException;
 
 uses()->group('exceptions');
 

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage;
+namespace Xray\AzureStoragePhpSdk\BlobStorage;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request as RequestContract;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request as RequestContract;
 
 final class BlobStorage
 {

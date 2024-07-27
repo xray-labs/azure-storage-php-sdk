@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account;
 
 use DateTimeImmutable;
-use Sjpereira\AzureStoragePhpSdk\Contracts\{Arrayable, Xmlable};
-use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\Contracts\{Arrayable, Xmlable};
+use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
+use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 /** @implements Arrayable<array{KeyInfo: array{Start: string, Expiry: string}}> */
 final readonly class KeyInfo implements Arrayable, Xmlable

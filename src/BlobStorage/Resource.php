@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage;
+namespace Xray\AzureStoragePhpSdk\BlobStorage;
 
 final class Resource
 {

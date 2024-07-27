@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
-use Sjpereira\AzureStoragePhpSdk\Contracts\Converter;
-use Sjpereira\AzureStoragePhpSdk\Parsers\XmlParser;
+use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
+use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\Contracts\Converter;
+use Xray\AzureStoragePhpSdk\Parsers\XmlParser;
 
 uses()->group('blob-storage');
 

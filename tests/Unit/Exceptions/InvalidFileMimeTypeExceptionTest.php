@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidFileMimeTypeException;
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidFileMimeTypeException;
 
 uses()->group('exceptions');
 

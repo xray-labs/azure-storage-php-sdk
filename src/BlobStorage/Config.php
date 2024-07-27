@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage;
+namespace Xray\AzureStoragePhpSdk\BlobStorage;
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Authentication\Auth;
-use Sjpereira\AzureStoragePhpSdk\Contracts\{Converter, Parser};
-use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
-use Sjpereira\AzureStoragePhpSdk\Parsers\XmlParser;
+use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
+use Xray\AzureStoragePhpSdk\Contracts\{Converter, Parser};
+use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\Parsers\XmlParser;
 
 /**
  * @phpstan-type ConfigType array{version?: string, parser?: Parser, converter?: Converter}

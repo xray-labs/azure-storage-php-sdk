@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty;
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
+use Xray\AzureStoragePhpSdk\Contracts\Arrayable;
 
 /**
  * @phpstan-type DeleteRetentionPolicyType array{Enabled?: bool, AllowPermanentDelete?: bool, Days?: int}

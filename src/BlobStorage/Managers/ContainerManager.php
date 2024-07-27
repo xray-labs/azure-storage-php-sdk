@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateContainerName;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\Container;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\{ContainerProperties, Containers};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\{
+use Xray\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateContainerName;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\Container;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\{ContainerProperties, Containers};
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\{
     ContainerAccessLevelManager,
     ContainerLeaseManager,
     ContainerMetadataManager,
 };
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Concerns\HasRequestShared;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
-use Sjpereira\AzureStoragePhpSdk\Contracts\{Manager, RequestShared};
-use Sjpereira\AzureStoragePhpSdk\Exceptions\{RequestException};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Concerns\HasRequestShared;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
+use Xray\AzureStoragePhpSdk\Contracts\{Manager, RequestShared};
+use Xray\AzureStoragePhpSdk\Exceptions\{RequestException};
 
 /**
  * @phpstan-import-type ContainerType from Container
