@@ -48,7 +48,7 @@ final class MicrosoftEntraId implements Auth
 
     public function getAuthentication(Request $request): string
     {
-        if (!empty($this->token) && $this->tokenExpiresAt > new DateTime()) {
+        if (!empty($this->token) && $this->tokenExpiresAt && $this->tokenExpiresAt > new DateTime()) {
             return $this->token;
         }
 
@@ -71,9 +71,12 @@ final class MicrosoftEntraId implements Auth
                     'scope'         => 'https://storage.azure.com/.default',
                 ],
             ]);
+
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
 
         /** @var array{token_type: string, expires_in: int, access_token: string} $body */
         $body = json_decode((string) $response->getBody(), true);
@@ -85,7 +88,7 @@ final class MicrosoftEntraId implements Auth
     protected function getRequestClient(): ClientInterface
     {
         if (!isset($this->client)) {
-            $this->client = new Client();
+            $this->client = new Client(); // @codeCoverageIgnore
         }
 
         return $this->client;

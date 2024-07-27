@@ -2,23 +2,19 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Promise\{Promise, PromiseInterface};
-use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\Assert;
-use Psr\Http\Message\{RequestInterface, ResponseInterface};
 use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 use Xray\AzureStoragePhpSdk\Contracts\Http\Response as HttpResponse;
 use Xray\AzureStoragePhpSdk\Http\{Headers, Request};
+use Xray\Tests\Fakes\ClientFake;
 
 uses()->group('http');
 
 it('should send get, delete, and options requests', function (string $method, HttpVerb $verb): void {
     $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($auth, client: $client = new Client()))
+    $request = (new Request($auth, client: $client = new ClientFake()))
         ->withAuthentication()
         ->usingAccount(fn (): string => 'foo')
         ->withOptions(['foo' => 'bar']);
@@ -43,7 +39,7 @@ it('should send get, delete, and options requests', function (string $method, Ht
 it('should send post and put requests', function (string $method, HttpVerb $verb): void {
     $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($auth, client: $client = new Client()))
+    $request = (new Request($auth, client: $client = new ClientFake()))
         ->withoutAuthentication()
         ->withHeaders(['foo' => 'bar']);
 
@@ -73,21 +69,21 @@ it('should get request config', function (): void {
     $auth   = new SharedKeyAuth('my_account', 'bar');
     $config = new Config();
 
-    expect((new Request($auth, $config, new Client()))->getConfig())
+    expect((new Request($auth, $config, new ClientFake()))->getConfig())
         ->toBe($config);
 });
 
 it('should get request auth', function (): void {
     $auth = new SharedKeyAuth('my_account', 'bar');
 
-    expect((new Request($auth, client: new Client()))->getAuth())
+    expect((new Request($auth, client: new ClientFake()))->getAuth())
         ->toBe($auth);
 });
 
 it('should get the http verb from request', function (HttpVerb $verb) {
     $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($auth, client: new Client()))
+    $request = (new Request($auth, client: new ClientFake()))
         ->withVerb($verb);
 
     expect($request->getVerb())
@@ -98,7 +94,7 @@ it('should get the http verb from request', function (HttpVerb $verb) {
 it('should get the resource from request', function (): void {
     $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($auth, client: new Client()))
+    $request = (new Request($auth, client: new ClientFake()))
         ->withResource('endpoint');
 
     expect($request->getResource())
@@ -108,7 +104,7 @@ it('should get the resource from request', function (): void {
 it('should get the headers from request', function (): void {
     $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($auth, client: new Client()))
+    $request = (new Request($auth, client: new ClientFake()))
         ->withHttpHeaders(new Headers());
 
     expect($request->getHttpHeaders())
@@ -118,60 +114,9 @@ it('should get the headers from request', function (): void {
 it('should get the body from request', function (): void {
     $auth = new SharedKeyAuth('my_account', 'bar');
 
-    $request = (new Request($auth, client: new Client()))
+    $request = (new Request($auth, client: new ClientFake()))
         ->withBody('body');
 
     expect($request->getBody())
         ->toBe('body');
 });
-
-class Client implements ClientInterface
-{
-    /** @var array<string, array{uri: string, options: array<string, scalar>}> */
-    protected array $requests = [];
-
-    /** @param array<string, scalar> $options */
-    public function send(RequestInterface $request, array $options = []): ResponseInterface
-    {
-        return new Response();
-    }
-
-    /** @param array<string, scalar> $options */
-    public function sendAsync(RequestInterface $request, array $options = []): PromiseInterface
-    {
-        return new Promise();
-    }
-
-    /** @param array<string, scalar> $options */
-    public function request(string $method, mixed $uri, array $options = []): ResponseInterface
-    {
-        /** @phpstan-ignore-next-line */
-        $this->requests[$method] = [
-            'uri'     => $uri,
-            'options' => $options,
-        ];
-
-        return new Response();
-    }
-
-    /** @param array<string, scalar> $options */
-    public function requestAsync(string $method, mixed $uri, array $options = []): PromiseInterface
-    {
-        return new Promise();
-    }
-
-    public function getConfig(?string $option = null): mixed
-    {
-        return [];
-    }
-
-    public function assertRequestSent(string $method, string $uri, ?Closure $options = null): void
-    {
-        Assert::assertArrayHasKey($method, $this->requests, 'Request not sent');
-        Assert::assertSame($uri, $this->requests[$method]['uri'], 'Invalid URI');
-
-        if (!is_null($options)) {
-            Assert::assertTrue($options($this->requests[$method]['options']), 'Invalid options');
-        }
-    }
-}

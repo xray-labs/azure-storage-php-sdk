@@ -23,6 +23,13 @@ it('should get date formatted correctly', function () {
         ->toBe(gmdate('D, d M Y H:i:s T'));
 });
 
+it('should get the authentication account', function () {
+    $auth = new SharedKeyAuth('account', 'key');
+
+    expect($auth->getAccount())
+        ->toBe('account');
+});
+
 it('should get correctly the authentication signature for all http methods', function (HttpVerb $verb) {
     $decodedKey = 'my-decoded-account-key';
 
