@@ -6,8 +6,8 @@ namespace Xray\AzureStoragePhpSdk\Exceptions;
 
 use Exception;
 use Psr\Http\Client\RequestExceptionInterface;
-use Xray\AzureStoragePhpSdk\Exceptions\RequestException\FailedAuthenticationException;
 use Throwable;
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException\FailedAuthenticationException;
 
 class RequestException extends Exception
 {

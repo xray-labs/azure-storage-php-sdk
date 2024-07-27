@@ -10,7 +10,7 @@ use Psr\Http\Client\RequestExceptionInterface;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
-use Xray\AzureStoragePhpSdk\Http\{Headers};
+use Xray\AzureStoragePhpSdk\Http\Headers;
 
 final class MicrosoftEntraId implements Auth
 {
@@ -66,7 +66,7 @@ final class MicrosoftEntraId implements Auth
             throw RequestException::createFromRequestException($e);
         }
 
-        /** @var array{token_type: string, expires_in: int, access_token: string} */
+        /** @var array{token_type: string, expires_in: int, access_token: string} $body */
         $body = json_decode((string) $response->getBody(), true);
 
         $this->token = "{$body['token_type']} {$body['access_token']}";
