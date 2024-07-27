@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Http\Headers;
 use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;

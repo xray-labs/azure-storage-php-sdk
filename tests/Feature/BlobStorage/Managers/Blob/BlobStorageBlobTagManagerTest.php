@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobTag;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobTagManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 

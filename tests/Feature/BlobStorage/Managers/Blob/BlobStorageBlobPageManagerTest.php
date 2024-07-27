@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{BlobManager, BlobPageManager};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};

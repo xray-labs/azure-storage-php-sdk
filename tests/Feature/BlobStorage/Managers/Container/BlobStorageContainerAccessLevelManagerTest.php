@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{ContainerAccessLevel, ContainerAccessLevels};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 uses()->group('blob-storage', 'managers', 'containers');

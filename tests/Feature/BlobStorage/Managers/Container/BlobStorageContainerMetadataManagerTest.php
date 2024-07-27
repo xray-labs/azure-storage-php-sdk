@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerMetadata;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerMetadataManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
