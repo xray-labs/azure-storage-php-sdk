@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
 use DateTimeImmutable;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Xmlable;
-use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\Contracts\Xmlable;
+use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 /**
  * @phpstan-type BlobTagHeaders array{Content-Length?: string, Content-Type?: string, Vary?: string, Server?: string, x-ms-request-id?: string, x-ms-version?: string, Date?: string}

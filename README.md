@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-[![PHP CI](https://github.com/sjspereira/azure-storage-php-sdk/actions/workflows/CI.yaml/badge.svg)](https://github.com/sjspereira/azure-storage-php-sdk/actions/workflows/CI.yaml)
+[![PHP CI](https://github.com/xray-labs/azure-storage-php-sdk/actions/workflows/CI.yaml/badge.svg)](https://github.com/xray-labs/azure-storage-php-sdk/actions/workflows/CI.yaml)
 
 ## Description
 
@@ -11,7 +11,7 @@ Integrate with Azure's cloud storage services
 ## Installation
 
 ```bash
-composer require sjpereira/azure-storage-php-sdk
+composer require xray/azure-storage-php-sdk
 ```
 
 ## Usage
@@ -19,8 +19,8 @@ composer require sjpereira/azure-storage-php-sdk
 Setup Blob Storage
 
 ```php
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{BlobStorage, Config};
-use Sjpereira\AzureStoragePhpSdk\Http\Request;
+use Xray\AzureStoragePhpSdk\BlobStorage\{BlobStorage, Config};
+use Xray\AzureStoragePhpSdk\Http\Request;
 
 $request = new Request(new Config([
     'account' => 'your_account_name',

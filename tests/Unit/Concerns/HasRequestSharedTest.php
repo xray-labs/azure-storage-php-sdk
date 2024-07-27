@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
-use Sjpereira\AzureStoragePhpSdk\Concerns\HasRequestShared;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
-use Sjpereira\AzureStoragePhpSdk\Tests\Http\RequestFake;
+use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
+use Xray\AzureStoragePhpSdk\BlobStorage\Config;
+use Xray\AzureStoragePhpSdk\Concerns\HasRequestShared;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
+use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 
 uses()->group('concerns', 'traits');
 

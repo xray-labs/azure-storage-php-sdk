@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cors;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cors;
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Arrayable;
+use Xray\AzureStoragePhpSdk\Contracts\Arrayable;
 
 /**
  * @phpstan-type CorsRuleType array{AllowedOrigins?: string, AllowedMethods?: string, MaxAgeInSeconds?: int, ExposedHeaders?: string, AllowedHeaders?: string}

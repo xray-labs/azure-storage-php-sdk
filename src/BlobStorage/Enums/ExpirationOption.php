@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Enums;
 
 enum ExpirationOption: string
 {

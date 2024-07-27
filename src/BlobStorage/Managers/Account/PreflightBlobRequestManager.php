@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\{RequestException};
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Exceptions\{RequestException};
 
 class PreflightBlobRequestManager implements Manager
 {

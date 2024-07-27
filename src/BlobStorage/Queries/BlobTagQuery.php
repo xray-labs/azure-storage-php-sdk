@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Queries;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Queries;
 
 use Closure;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 /**
  * @template TManager of Manager

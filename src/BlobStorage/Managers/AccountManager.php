@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\{
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\{
     AccountInformation,
     GeoReplication,
     KeyInfo,
     UserDelegationKey,
 };
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestManager, StoragePropertyManager};
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequestException;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestManager, StoragePropertyManager};
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
 readonly class AccountManager implements Manager
 {

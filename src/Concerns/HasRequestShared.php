@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Concerns;
+namespace Xray\AzureStoragePhpSdk\Concerns;
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 
 /** @template TRequest of Request */
 trait HasRequestShared

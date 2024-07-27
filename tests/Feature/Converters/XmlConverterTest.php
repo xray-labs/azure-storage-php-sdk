@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Converter;
-use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\UnableToConvertException;
+use Xray\AzureStoragePhpSdk\Contracts\Converter;
+use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
+use Xray\AzureStoragePhpSdk\Exceptions\UnableToConvertException;
 
 uses()->group('converters');
 

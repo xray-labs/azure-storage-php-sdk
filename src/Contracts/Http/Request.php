@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Contracts\Http;
+namespace Xray\AzureStoragePhpSdk\Contracts\Http;
 
 use Closure;
-use Sjpereira\AzureStoragePhpSdk\Contracts\HasConfig;
+use Xray\AzureStoragePhpSdk\Contracts\HasConfig;
 
 interface Request extends HasConfig, HttpMethods
 {

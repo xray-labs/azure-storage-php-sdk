@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Exceptions\UnableToConvertException;
+use Xray\AzureStoragePhpSdk\Exceptions\UnableToConvertException;
 
 uses()->group('exceptions');
 

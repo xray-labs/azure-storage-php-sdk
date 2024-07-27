@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Converter;
+namespace Xray\AzureStoragePhpSdk\Converter;
 
 use SimpleXMLElement;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Converter;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\UnableToConvertException;
+use Xray\AzureStoragePhpSdk\Contracts\Converter;
+use Xray\AzureStoragePhpSdk\Exceptions\UnableToConvertException;
 
 class XmlConverter implements Converter
 {

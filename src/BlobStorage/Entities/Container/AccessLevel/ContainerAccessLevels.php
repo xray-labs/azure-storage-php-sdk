@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelManager;
-use Sjpereira\AzureStoragePhpSdk\Support\Collection;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelManager;
+use Xray\AzureStoragePhpSdk\Support\Collection;
 
 /**
  * @method array<ContainerAccessLevel> all()

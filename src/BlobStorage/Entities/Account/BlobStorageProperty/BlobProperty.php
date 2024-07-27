@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cors\Cors;
-use Sjpereira\AzureStoragePhpSdk\Contracts\{Arrayable, Xmlable};
-use Sjpereira\AzureStoragePhpSdk\Converter\XmlConverter;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cors\Cors;
+use Xray\AzureStoragePhpSdk\Contracts\{Arrayable, Xmlable};
+use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
 
 /**
  * @phpstan-import-type LoggingType from Logging

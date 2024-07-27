@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Concerns;
+namespace Xray\AzureStoragePhpSdk\Concerns;
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\ManagerNotSetException;
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Exceptions\ManagerNotSetException;
 
 /** @template TManager of Manager */
 trait HasManager

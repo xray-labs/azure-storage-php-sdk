@@ -1,6 +1,6 @@
 <?php
 
-namespace Sjpereira\Tests;
+namespace Xray\Tests;
 
 /*
 |--------------------------------------------------------------------------

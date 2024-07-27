@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob\File;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Resource;
-use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Request;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Manager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\File;
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Concerns\HasManager;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
+use Xray\AzureStoragePhpSdk\Contracts\Manager;
+use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 
 class BlobPageManager implements Manager
 {

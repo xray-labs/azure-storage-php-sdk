@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{BlobStorage, Config};
-use Sjpereira\AzureStoragePhpSdk\Tests\Http\RequestFake;
+use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
+use Xray\AzureStoragePhpSdk\BlobStorage\{BlobStorage, Config};
+use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 
 uses()->group('blob-storage');
 

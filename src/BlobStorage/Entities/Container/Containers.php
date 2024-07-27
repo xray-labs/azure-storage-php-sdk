@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
-use Sjpereira\AzureStoragePhpSdk\Support\Collection;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
+use Xray\AzureStoragePhpSdk\Support\Collection;
 
 /**
  * @phpstan-import-type ContainerType from Container

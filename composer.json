@@ -1,5 +1,5 @@
 {
-    "name": "sjpereira/azure-storage-php-sdk",
+    "name": "xray/azure-storage-php-sdk",
     "description": "Integrate with Azure's cloud storage services",
     "type": "library",
     "license": "MIT",
@@ -37,8 +37,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Sjpereira\\AzureStoragePhpSdk\\": "src/",
-            "Sjpereira\\Tests\\": "tests/"
+            "Xray\\AzureStoragePhpSdk\\": "src/",
+            "Xray\\Tests\\": "tests/"
         },
         "files": [
             "src/helpers.php"

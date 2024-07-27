@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
 use DateTime;
 use DateTimeImmutable;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\ExpirationOption;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{BlobLeaseManager, BlobManager, BlobTagManager};
-use Sjpereira\AzureStoragePhpSdk\Concerns\HasManager;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\ExpirationOption;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{BlobLeaseManager, BlobManager, BlobTagManager};
+use Xray\AzureStoragePhpSdk\Concerns\HasManager;
+use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 /**
  * @phpstan-import-type PropertiesType from Properties

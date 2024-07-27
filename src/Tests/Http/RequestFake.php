@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\Tests\Http;
+namespace Xray\AzureStoragePhpSdk\Tests\Http;
 
 use Closure;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Config;
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
-use Sjpereira\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions};
+use Xray\AzureStoragePhpSdk\BlobStorage\Config;
+use Xray\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
+use Xray\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions};
 
 /**
  * @phpstan-type Method array{endpoint: string, body?: string}

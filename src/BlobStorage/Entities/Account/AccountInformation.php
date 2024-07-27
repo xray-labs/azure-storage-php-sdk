@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account;
+namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account;
 
 use DateTimeImmutable;
 

@@ -7,11 +7,11 @@ use GuzzleHttp\Promise\{Promise, PromiseInterface};
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Assert;
 use Psr\Http\Message\{RequestInterface, ResponseInterface};
-use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
-use Sjpereira\AzureStoragePhpSdk\Contracts\Http\Response as HttpResponse;
-use Sjpereira\AzureStoragePhpSdk\Http\Request;
+use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
+use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\Contracts\Http\Response as HttpResponse;
+use Xray\AzureStoragePhpSdk\Http\Request;
 
 uses()->group('http');
 

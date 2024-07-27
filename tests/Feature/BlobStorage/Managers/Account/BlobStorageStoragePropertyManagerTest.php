@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cors\Cors;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\{BlobProperty, DeleteRetentionPolicy, HourMetrics, Logging, MinuteMetrics, StaticWebsite};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Account\StoragePropertyManager;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
-use Sjpereira\AzureStoragePhpSdk\Http\Response as BaseResponse;
-use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cors\Cors;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\{BlobProperty, DeleteRetentionPolicy, HourMetrics, Logging, MinuteMetrics, StaticWebsite};
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\StoragePropertyManager;
+use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
+use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 uses()->group('blob-storage', 'managers', 'account');
 

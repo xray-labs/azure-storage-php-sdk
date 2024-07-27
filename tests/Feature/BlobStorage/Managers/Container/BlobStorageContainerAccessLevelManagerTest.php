@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{ContainerAccessLevel, ContainerAccessLevels};
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelManager;
-use Sjpereira\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
-use Sjpereira\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\{ContainerAccessLevel, ContainerAccessLevels};
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelManager;
+use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 uses()->group('blob-storage', 'managers', 'containers');
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Sjpereira\AzureStoragePhpSdk\Contracts\Parser;
-use Sjpereira\AzureStoragePhpSdk\Exceptions\UnableToParseException;
-use Sjpereira\AzureStoragePhpSdk\Parsers\XmlParser;
+use Xray\AzureStoragePhpSdk\Contracts\Parser;
+use Xray\AzureStoragePhpSdk\Exceptions\UnableToParseException;
+use Xray\AzureStoragePhpSdk\Parsers\XmlParser;
 
 uses()->group('parsers');
 
