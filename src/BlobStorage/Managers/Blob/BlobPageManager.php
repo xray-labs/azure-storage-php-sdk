@@ -53,17 +53,17 @@ class BlobPageManager implements Manager
     /** @param array<string, scalar> $options */
     public function append(File $file, int $startPage, ?int $endPage = null, array $options = []): bool
     {
-        $this->validatePageBytesBoundary($file->contentLength);
+        $this->validatePageBytesBoundary($file->getContentLength());
 
         ['startByte' => $startByte] = $this->getPageRange($startPage);
 
-        $endByte = $startByte + $file->contentLength - 1;
+        $endByte = $startByte + $file->getContentLength() - 1;
 
         if ($endPage) {
             ['endByte' => $endByte] = $this->getPageRange($endPage);
         }
 
-        $this->validatePageSize($startByte, $endByte, $file->contentLength);
+        $this->validatePageSize($startByte, $endByte, $file->getContentLength());
 
         try {
             return $this->request
@@ -71,11 +71,11 @@ class BlobPageManager implements Manager
                 ->withHeaders([
                     Resource::PAGE_WRITE     => 'update',
                     Resource::RANGE          => "bytes={$startByte}-{$endByte}",
-                    Resource::CONTENT_TYPE   => $file->contentType,
-                    Resource::CONTENT_LENGTH => $file->contentLength,
-                    Resource::CONTENT_MD5    => $file->contentMD5,
+                    Resource::CONTENT_TYPE   => $file->getContentType(),
+                    Resource::CONTENT_LENGTH => $file->getContentLength(),
+                    Resource::CONTENT_MD5    => $file->getContentMD5(),
                 ])
-                ->put("{$this->containerName}/{$file->name}?resttype=blob&comp=page", $file->content)
+                ->put("{$this->containerName}/{$file->getFilename()}?resttype=blob&comp=page", $file->getContent())
                 ->isCreated();
 
             // @codeCoverageIgnoreStart
@@ -88,12 +88,12 @@ class BlobPageManager implements Manager
     /** @param array<string, scalar> $options */
     public function put(File $file, array $options = []): bool
     {
-        $this->validatePageBytesBoundary($file->contentLength);
+        $this->validatePageBytesBoundary($file->getContentLength());
 
         try {
-            $this->create($file->name, $file->contentLength, $options, [
-                Resource::CONTENT_TYPE => $file->contentType,
-                Resource::CONTENT_MD5  => $file->contentMD5,
+            $this->create($file->getFilename(), $file->getContentLength(), $options, [
+                Resource::CONTENT_TYPE => $file->getContentType(),
+                Resource::CONTENT_MD5  => $file->getContentMD5(),
             ]);
 
             return $this->append($file, 1, options: $options);
@@ -140,7 +140,7 @@ class BlobPageManager implements Manager
 
         $file = $this->getManager()->get($name);
 
-        return $this->clear($name, 1, (int)($file->contentLength / self::PAGE_SIZE_BYTES), $options);
+        return $this->clear($name, 1, (int)($file->getContentLength() / self::PAGE_SIZE_BYTES), $options);
     }
 
     /** @return array{startByte: int, endByte: int} */

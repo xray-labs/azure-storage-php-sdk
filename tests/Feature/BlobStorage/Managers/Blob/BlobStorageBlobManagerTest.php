@@ -38,15 +38,15 @@ it('should create a new blob block', function () {
     expect((new BlobManager($request, $container = 'container'))->putBlock($file, ['option' => 'value']))
         ->toBeTrue();
 
-    $request->assertPut("{$container}/{$file->name}?resttype=blob")
+    $request->assertPut("{$container}/{$file->getFilename()}?resttype=blob")
         ->assertSentWithOptions(['option' => 'value'])
         ->assertSentWithHeaders([
             Resource::BLOB_TYPE         => BlobType::BLOCK->value,
-            Resource::BLOB_CONTENT_MD5  => $file->contentMD5,
-            Resource::BLOB_CONTENT_TYPE => $file->contentType,
-            Resource::CONTENT_MD5       => $file->contentMD5,
-            Resource::CONTENT_TYPE      => $file->contentType,
-            Resource::CONTENT_LENGTH    => $file->contentLength,
+            Resource::BLOB_CONTENT_MD5  => $file->getContentMD5(),
+            Resource::BLOB_CONTENT_TYPE => $file->getContentType(),
+            Resource::CONTENT_MD5       => $file->getContentMD5(),
+            Resource::CONTENT_TYPE      => $file->getContentType(),
+            Resource::CONTENT_LENGTH    => $file->getContentLength(),
         ]);
 });
 
@@ -73,23 +73,23 @@ it('should get a blob', function () {
 
     expect((new BlobManager($request, $container = 'container'))->get($blob = 'blob.text', ['option' => 'value']))
         ->toBeInstanceOf(File::class)
-        ->name->toBe($blob)
-        ->content->toBe($body)
-        ->contentLength->toBe(10)
-        ->contentType->toBe('plain/text')
-        ->contentMD5->toBe('Q2hlY2sgSW50ZWdyaXR5')
-        ->lastModified->format('Y-m-d\TH:i:s')->toBe('2021-01-01T00:00:00')
-        ->acceptRanges->toBe('bytes')
-        ->eTag->toBe('"0x8D8D8D8D8D8D8D9"')
-        ->vary->toBe('Accept-Encoding')
-        ->server->toBe('Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0')
-        ->xMsRequestId->toBe('0')
-        ->xMsVersion->format('Y-m-d')->toBe('2019-02-02')
-        ->xMsCreationTime->format('Y-m-d\TH:i:s')->toBe('2020-01-01T00:00:00')
-        ->xMsLeaseStatus->toBe('unlocked')
-        ->xMsLeaseState->toBe('available')
-        ->xMsBlobType->toBe('BlockBlob')
-        ->xMsServerEncrypted->toBe(true);
+        ->getFilename()->toBe($blob)
+        ->getContent()->toBe($body)
+        ->getContentLength()->toBe(10)
+        ->getContentType()->toBe('plain/text')
+        ->getContentMD5()->toBe('Q2hlY2sgSW50ZWdyaXR5')
+        ->getLastModified()->format('Y-m-d\TH:i:s')->toBe('2021-01-01T00:00:00')
+        ->getAcceptRanges()->toBe('bytes')
+        ->getETag()->toBe('"0x8D8D8D8D8D8D8D9"')
+        ->getVary()->toBe('Accept-Encoding')
+        ->getServer()->toBe('Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0')
+        ->getRequestId()->toBe('0')
+        ->getVersion()->toBe('2019-02-02')
+        ->getCreationTime()->format('Y-m-d\TH:i:s')->toBe('2020-01-01T00:00:00')
+        ->getLeaseStatus()->toBe('unlocked')
+        ->getLeaseState()->toBe('available')
+        ->getBlobType()->toBe('BlockBlob')
+        ->getServerEncrypted()->toBe(true);
 
     $request->assertGet("{$container}/{$blob}?resttype=blob")
         ->assertSentWithOptions(['option' => 'value']);
@@ -103,7 +103,7 @@ it('should list all blobs', function () {
             <Blob>
                 <Name>name</Name>
                 <Snapshot>2021-01-01T00:00:00.0000000Z</Snapshot>
-                <Version>2021-01-01T00:00:00.0000000Z</Version>
+                <Version>2021-01-01</Version>
                 <IsCurrentVersion>true</IsCurrentVersion>
                 <Properties>
                     <Last-Modified>2021-01-01T00:00:00.0000000Z</Last-Modified>
@@ -133,7 +133,7 @@ it('should list all blobs', function () {
         ->toBeInstanceOf(Blob::class)
         ->name->toBe('name')
         ->snapshot->format('Y-m-d\TH:i:s')->toBe('2021-01-01T00:00:00')
-        ->versionId->format('Y-m-d\TH:i:s')->toBe('2021-01-01T00:00:00')
+        ->versionId->toBe('2021-01-01')
         ->isCurrentVersion->toBeTrue()
         ->and($result->first()?->properties)
         ->toBeInstanceOf(Properties::class)

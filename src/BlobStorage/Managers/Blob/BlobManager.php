@@ -121,13 +121,13 @@ readonly class BlobManager implements Manager
                 ->withOptions($options)
                 ->withHeaders([
                     Resource::BLOB_TYPE         => BlobType::BLOCK->value,
-                    Resource::BLOB_CONTENT_MD5  => $file->contentMD5,
-                    Resource::BLOB_CONTENT_TYPE => $file->contentType,
-                    Resource::CONTENT_MD5       => $file->contentMD5,
-                    Resource::CONTENT_TYPE      => $file->contentType,
-                    Resource::CONTENT_LENGTH    => $file->contentLength,
+                    Resource::BLOB_CONTENT_MD5  => $file->getContentMD5(),
+                    Resource::BLOB_CONTENT_TYPE => $file->getContentType(),
+                    Resource::CONTENT_MD5       => $file->getContentMD5(),
+                    Resource::CONTENT_TYPE      => $file->getContentType(),
+                    Resource::CONTENT_LENGTH    => $file->getContentLength(),
                 ])
-                ->put("{$this->containerName}/{$file->name}?resttype=blob", $file->content)
+                ->put("{$this->containerName}/{$file->getFilename()}?resttype=blob", $file->getContent())
                 ->isCreated();
 
             // @codeCoverageIgnoreStart

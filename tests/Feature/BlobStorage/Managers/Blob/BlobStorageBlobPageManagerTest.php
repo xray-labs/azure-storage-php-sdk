@@ -65,14 +65,14 @@ it('should append an additional page', function () {
     expect((new BlobPageManager($request, $container = 'container'))->append($file, $startPage, $endPage, $options))
         ->toBeTrue();
 
-    $request->assertPut("{$container}/{$file->name}?resttype=blob&comp=page", $file->content)
+    $request->assertPut("{$container}/{$file->getFilename()}?resttype=blob&comp=page", $file->getContent())
         ->assertSentWithOptions($options)
         ->assertSentWithHeaders([
             Resource::PAGE_WRITE     => 'update',
             Resource::RANGE          => 'bytes=0-1023',
-            Resource::CONTENT_TYPE   => $file->contentType,
-            Resource::CONTENT_LENGTH => $file->contentLength,
-            Resource::CONTENT_MD5    => $file->contentMD5,
+            Resource::CONTENT_TYPE   => $file->getContentType(),
+            Resource::CONTENT_LENGTH => $file->getContentLength(),
+            Resource::CONTENT_MD5    => $file->getContentMD5(),
         ]);
 });
 
@@ -86,16 +86,16 @@ it('should put a new blob page', function () {
     expect((new BlobPageManager($request, $container = 'container'))->put($file, $options))
         ->toBeTrue();
 
-    $request->assertPut("{$container}/{$file->name}?resttype=blob&comp=page", $file->content)
+    $request->assertPut("{$container}/{$file->getFilename()}?resttype=blob&comp=page", $file->getContent())
         ->assertSentWithOptions($options)
         ->assertSentWithHeaders([
             Resource::BLOB_TYPE           => BlobType::PAGE->value,
-            Resource::BLOB_CONTENT_LENGTH => $file->contentLength,
-            Resource::CONTENT_TYPE        => $file->contentType,
-            Resource::CONTENT_MD5         => $file->contentMD5,
+            Resource::BLOB_CONTENT_LENGTH => $file->getContentLength(),
+            Resource::CONTENT_TYPE        => $file->getContentType(),
+            Resource::CONTENT_MD5         => $file->getContentMD5(),
             Resource::PAGE_WRITE          => 'update',
             Resource::RANGE               => 'bytes=0-1023',
-            Resource::CONTENT_LENGTH      => $file->contentLength,
+            Resource::CONTENT_LENGTH      => $file->getContentLength(),
         ]);
 });
 
