@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use Psr\Http\Client\RequestExceptionInterface;
-use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\File;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\Concerns\HasManager;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 use Xray\AzureStoragePhpSdk\Contracts\Manager;

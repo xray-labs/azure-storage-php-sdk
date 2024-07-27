@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\File;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\BlobType;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{BlobManager, BlobPageManager};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
