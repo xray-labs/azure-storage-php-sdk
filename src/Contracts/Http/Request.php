@@ -7,7 +7,7 @@ namespace Xray\AzureStoragePhpSdk\Contracts\Http;
 use Closure;
 use Xray\AzureStoragePhpSdk\Contracts\HasConfig;
 
-interface Request extends HasConfig, HttpMethods, AuthRequest
+interface Request extends HasConfig, HttpMethods, AuthRequest, Sharable
 {
     public function usingAccount(Closure $callback): static;
 

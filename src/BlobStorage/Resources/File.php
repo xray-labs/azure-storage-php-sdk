@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\BlobStorage\Resources;
 
 use DateTimeImmutable;
-use Xray\AzureStoragePhpSdk\BlobStorage\Resources\Concerns\{HasFileMethods, HasFileProperties};
+use Xray\AzureStoragePhpSdk\Concerns\{HasFileMethods, HasFileProperties};
 use Xray\AzureStoragePhpSdk\Exceptions\{
     CouldNotCreateTempFileException,
     InvalidArgumentException,

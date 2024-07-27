@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xray\AzureStoragePhpSdk\Http\Concerns;
+namespace Xray\AzureStoragePhpSdk\Concerns\Http;
 
 use Closure;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;

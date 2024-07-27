@@ -8,13 +8,14 @@ use Closure;
 use GuzzleHttp\{Client, ClientInterface};
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\Concerns\Http\{HasAuthenticatedRequest, HasSharingMethods};
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\{Request as RequestContract, Response as ResponseContract};
-use Xray\AzureStoragePhpSdk\Http\Concerns\HasAuthenticatedRequest;
 
 class Request implements RequestContract
 {
     use HasAuthenticatedRequest;
+    use HasSharingMethods;
 
     protected readonly ClientInterface $client;
 
@@ -157,6 +158,10 @@ class Request implements RequestContract
     /** @return array<string, mixed> */
     protected function getOptions(HttpVerb $verb, string $resource, string $body = ''): array
     {
+        $this->withVerb($verb)
+            ->withResource($resource)
+            ->withBody($body);
+
         $options = $this->options;
 
         $headers = Headers::parse(array_merge($this->headers, [
@@ -174,7 +179,7 @@ class Request implements RequestContract
 
         if ($this->shouldAuthenticate) {
             $headers = $headers->withAdditionalHeaders([
-                Resource::AUTH_HEADER => $this->auth->getAuthentication($verb, $headers, $resource),
+                Resource::AUTH_HEADER => $this->auth->getAuthentication($this->withHttpHeaders($headers)),
             ]);
         } else {
             $this->withAuthentication();

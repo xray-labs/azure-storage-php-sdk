@@ -11,7 +11,7 @@ use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 use Xray\AzureStoragePhpSdk\Contracts\Http\Response as HttpResponse;
-use Xray\AzureStoragePhpSdk\Http\Request;
+use Xray\AzureStoragePhpSdk\Http\{Headers, Request};
 
 uses()->group('http');
 
@@ -82,6 +82,47 @@ it('should get request auth', function (): void {
 
     expect((new Request($auth, client: new Client()))->getAuth())
         ->toBe($auth);
+});
+
+it('should get the http verb from request', function (HttpVerb $verb) {
+    $auth = new SharedKeyAuth('my_account', 'bar');
+
+    $request = (new Request($auth, client: new Client()))
+        ->withVerb($verb);
+
+    expect($request->getVerb())
+        ->toBeInstanceOf(HttpVerb::class)
+        ->toEqual($verb);
+})->with(fn () => HttpVerb::cases());
+
+it('should get the resource from request', function (): void {
+    $auth = new SharedKeyAuth('my_account', 'bar');
+
+    $request = (new Request($auth, client: new Client()))
+        ->withResource('endpoint');
+
+    expect($request->getResource())
+        ->toEqual('endpoint');
+});
+
+it('should get the headers from request', function (): void {
+    $auth = new SharedKeyAuth('my_account', 'bar');
+
+    $request = (new Request($auth, client: new Client()))
+        ->withHttpHeaders(new Headers());
+
+    expect($request->getHttpHeaders())
+        ->toBeInstanceOf(Headers::class);
+});
+
+it('should get the body from request', function (): void {
+    $auth = new SharedKeyAuth('my_account', 'bar');
+
+    $request = (new Request($auth, client: new Client()))
+        ->withBody('body');
+
+    expect($request->getBody())
+        ->toBe('body');
 });
 
 class Client implements ClientInterface

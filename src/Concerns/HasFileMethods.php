@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xray\AzureStoragePhpSdk\BlobStorage\Resources\Concerns;
+namespace Xray\AzureStoragePhpSdk\Concerns;
 
 use DateTimeImmutable;
 

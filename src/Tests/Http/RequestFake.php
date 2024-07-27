@@ -7,9 +7,11 @@ namespace Xray\AzureStoragePhpSdk\Tests\Http;
 use Closure;
 use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Config;
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
-use Xray\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions};
+use Xray\AzureStoragePhpSdk\Http\Headers;
+use Xray\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions, HasSharableHttp};
 
 /**
  * @phpstan-type Method array{endpoint: string, body?: string}
@@ -18,6 +20,7 @@ class RequestFake implements Request
 {
     use HasHttpAssertions;
     use HasAuthAssertions;
+    use HasSharableHttp;
 
     protected readonly Auth $auth;
 
@@ -98,6 +101,7 @@ class RequestFake implements Request
     public function withHeaders(array $headers = []): static
     {
         $this->headers = array_merge($this->headers, $headers);
+        $this->withHttpHeaders(Headers::parse($this->headers));
 
         return $this;
     }
@@ -107,6 +111,8 @@ class RequestFake implements Request
         $this->methods['get'] = [
             'endpoint' => $endpoint,
         ];
+
+        $this->withVerb(HttpVerb::GET);
 
         return $this->fakeResponse ?? new ResponseFake();
     }
@@ -118,6 +124,9 @@ class RequestFake implements Request
             'body'     => $body,
         ];
 
+        $this->withVerb(HttpVerb::POST)
+            ->withBody($body);
+
         return $this->fakeResponse ?? new ResponseFake();
     }
 
@@ -128,6 +137,9 @@ class RequestFake implements Request
             'body'     => $body,
         ];
 
+        $this->withVerb(HttpVerb::PUT)
+            ->withBody($body);
+
         return $this->fakeResponse ?? new ResponseFake();
     }
 
@@ -137,6 +149,8 @@ class RequestFake implements Request
             'endpoint' => $endpoint,
         ];
 
+        $this->withVerb(HttpVerb::DELETE);
+
         return $this->fakeResponse ?? new ResponseFake();
     }
 
@@ -145,6 +159,8 @@ class RequestFake implements Request
         $this->methods['options'] = [
             'endpoint' => $endpoint,
         ];
+
+        $this->withVerb(HttpVerb::OPTIONS);
 
         return $this->fakeResponse ?? new ResponseFake();
     }
