@@ -51,7 +51,7 @@ final class File
     protected function detectContentType(): string
     {
         if (($file = tmpfile()) === false) {
-            throw CouldNotCreateTempFileException::create('Could not create temporary file');
+            throw CouldNotCreateTempFileException::create('Could not create temporary file'); // @codeCoverageIgnore
         }
 
         try {
@@ -62,7 +62,7 @@ final class File
         }
 
         if (!$mimeType) {
-            throw InvalidFileMimeTypeException::create();
+            throw InvalidFileMimeTypeException::create(); // @codeCoverageIgnore
         }
 
         return $mimeType;
