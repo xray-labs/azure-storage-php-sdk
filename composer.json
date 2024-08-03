@@ -32,8 +32,7 @@
     },
     "authors": [
         { "name": "Silvio Pereira", "email": "sjpereira2000@gmail.com" },
-        { "name": "Gabriel de Ramos", "email": "gabrielramos791@gmail.com" },
-        { "name": "Erlon Sodre", "email": "erlonsodre@gmail.com" }
+        { "name": "Gabriel de Ramos", "email": "gabrielramos791@gmail.com" }
     ],
     "autoload": {
         "psr-4": {
