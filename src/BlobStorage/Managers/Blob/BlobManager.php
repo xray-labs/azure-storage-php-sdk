@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Psr\Http\Client\RequestExceptionInterface;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\{KeyInfo, UserDelegationKey};
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs};
-use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{BlobIncludeOption, BlobType, ExpirationOption};
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{AccessTokenPermission, BlobIncludeOption, BlobType, ExpirationOption};
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\AccountManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
@@ -243,6 +247,22 @@ readonly class BlobManager implements Manager
         // @codeCoverageIgnoreEnd
     }
 
+    /** @param array<string, scalar> $options */
+    public function temporaryUrl(string $blobName, string|int|DateTimeInterface $expiresAt, array $options = []): string
+    {
+        $expires = match(true) {
+            $expiresAt instanceof DateTime => DateTimeImmutable::createFromMutable($expiresAt),
+            is_int($expiresAt)             => DateTimeImmutable::createFromFormat('U', (string)$expiresAt),
+            is_string($expiresAt)          => new DateTimeImmutable($expiresAt),
+            default                        => $expiresAt,
+        };
+
+        $uri = $this->request->uri("{$this->containerName}/{$blobName}");
+
+        return $this->getUserDelegationKey($expires, $options)
+            ->generateTokenUrl($uri, AccessTokenPermission::READ);
+    }
+
     public function lease(string $blobName): BlobLeaseManager
     {
         return new BlobLeaseManager($this->request, $this->containerName, $blobName);
@@ -279,5 +299,14 @@ readonly class BlobManager implements Manager
             $expiryTime instanceof DateTime && $expirationOption !== ExpirationOption::ABSOLUTE => throw InvalidArgumentException::create('The expiration time must be informed in milliseconds.'),
             default                                                                             => true,
         };
+    }
+
+    /** @param array<string, scalar> $options */
+    protected function getUserDelegationKey(DateTimeImmutable $expiry, array $options = []): UserDelegationKey
+    {
+        return (new AccountManager($this->request))->userDelegationKey(new KeyInfo([
+            'Start'  => new DateTimeImmutable(),
+            'Expiry' => $expiry,
+        ]), $options);
     }
 }

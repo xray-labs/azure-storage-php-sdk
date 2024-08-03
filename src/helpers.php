@@ -77,3 +77,12 @@ if (!function_exists('convert_to_RFC3339_micro')) {
         return $utcDateTime->format('Y-m-d\TH:i:s.') . $microseconds . 'Z';
     }
 }
+
+if (!function_exists('convert_to_ISO')) {
+    function convert_to_ISO(DateTimeImmutable $dateTime): string
+    {
+        $dateTime = $dateTime->setTimezone(new DateTimeZone('UTC'));
+
+        return str_replace('+00:00', 'Z', $dateTime->format('c'));
+    }
+}

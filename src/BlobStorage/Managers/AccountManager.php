@@ -88,7 +88,6 @@ readonly class AccountManager implements Manager
     /** @param array<string, scalar> $options */
     public function userDelegationKey(KeyInfo $keyInfo, array $options = []): UserDelegationKey
     {
-        # FIX: Needs other authentication (Microsoft Entra ID)
         try {
             $response = $this->request
                 ->withOptions($options)
@@ -101,9 +100,9 @@ readonly class AccountManager implements Manager
         }
         // @codeCoverageIgnoreEnd
 
-        /** @var array{UserDelegationKey: array{SignedOid: string, SignedTid: string, SignedStart: string, SignedExpiry: string, SignedService: string, SignedVersion: string, Value: string}} $parsed */
+        /** @var array{SignedOid: string, SignedTid: string, SignedStart: string, SignedExpiry: string, SignedService: string, SignedVersion: string, Value: string} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
-        return new UserDelegationKey($parsed['UserDelegationKey']);
+        return new UserDelegationKey($parsed);
     }
 }
