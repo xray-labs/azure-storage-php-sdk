@@ -250,6 +250,7 @@ readonly class BlobManager implements Manager
     /** @param array<string, scalar> $options */
     public function temporaryUrl(string $blobName, string|int|DateTimeInterface $expiresAt, array $options = []): string
     {
+        /** @var DateTimeImmutable $expires */
         $expires = match(true) {
             $expiresAt instanceof DateTime => DateTimeImmutable::createFromMutable($expiresAt),
             is_int($expiresAt)             => DateTimeImmutable::createFromFormat('U', (string)$expiresAt),

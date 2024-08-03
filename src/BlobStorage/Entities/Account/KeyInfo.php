@@ -18,7 +18,7 @@ final readonly class KeyInfo implements Arrayable, Xmlable
     public DateTimeInterface $expiry;
 
     /**
-     * @param array{Start?: string, Expiry?: string} $keyInfo
+     * @param array{Start?: string|DateTimeInterface, Expiry?: string|DateTimeInterface} $keyInfo
      *
      * @throws RequiredFieldException
      */
@@ -45,8 +45,8 @@ final readonly class KeyInfo implements Arrayable, Xmlable
     {
         return [
             'KeyInfo' => [
-                'Start'  => convert_to_ISO($this->start),
-                'Expiry' => convert_to_ISO($this->expiry),
+                'Start'  => convert_to_ISO($this->start), // @phpstan-ignore-line
+                'Expiry' => convert_to_ISO($this->expiry), // @phpstan-ignore-line
             ],
         ];
     }
