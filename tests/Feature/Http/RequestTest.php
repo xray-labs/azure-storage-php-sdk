@@ -30,6 +30,15 @@ it('should send get, delete, and options requests', function (string $method, Ht
             && array_key_exists(Resource::AUTH_HEADER, $options['headers'])
             && array_key_exists(Resource::AUTH_VERSION, $options['headers'])
     );
+
+    $getRequestOptions = fn () => (object)[
+        'options' => $this->options,
+        'headers' => $this->headers,
+    ];
+
+    expect($getRequestOptions->call($request))
+        ->options->toBeEmpty()
+        ->headers->toBeEmpty();
 })->with([
     'With GET method'     => ['get', HttpVerb::GET],
     'With DELETE method'  => ['delete', HttpVerb::DELETE],
@@ -60,6 +69,17 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
             && !array_key_exists(Resource::AUTH_HEADER, $options['headers'])
             && array_key_exists(Resource::AUTH_VERSION, $options['headers'])
     );
+
+    $getRequestOptions = fn () => (object)[
+        'options'            => $this->options,
+        'headers'            => $this->headers,
+        'shouldAuthenticate' => $this->shouldAuthenticate,
+    ];
+
+    expect($getRequestOptions->call($request))
+        ->options->toBeEmpty()
+        ->headers->toBeEmpty()
+        ->shouldAuthenticate->toBeTrue();
 })->with([
     'With PUT method'  => ['put', HttpVerb::PUT],
     'With POST method' => ['post', HttpVerb::POST],

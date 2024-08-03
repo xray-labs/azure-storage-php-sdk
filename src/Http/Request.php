@@ -182,12 +182,17 @@ class Request implements RequestContract
             $headers = $headers->withAdditionalHeaders([
                 Resource::AUTH_HEADER => $this->auth->getAuthentication($this->withHttpHeaders($headers)),
             ]);
-        } else {
-            $this->withAuthentication();
         }
 
         $options['headers'] = $headers->toArray();
 
-        return $options;
+        return with($options, fn () => $this->resetRequestOptions());
+    }
+
+    protected function resetRequestOptions(): void
+    {
+        $this->headers = [];
+        $this->options = [];
+        $this->withAuthentication();
     }
 }
