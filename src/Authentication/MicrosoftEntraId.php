@@ -8,12 +8,15 @@ use DateTime;
 use GuzzleHttp\{Client, ClientInterface};
 use Psr\Http\Client\RequestExceptionInterface;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
+use Xray\AzureStoragePhpSdk\Concerns\UseCurrentHttpDate;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
 final class MicrosoftEntraId implements Auth
 {
+    use UseCurrentHttpDate;
+
     protected ?ClientInterface $client = null;
 
     protected string $token = '';
@@ -34,11 +37,6 @@ final class MicrosoftEntraId implements Auth
         $this->client = $client;
 
         return $this;
-    }
-
-    public function getDate(): string
-    {
-        return gmdate('D, d M Y H:i:s T');
     }
 
     public function getAccount(): string
