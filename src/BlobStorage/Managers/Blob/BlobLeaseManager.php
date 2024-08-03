@@ -90,8 +90,10 @@ class BlobLeaseManager implements Manager
             return $this->request
                 ->withHeaders($headers)
                 ->put("{$this->container}/{$this->blob}?comp=lease&resttype=blob");
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 }

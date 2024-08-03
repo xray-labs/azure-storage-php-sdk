@@ -19,15 +19,15 @@ composer require xray/azure-storage-php-sdk
 Setup Blob Storage
 
 ```php
-use Xray\AzureStoragePhpSdk\BlobStorage\{BlobStorage, Config};
-use Xray\AzureStoragePhpSdk\Http\Request;
+use Xray\AzureStoragePhpSdk\BlobStorage\BlobStorageClient;
+use Xray\AzureStoragePhpSdk\Authentication\MicrosoftEntraId;
 
-$request = new Request(new Config([
-    'account' => 'your_account_name',
-    'key'     => 'your_account_key',
-]));
-
-$blobStorage = new BlobStorage($request);
+$client = BlobStorageClient::create(new MicrosoftEntraId(
+    account: 'my_account',
+    directoryId: 'directory_id',
+    applicationId: 'application_id',
+    applicationSecret: 'application_secret',
+));
 ```
 
 [Storage Account](docs/StorageAccount.md)
@@ -40,4 +40,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 - sjpereira2000@gmail.com
 - gabrielramos791@gmail.com
-- erlonsodre@gmail.com

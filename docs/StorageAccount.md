@@ -3,16 +3,16 @@
 Getting the storage account information
 
 ```php
-use Xray\AzureStoragePhpSdk\BlobStorage\{BlobStorage, Config};
-use Xray\AzureStoragePhpSdk\Http\Request;
+use Xray\AzureStoragePhpSdk\BlobStorage\BlobStorageClient;
+use Xray\AzureStoragePhpSdk\Authentication\MicrosoftEntraId;
 
-$request = new Request(new Config([
-    'account' => 'your_account_name',
-    'key'     => 'your_account_key',
-]));
+$client = BlobStorageClient::create(new MicrosoftEntraId(
+    account: 'my_account',
+    directoryId: 'directory_id',
+    applicationId: 'application_id',
+    applicationSecret: 'application_secret',
+));
 
-$blobStorage = new BlobStorage($request);
-
-$blobStorage->account()->information();
-// returns Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\AccountInformation;
+$client->account()->information();
+// ?^ returns Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\AccountInformation;
 ```

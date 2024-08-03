@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\Http;
 
 use Psr\Http\Message\ResponseInterface;
+use Xray\AzureStoragePhpSdk\Concerns\HasStreamingResponse;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Response as ResponseContract;
 
 final class Response implements ResponseContract
 {
+    use HasStreamingResponse;
+
     public const int STATUS_OK         = 200;
     public const int STATUS_CREATED    = 201;
     public const int STATUS_ACCEPTED   = 202;

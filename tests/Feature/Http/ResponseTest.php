@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Response;
 
 uses()->group('http');
@@ -38,3 +40,21 @@ it('should get body', function (): void {
     $response = new Response(new GuzzleResponse(200, [], 'body'));
     expect($response->getBody())->toBe('body');
 });
+
+it('should validate expiration time when streaming or downloading', function (string $method) {
+    $file = new File('file', 'file.txt', ['Content-Type' => 'text/plain']);
+
+    Response::{$method}($file, -1);
+})->with([
+    'Streaming'   => ['stream'],
+    'Downloading' => ['download'],
+])->throws(InvalidArgumentException::class, 'Expires cannot be less than 0.');
+
+it('should stream or download the file through the response', function (string $method) {
+    $file = new File('file.txt', $content = 'content', ['Content-Type' => 'text/plain']);
+
+    expect(Response::{$method}($file))->toBe($content);
+})->with([
+    'Streaming'   => ['stream'],
+    'Downloading' => ['download'],
+]);

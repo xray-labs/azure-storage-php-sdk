@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Xray\AzureStoragePhpSdk\BlobStorage;
 
-use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\{Converter, Parser};
 use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
@@ -25,7 +24,7 @@ final readonly class Config
      * @param ConfigType $config
      * @throws InvalidArgumentException
      */
-    public function __construct(public Auth $auth, array $config = [])
+    public function __construct(array $config = [])
     {
         $this->version   = $config['version'] ?? Resource::VERSION;
         $this->parser    = $config['parser'] ?? new XmlParser();

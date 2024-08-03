@@ -6,7 +6,7 @@ namespace Xray\AzureStoragePhpSdk\BlobStorage\Queries;
 
 use Closure;
 use Xray\AzureStoragePhpSdk\Contracts\Manager;
-use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequiredFieldException};
 
 /**
  * @template TManager of Manager
@@ -74,7 +74,7 @@ class BlobTagQuery
     protected function validateOperator(string $operator): void
     {
         if (!in_array($operator, ['=', '>', '>=', '<', '<='])) {
-            throw new \InvalidArgumentException("Invalid operator: {$operator}");
+            throw InvalidArgumentException::create("Invalid operator: {$operator}");
         }
     }
 }

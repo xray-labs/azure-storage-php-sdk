@@ -1,6 +1,49 @@
 <?php
 
+use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+
 define('RFC3339_MICRO', 'Y-m-d\TH:i:s.u\Z');
+
+if (!function_exists('with')) {
+    /**
+     * Applies a closure to a value and returns the value.
+     *
+     * @template T
+     * @param T $value The value to be passed to the closure.
+     * @param \Closure(T): void $callback The closure to be applied to the value.
+     * @return T The original value after the closure has been applied.
+     */
+    function with(mixed $value, Closure $callback): mixed
+    {
+        $callback($value);
+
+        return $value;
+    }
+}
+
+if (!function_exists('is_running_in_console')) {
+    function is_running_in_console(): bool
+    {
+        return in_array(\PHP_SAPI, ['cli', 'phpdbg'], true);
+    }
+}
+
+if (!function_exists('validate_protocol')) {
+    function validate_protocol(string $value): true
+    {
+        $validProtocols = ['http', 'https'];
+
+        if (!in_array($value, $validProtocols, true)) {
+            throw InvalidArgumentException::create(sprintf(
+                'Invalid protocol: %s. Valid protocols: %s',
+                $value,
+                implode(', ', $validProtocols),
+            ));
+        }
+
+        return true;
+    }
+}
 
 if (!function_exists('str_camel_to_header')) {
     function str_camel_to_header(string $value): string
@@ -24,7 +67,7 @@ if (!function_exists('convert_to_RFC1123')) {
 }
 
 if (!function_exists('convert_to_RFC3339_micro')) {
-    function convert_to_RFC3339_micro(DateTimeImmutable $dateTime): string
+    function convert_to_RFC3339_micro(DateTime $dateTime): string
     {
         $utcDateTime = $dateTime->setTimezone(new DateTimeZone('UTC'));
 

@@ -9,7 +9,7 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
 use Xray\AzureStoragePhpSdk\Contracts\Manager;
-use Xray\AzureStoragePhpSdk\Exceptions\{RequestException};
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
 class PreflightBlobRequestManager implements Manager
 {

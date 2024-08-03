@@ -3,12 +3,11 @@
 declare(strict_types=1);
 
 use Pest\Expectation;
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\Properties;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\{Container, ContainerProperties, Containers};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\{ContainerAccessLevelManager, ContainerLeaseManager, ContainerMetadataManager};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
-use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
@@ -16,7 +15,7 @@ use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'containers');
 
 it('should get container\'s managers', function (string $method, string $class) {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     expect((new ContainerManager($request))->{$method}())
         ->toBeInstanceOf($class); // @phpstan-ignore-line
@@ -26,7 +25,7 @@ it('should get container\'s managers', function (string $method, string $class) 
 ]);
 
 it('should get container properties', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(headers: [
             'Last-Modified'                                  => ['2024-06-10T00:00:00.0000000Z'],
             'ETag'                                           => ['etag'],
@@ -108,7 +107,7 @@ it('should list all the containers', function (bool $withDeleted) {
     </EnumerationResults>
     XML;
 
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($xml));
 
     $result = (new ContainerManager($request))->list(['some' => 'value'], $withDeleted);
@@ -147,7 +146,7 @@ it('should list all the containers', function (bool $withDeleted) {
 ]);
 
 it('should not be able to request when a container name is invalid', function (string $method) {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     $container = 'container#Name.';
 
@@ -161,14 +160,14 @@ it('should not be able to request when a container name is invalid', function (s
 ]);
 
 it('should lease a container', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))));
+    $request = (new RequestFake());
 
     expect((new ContainerManager($request))->lease('container'))
         ->toBeInstanceOf(ContainerLeaseManager::class);
 });
 
 it('should create a new container', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     expect((new ContainerManager($request))->create($container = 'container'))
@@ -178,7 +177,7 @@ it('should create a new container', function () {
 });
 
 it('should delete an existing container', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_ACCEPTED));
 
     expect((new ContainerManager($request))->delete($container = 'container'))
@@ -188,7 +187,7 @@ it('should delete an existing container', function () {
 });
 
 it('should restore a deleted container', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(statusCode: BaseResponse::STATUS_CREATED));
 
     expect((new ContainerManager($request))->restore($container = 'container', $version = 'version'))

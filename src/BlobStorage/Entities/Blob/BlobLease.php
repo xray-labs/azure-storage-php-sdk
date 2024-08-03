@@ -42,8 +42,7 @@ final class BlobLease
         $this->version      = $blobLease[Resource::AUTH_VERSION] ?? '';
         $this->date         = new DateTimeImmutable($blobLease['Date'] ?? 'now');
 
-        $this->leaseId = $blobLease[Resource::LEASE_ID]
-            ?? null;
+        $this->leaseId = $blobLease[Resource::LEASE_ID] ?? null;
     }
 
     public function renew(): self

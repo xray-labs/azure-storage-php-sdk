@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Xray\AzureStoragePhpSdk\Contracts\Authentication;
 
-use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
-use Xray\AzureStoragePhpSdk\Http\Headers;
+use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 
 interface Auth
 {
@@ -13,9 +12,5 @@ interface Auth
 
     public function getAccount(): string;
 
-    public function getAuthentication(
-        HttpVerb $verb,
-        Headers $headers,
-        string $resource,
-    ): string;
+    public function getAuthentication(Request $request): string;
 }

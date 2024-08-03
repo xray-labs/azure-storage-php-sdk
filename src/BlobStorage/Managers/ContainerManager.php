@@ -17,7 +17,7 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Concerns\HasRequestShared;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 use Xray\AzureStoragePhpSdk\Contracts\{Manager, RequestShared};
-use Xray\AzureStoragePhpSdk\Exceptions\{RequestException};
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
 /**
  * @phpstan-import-type ContainerType from Container
