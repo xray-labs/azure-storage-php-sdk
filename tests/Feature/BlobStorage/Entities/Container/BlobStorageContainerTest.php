@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\AccessLevel\ContainerAccessLevels;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\{Container, ContainerMetadata, ContainerProperties};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;

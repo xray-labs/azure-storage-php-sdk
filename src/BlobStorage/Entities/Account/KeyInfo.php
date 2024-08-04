@@ -53,6 +53,6 @@ final readonly class KeyInfo implements Arrayable, Xmlable
 
     public function toXml(): string
     {
-        return (new XmlConverter())->convert($this->toArray());
+        return azure_app(XmlConverter::class)->convert($this->toArray());
     }
 }

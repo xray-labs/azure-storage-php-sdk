@@ -30,7 +30,7 @@ class BlobLeaseManager implements Manager
             Resource::LEASE_ID       => $leaseId,
         ]))->getHeaders();
 
-        return (new BlobLease($headers))
+        return azure_app(BlobLease::class, ['blobLease' => $headers])
             ->setManager($this);
     }
 

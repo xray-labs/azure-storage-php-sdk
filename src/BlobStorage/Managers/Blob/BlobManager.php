@@ -24,8 +24,10 @@ use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestExcepti
  */
 readonly class BlobManager implements Manager
 {
-    public function __construct(protected Request $request, protected string $containerName)
-    {
+    public function __construct(
+        protected Request $request,
+        protected string $containerName
+    ) {
         //
     }
 
@@ -262,7 +264,7 @@ readonly class BlobManager implements Manager
 
         $resource = "/{$this->containerName}/{$blobName}";
 
-        $token = (new UserDelegationSas($this->request->withResource($resource)))
+        $token = azure_app(UserDelegationSas::class, ['request' => $this->request->withResource($resource)])
             ->buildTokenUrl(AccessTokenPermission::READ, $expires);
 
         $uri = $this->request->uri("{$this->containerName}/{$blobName}");

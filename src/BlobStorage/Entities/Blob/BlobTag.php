@@ -83,7 +83,7 @@ final readonly class BlobTag implements Xmlable
             ];
         }
 
-        return (new XmlConverter())->convert([
+        return (azure_app(XmlConverter::class))->convert([
             'Tags' => [
                 'TagSet' => $tags,
             ],

@@ -27,7 +27,7 @@ final readonly class Config
     public function __construct(array $config = [])
     {
         $this->version   = $config['version'] ?? Resource::VERSION;
-        $this->parser    = $config['parser'] ?? new XmlParser();
-        $this->converter = $config['converter'] ?? new XmlConverter();
+        $this->parser    = $config['parser'] ?? azure_app(XmlParser::class);
+        $this->converter = $config['converter'] ?? azure_app(XmlConverter::class);
     }
 }

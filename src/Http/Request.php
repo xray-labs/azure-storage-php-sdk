@@ -41,8 +41,8 @@ class Request implements RequestContract
     ) {
         validate_protocol($protocol ??= 'https');
 
-        $this->client   = $client ?? new Client();
-        $this->config   = $config ?? new Config();
+        $this->client   = $client ?? azure_app(Client::class);
+        $this->config   = $config ?? azure_app(Config::class);
         $this->protocol = $protocol;
         $this->domain   = $domain ?? 'blob.core.windows.net';
     }

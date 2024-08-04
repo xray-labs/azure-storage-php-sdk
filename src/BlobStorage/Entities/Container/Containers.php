@@ -32,7 +32,7 @@ final class Containers extends Collection
     protected function generateContainersList(array $containers): array
     {
         return array_map(
-            fn (array $container) => (new Container($container))->setManager($this->manager),
+            fn (array $container) => azure_app(Container::class, ['container' => $container])->setManager($this->manager),
             $containers,
         );
     }

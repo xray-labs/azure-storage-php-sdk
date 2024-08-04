@@ -86,7 +86,7 @@ final class MicrosoftEntraId implements Auth
     protected function getRequestClient(): ClientInterface
     {
         if (!isset($this->client)) {
-            $this->client = new Client(); // @codeCoverageIgnore
+            $this->client = azure_app(Client::class); // @codeCoverageIgnore
         }
 
         return $this->client;

@@ -17,7 +17,7 @@ use Xray\AzureStoragePhpSdk\Support\Collection;
 final class Cors extends Collection implements Arrayable
 {
     /** @param CorsRuleType|CorsRuleType[] $corsRules */
-    public function __construct(array $corsRules)
+    public function __construct(array $corsRules = [])
     {
         $firstKey = array_keys($corsRules)[0] ?? null;
 
@@ -46,7 +46,7 @@ final class Cors extends Collection implements Arrayable
     protected function generateCorsList(array $corsRules): array
     {
         return array_map(
-            fn (array $rule): CorsRule => new CorsRule($rule),
+            fn (array $rule): CorsRule => azure_app(CorsRule::class, ['corsRule' => $rule]),
             $corsRules,
         );
     }

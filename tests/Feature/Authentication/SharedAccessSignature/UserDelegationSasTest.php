@@ -101,11 +101,21 @@ it('should build the query param token correctly', function () {
     $request->assertPost('?comp=userdelegationkey&restype=service');
 });
 
-/** @param array<string, string|DateTimeImmutable> $parameters */
+/** @param array<string, string|DateTimeImmutable> $arguments */
 function createSignatureTokenForUserDelegationSasTest(array $arguments): string
 {
-    $signedResource = "/blob/{$arguments['account']}/{$arguments['container']}/{$arguments['blob']}";
+    /** @var string $account */
+    $account = $arguments['account'];
 
+    /** @var string $container */
+    $container = $arguments['container'];
+
+    /** @var string $blob */
+    $blob = $arguments['blob'];
+
+    $signedResource = "/blob/{$account}/{$container}/{$blob}";
+
+    /** @var array<string> $parameters */
     $parameters = [
         SignatureResource::SIGNED_PERMISSION             => $arguments['permission'],
         SignatureResource::SIGNED_START                  => convert_to_ISO($arguments['start']),
@@ -134,7 +144,11 @@ function createSignatureTokenForUserDelegationSasTest(array $arguments): string
     ];
 
     $stringToSign = implode("\n", $parameters);
-    $signature    = base64_encode(hash_hmac('sha256', $stringToSign, base64_decode($arguments['key']), true));
+
+    /** @var string $key */
+    $key = $arguments['key'];
+
+    $signature = base64_encode(hash_hmac('sha256', $stringToSign, base64_decode($key), true));
 
     unset($parameters[SignatureResource::SIGNED_CANONICAL_RESOURCE]);
 

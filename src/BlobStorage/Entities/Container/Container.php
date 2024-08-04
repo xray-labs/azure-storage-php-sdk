@@ -42,7 +42,7 @@ final class Container
         $this->name       = $name;
         $this->deleted    = to_boolean($container['Deleted'] ?? false);
         $this->version    = $container['Version'] ?? '';
-        $this->properties = new Properties($container['Properties'] ?? []);
+        $this->properties = azure_app(Properties::class, ['property' => $container['Properties'] ?? []]);
     }
 
     public function listAccessLevels(): ContainerAccessLevels
@@ -91,6 +91,6 @@ final class Container
     {
         $this->ensureManagerIsConfigured();
 
-        return new BlobManager($this->getManager()->getRequest(), $this->name);
+        return azure_app(BlobManager::class, ['containerName' => $this->name]);
     }
 }

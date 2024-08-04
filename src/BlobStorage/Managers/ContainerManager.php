@@ -36,12 +36,12 @@ readonly class ContainerManager implements Manager, RequestShared
 
     public function accessLevel(): ContainerAccessLevelManager
     {
-        return new ContainerAccessLevelManager($this->request);
+        return azure_app(ContainerAccessLevelManager::class);
     }
 
     public function metadata(): ContainerMetadataManager
     {
-        return new ContainerMetadataManager($this->request);
+        return azure_app(ContainerMetadataManager::class);
     }
 
     /**
@@ -65,7 +65,7 @@ readonly class ContainerManager implements Manager, RequestShared
         array_walk($response, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         /** @var array<string> $response */
-        return new ContainerProperties($response);
+        return azure_app(ContainerProperties::class, ['containerProperty' => $response]);
     }
 
     /** @param array<string, scalar> $options */
@@ -86,14 +86,14 @@ readonly class ContainerManager implements Manager, RequestShared
         /** @var array{Containers?: array{Container: ContainerType|ContainerType[]}} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
-        return new Containers($this, $parsed['Containers']['Container'] ?? []);
+        return azure_app(Containers::class, ['containers' => $parsed['Containers']['Container'] ?? []]);
     }
 
     public function lease(string $name): ContainerLeaseManager
     {
         $this->validateContainerName($name);
 
-        return new ContainerLeaseManager($this->request, $name);
+        return azure_app(ContainerLeaseManager::class, ['container' => $name]);
     }
 
     public function create(string $name): bool

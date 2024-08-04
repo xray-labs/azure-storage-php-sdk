@@ -2,6 +2,9 @@
 
 namespace Xray\Tests;
 
+use Closure;
+use Mockery;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -40,3 +43,17 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+
+/**
+ * Mock an instance of an object in the container.
+ *
+ * @param  string  $abstract
+ * @param  \Closure|null  $mock
+ * @return \Mockery\MockInterface
+ */
+function mock($abstract, ?Closure $mock = null)
+{
+    azure_app()->instance($abstract, $instance = Mockery::mock(...array_filter(func_get_args())));
+
+    return $instance;
+}

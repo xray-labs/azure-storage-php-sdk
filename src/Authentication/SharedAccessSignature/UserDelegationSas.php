@@ -96,9 +96,11 @@ class UserDelegationSas implements SharedAccessSignature
 
     protected function getUserDelegationKey(DateTimeImmutable $expiry): UserDelegationKey
     {
-        return (new AccountManager($this->request))->userDelegationKey(new KeyInfo([
+        $keyInfo = azure_app(KeyInfo::class, ['keyInfo' => [
             'Start'  => new DateTimeImmutable(),
             'Expiry' => $expiry,
-        ]));
+        ]]);
+
+        return azure_app(AccountManager::class)->userDelegationKey($keyInfo);
     }
 }
