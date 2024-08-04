@@ -191,8 +191,13 @@ class Request implements RequestContract
 
     protected function resetRequestOptions(): void
     {
-        $this->headers = [];
-        $this->options = [];
+        $this->headers     = [];
+        $this->options     = [];
+        $this->verb        = HttpVerb::GET;
+        $this->httpHeaders = new Headers();
+        $this->resource    = '';
+        $this->body        = '';
+
         $this->withAuthentication();
     }
 }

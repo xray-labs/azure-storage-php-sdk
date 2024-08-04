@@ -8,10 +8,9 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Psr\Http\Client\RequestExceptionInterface;
-use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\{KeyInfo, UserDelegationKey};
+use Xray\AzureStoragePhpSdk\Authentication\SharedAccessSignature\UserDelegationSas;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs};
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{AccessTokenPermission, BlobIncludeOption, BlobType, ExpirationOption};
-use Xray\AzureStoragePhpSdk\BlobStorage\Managers\AccountManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
@@ -247,8 +246,7 @@ readonly class BlobManager implements Manager
         // @codeCoverageIgnoreEnd
     }
 
-    /** @param array<string, scalar> $options */
-    public function temporaryUrl(string $blobName, string|int|DateTimeInterface $expiresAt, array $options = []): string
+    public function temporaryUrl(string $blobName, string|int|DateTimeInterface $expiresAt): string
     {
         /** @var DateTimeImmutable $expires */
         $expires = match(true) {
@@ -258,10 +256,18 @@ readonly class BlobManager implements Manager
             default                        => $expiresAt,
         };
 
+        if ($expires <= new DateTimeImmutable()) {
+            throw InvalidArgumentException::create('Expiration time must be in the future');
+        }
+
+        $resource = "/{$this->containerName}/{$blobName}";
+
+        $token = (new UserDelegationSas($this->request->withResource($resource)))
+            ->buildTokenUrl(AccessTokenPermission::READ, $expires);
+
         $uri = $this->request->uri("{$this->containerName}/{$blobName}");
 
-        return $this->getUserDelegationKey($expires, $options)
-            ->generateTokenUrl($uri, AccessTokenPermission::READ);
+        return $uri . $token;
     }
 
     public function lease(string $blobName): BlobLeaseManager
@@ -300,14 +306,5 @@ readonly class BlobManager implements Manager
             $expiryTime instanceof DateTime && $expirationOption !== ExpirationOption::ABSOLUTE => throw InvalidArgumentException::create('The expiration time must be informed in milliseconds.'),
             default                                                                             => true,
         };
-    }
-
-    /** @param array<string, scalar> $options */
-    protected function getUserDelegationKey(DateTimeImmutable $expiry, array $options = []): UserDelegationKey
-    {
-        return (new AccountManager($this->request))->userDelegationKey(new KeyInfo([
-            'Start'  => new DateTimeImmutable(),
-            'Expiry' => $expiry,
-        ]), $options);
     }
 }
