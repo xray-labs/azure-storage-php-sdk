@@ -42,31 +42,29 @@ final readonly class BlobProperty implements Arrayable, Xmlable
         $this->defaultServiceVersion = $blobProperty['DefaultServiceVersion'] ?? '';
 
         $this->logging = isset($blobProperty['Logging'])
-            ? new Logging($blobProperty['Logging'])
+            ? azure_app(Logging::class, ['logging' => $blobProperty['Logging']])
             : null; // @codeCoverageIgnore
 
         $this->hourMetrics = isset($blobProperty['HourMetrics'])
-            ? new HourMetrics($blobProperty['HourMetrics'])
+            ? azure_app(HourMetrics::class, ['hourMetrics' => $blobProperty['HourMetrics']])
             : null; // @codeCoverageIgnore
 
         $this->minuteMetrics = isset($blobProperty['MinuteMetrics'])
-            ? new MinuteMetrics($blobProperty['MinuteMetrics'])
+            ? azure_app(MinuteMetrics::class, ['minuteMetrics' => $blobProperty['MinuteMetrics']])
             : null; // @codeCoverageIgnore
 
         if (isset($blobProperty['Cors'])) {
-            $this->cors = isset($blobProperty['Cors']['CorsRule'])
-                ? new Cors($blobProperty['Cors']['CorsRule'])
-                : new Cors([]); // @codeCoverageIgnore
+            $this->cors = azure_app(Cors::class, isset($blobProperty['Cors']['CorsRule']) ? ['corsRules' => $blobProperty['Cors']['CorsRule']] : []);
         } else {
             $this->cors = null; // @codeCoverageIgnore
         }
 
         $this->deleteRetentionPolicy = isset($blobProperty['DeleteRetentionPolicy'])
-            ? new DeleteRetentionPolicy($blobProperty['DeleteRetentionPolicy'])
+            ? azure_app(DeleteRetentionPolicy::class, ['deleteRetentionPolicy' => $blobProperty['DeleteRetentionPolicy']])
             : null; // @codeCoverageIgnore
 
         $this->staticWebsite = isset($blobProperty['StaticWebsite'])
-            ? new StaticWebsite($blobProperty['StaticWebsite'])
+            ? azure_app(StaticWebsite::class, ['staticWebsite' => $blobProperty['StaticWebsite']])
             : null; // @codeCoverageIgnore
     }
 
@@ -106,6 +104,6 @@ final readonly class BlobProperty implements Arrayable, Xmlable
 
     public function toXml(): string
     {
-        return (new XmlConverter())->convert($this->toArray());
+        return azure_app(XmlConverter::class)->convert($this->toArray());
     }
 }

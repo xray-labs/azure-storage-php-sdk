@@ -52,7 +52,7 @@ final class Blob
         $this->versionId           = $blob['Version'] ?? '';
         $this->isCurrentVersion    = to_boolean($blob['IsCurrentVersion'] ?? true);
 
-        $this->properties = new Properties($blob['Properties'] ?? []);
+        $this->properties = azure_app(Properties::class, ['property' => $blob['Properties'] ?? []]);
 
         $this->deleted = to_boolean($blob['Deleted'] ?? false);
     }

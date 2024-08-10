@@ -1,7 +1,9 @@
 <?php
 
+use Xray\AzureStoragePhpSdk\Authentication\MicrosoftEntraId;
+use Xray\AzureStoragePhpSdk\Authentication\SharedAccessSignature\UserDelegationSas;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, Properties};
-use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{BlobType, ExpirationOption};
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{AccessTokenPermission, BlobType, ExpirationOption};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{
     BlobLeaseManager,
     BlobManager,
@@ -10,11 +12,13 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{
     BlobPropertyManager,
     BlobTagManager,
 };
-use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
+use Xray\AzureStoragePhpSdk\BlobStorage\{Resource, SignatureResource};
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+
+use function Xray\Tests\mock;
 
 uses()->group('blob-storage', 'managers', 'blobs');
 
@@ -329,3 +333,130 @@ it('should copy a blob', function () {
             Resource::COPY_SOURCE => "http://account.microsoft.azure/{$container}/{$source}?snapshot=2024-07-14T15%3A02%3A29.8018330Z",
         ]);
 });
+
+it('should throw an exception if the expiry is before now when retrieving temporaryURL', function (int|string|DateTimeInterface $expiry) {
+    $request = new RequestFake();
+
+    (new BlobManager($request, 'container'))
+        ->temporaryUrl('blob', $expiry);
+})->with([
+    'String'   => ['2021-01-01T00:00:00.0000000Z'],
+    'Integer'  => [time() - 3600],
+    'DateTime' => [new DateTime('yesterday')],
+])->throws(InvalidArgumentException::class, 'Expiration time must be in the future');
+
+it('should get a temporary URL', function () {
+    $expiry = new DateTimeImmutable('+1 hour');
+
+    $signedKeyObjectId = '050b9fa2-5df9-47b2-95d0-3342be8d943c';
+    $signedKeyTenantId = '0a20a1a3-567e-45a2-8c3a-3300a41c8770';
+    $signedStart       = '2024-08-01T00:00:00Z';
+    $signedExpiry      = '2024-08-03T00:00:00Z';
+    $signedService     = 'b';
+    $signedVersion     = '2024-05-04';
+    $value             = 'cbUl8Ca1gwjmcFp+PTRaa5lIDJ3INnFS0suuPSCT2VA=';
+
+    $body = <<<XML
+    <?xml version="1.0"?>
+    <UserDelegationKey>
+        <SignedOid>{$signedKeyObjectId}</SignedOid>
+        <SignedTid>{$signedKeyTenantId}</SignedTid>
+        <SignedStart>{$signedStart}</SignedStart>
+        <SignedExpiry>{$signedExpiry}</SignedExpiry>
+        <SignedService>{$signedService}</SignedService>
+        <SignedVersion>{$signedVersion}</SignedVersion>
+        <Value>{$value}</Value>
+    </UserDelegationKey>
+    XML;
+
+    $request = (new RequestFake(new MicrosoftEntraId('account', 'directory', 'application', 'secret')))
+        ->withFakeResponse(new ResponseFake($body));
+
+    $container = 'container';
+    $blob      = 'blob.txt';
+
+    $uri = $request->uri("{$container}/{$blob}");
+
+    /** @phpstan-ignore-next-line */
+    mock(UserDelegationSas::class)
+        ->shouldReceive('buildTokenUrl')
+        ->withArgs([AccessTokenPermission::READ, $expiry])
+        ->andReturn($expectedResult = (http_build_query([
+            'sp'    => 'r',
+            'st'    => '2024-08-01T00:00:00Z',
+            'se'    => '2024-08-03T00:00:00Z',
+            'sv'    => '2024-05-04',
+            'srt'   => 'b',
+            'spr'   => 'https',
+            'sr'    => 'b',
+            'skoid' => $signedKeyObjectId,
+            'sktid' => $signedKeyTenantId,
+            'skt'   => '2024-08-01T00:00:00Z',
+            'ske'   => '2024-08-03T00:00:00Z',
+            'sks'   => 'b',
+            'skv'   => '2024-05-04',
+            'sig'   => 'signature',
+        ])));
+
+    $result = (new BlobManager($request, $container))
+        ->temporaryUrl($blob, $expiry);
+
+    expect($result)->toBe($uri . $expectedResult);
+});
+
+/** @param array<string, string|DateTimeImmutable> $arguments */
+function createSignatureTokenForBlobStorageBlobManagerTest(array $arguments): string
+{
+    /** @var string $account */
+    $account = $arguments['account'];
+
+    /** @var string $container */
+    $container = $arguments['container'];
+
+    /** @var string $blob */
+    $blob = $arguments['blob'];
+
+    $signedResource = "/blob/{$account}/{$container}/{$blob}";
+
+    /** @var array<string> $parameters */
+    $parameters = [
+        SignatureResource::SIGNED_PERMISSION             => $arguments['permission'],
+        SignatureResource::SIGNED_START                  => convert_to_ISO($arguments['start']),
+        SignatureResource::SIGNED_EXPIRY                 => convert_to_ISO($arguments['expiry']),
+        SignatureResource::SIGNED_CANONICAL_RESOURCE     => $signedResource,
+        SignatureResource::SIGNED_OBJECT_ID              => $arguments['oid'],
+        SignatureResource::SIGNED_TENANT_ID              => $arguments['tid'],
+        SignatureResource::SIGNED_KEY_START_TIME         => convert_to_ISO($arguments['start']),
+        SignatureResource::SIGNED_KEY_EXPIRY_TIME        => convert_to_ISO($arguments['expiry']),
+        SignatureResource::SIGNED_KEY_SERVICE            => $arguments['service'],
+        SignatureResource::SIGNED_KEY_VERSION            => $arguments['version'],
+        SignatureResource::SIGNED_AUTHORIZED_OBJECT_ID   => null,
+        SignatureResource::SIGNED_UNAUTHORIZED_OBJECT_ID => null,
+        SignatureResource::SIGNED_CORRELATION_ID         => null,
+        SignatureResource::SIGNED_IP_ADDRESS             => null,
+        SignatureResource::SIGNED_PROTOCOL               => 'http',
+        SignatureResource::SIGNED_VERSION                => $arguments['version'],
+        SignatureResource::SIGNED_RESOURCE               => $arguments['service'],
+        SignatureResource::SIGNED_SNAPSHOT_TIME          => null,
+        SignatureResource::SIGNED_ENCRYPTION_SCOPE       => null,
+        SignatureResource::RESOURCE_CACHE_CONTROL        => null,
+        SignatureResource::RESOURCE_CONTENT_DISPOSITION  => null,
+        SignatureResource::RESOURCE_CONTENT_ENCODING     => null,
+        SignatureResource::RESOURCE_CONTENT_LANGUAGE     => null,
+        SignatureResource::RESOURCE_CONTENT_TYPE         => null,
+    ];
+
+    $stringToSign = implode("\n", $parameters);
+
+    /** @var string $key */
+    $key = $arguments['key'];
+
+    $signature = base64_encode(hash_hmac('sha256', $stringToSign, base64_decode($key), true));
+
+    unset($parameters[SignatureResource::SIGNED_CANONICAL_RESOURCE]);
+
+    $queryParams                               = array_filter($parameters);
+    $queryParams[SignatureResource::SIGNATURE] = $signature;
+
+    return http_build_query($queryParams);
+}

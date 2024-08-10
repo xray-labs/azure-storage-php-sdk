@@ -39,7 +39,7 @@ readonly class StoragePropertyManager implements Manager
         /** @var ?BlobPropertyType $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
-        return new BlobProperty($parsed ?? []);
+        return azure_app(BlobProperty::class, ['blobProperty' => $parsed ?? []]);
     }
 
     /** @param array<string, scalar> $options */

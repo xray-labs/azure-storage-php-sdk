@@ -52,7 +52,7 @@ class BlobTagManager implements Manager
 
         array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
-        return new BlobTag($tags, $headers);
+        return azure_app(BlobTag::class, ['tags' => $tags, 'options' => $headers]);
     }
 
     /** @param array<string, scalar> $options */

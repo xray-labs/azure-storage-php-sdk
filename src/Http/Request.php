@@ -41,8 +41,8 @@ class Request implements RequestContract
     ) {
         validate_protocol($protocol ??= 'https');
 
-        $this->client   = $client ?? new Client();
-        $this->config   = $config ?? new Config();
+        $this->client   = $client ?? azure_app(Client::class);
+        $this->config   = $config ?? azure_app(Config::class);
         $this->protocol = $protocol;
         $this->domain   = $domain ?? 'blob.core.windows.net';
     }
@@ -191,8 +191,14 @@ class Request implements RequestContract
 
     protected function resetRequestOptions(): void
     {
-        $this->headers = [];
-        $this->options = [];
+        $this->headers     = [];
+        $this->options     = [];
+        $this->verb        = HttpVerb::GET;
+        $this->httpHeaders = azure_app(Headers::class);
+        $this->resource    = '';
+        $this->body        = '';
+
         $this->withAuthentication();
+        azure_app()->flushScoped();
     }
 }

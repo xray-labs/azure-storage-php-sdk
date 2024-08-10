@@ -7,8 +7,10 @@ use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 uses()->group('blob-storage', 'managers', 'blob');
 
-const REQUEST_URL = 'container/blob?comp=lease&resttype=blob';
-const VERSION     = '2020-06-12';
+const BLOB_LEASE_MANAGER_REQUEST_URL = 'container/blob?comp=lease&resttype=blob';
+const BLOB_LEASE_MANAGER_VERSION     = '2020-06-12';
+const BLOB_LEASE_MANAGER_LEASE_ID    = '29389-29389-398439';
+const BLOB_LEASE_MANAGER_REQUEST_ID  = '923-2324-2134';
 
 it('should acquire a lease', function () {
     ['request' => $request, 'manager' => $manager] = prepareForBlobLeaseManagerTest();
@@ -17,14 +19,14 @@ it('should acquire a lease', function () {
 
     expect($response)
         ->lastModified->toBeInstanceOf(DateTimeImmutable::class)
-        ->etag->toBe('KCSNSAKDMA')
+        ->etag->toBe('ETAG_CODE')
         ->server->toBe('MS-AZURE')
-        ->requestId->toBe('osjdnw-29389dksd-dwwdwd')
-        ->version->toBe(VERSION)
-        ->leaseId->toBe('lalsncjwej-29389dksd-dwwdwd')
+        ->requestId->toBe(BLOB_LEASE_MANAGER_REQUEST_ID)
+        ->version->toBe(BLOB_LEASE_MANAGER_VERSION)
+        ->leaseId->toBe(BLOB_LEASE_MANAGER_LEASE_ID)
         ->date->toBeInstanceOf(DateTimeImmutable::class);
 
-    $request->assertPut(REQUEST_URL);
+    $request->assertPut(BLOB_LEASE_MANAGER_REQUEST_URL);
 });
 
 it('should renew a lease', function () {
@@ -34,65 +36,65 @@ it('should renew a lease', function () {
 
     expect($response)
         ->lastModified->toBeInstanceOf(DateTimeImmutable::class)
-        ->etag->toBe('KCSNSAKDMA')
+        ->etag->toBe('ETAG_CODE')
         ->server->toBe('MS-AZURE')
-        ->requestId->toBe('osjdnw-29389dksd-dwwdwd')
-        ->version->toBe(VERSION)
-        ->leaseId->toBe('lalsncjwej-29389dksd-dwwdwd')
+        ->requestId->toBe(BLOB_LEASE_MANAGER_REQUEST_ID)
+        ->version->toBe(BLOB_LEASE_MANAGER_VERSION)
+        ->leaseId->toBe(BLOB_LEASE_MANAGER_LEASE_ID)
         ->date->toBeInstanceOf(DateTimeImmutable::class);
 
-    $request->assertPut(REQUEST_URL);
+    $request->assertPut(BLOB_LEASE_MANAGER_REQUEST_URL);
 });
 
 it('should change a lease', function () {
     ['request' => $request, 'blobLease' => $blobLease] = prepareForBlobLeaseManagerTest();
 
-    $response = $blobLease->change('lalsncjwej-29389dksd-dwwdwd');
+    $response = $blobLease->change(BLOB_LEASE_MANAGER_REQUEST_ID);
 
     expect($response)
         ->lastModified->toBeInstanceOf(DateTimeImmutable::class)
-        ->etag->toBe('KCSNSAKDMA')
+        ->etag->toBe('ETAG_CODE')
         ->server->toBe('MS-AZURE')
-        ->requestId->toBe('osjdnw-29389dksd-dwwdwd')
-        ->version->toBe(VERSION)
-        ->leaseId->toBe('lalsncjwej-29389dksd-dwwdwd')
+        ->requestId->toBe(BLOB_LEASE_MANAGER_REQUEST_ID)
+        ->version->toBe(BLOB_LEASE_MANAGER_VERSION)
+        ->leaseId->toBe(BLOB_LEASE_MANAGER_LEASE_ID)
         ->date->toBeInstanceOf(DateTimeImmutable::class);
 
-    $request->assertPut(REQUEST_URL);
+    $request->assertPut(BLOB_LEASE_MANAGER_REQUEST_URL);
 });
 
 it('should release a lease', function () {
     ['request' => $request, 'blobLease' => $blobLease] = prepareForBlobLeaseManagerTest();
 
-    $response = $blobLease->release('lalsncjwej-29389dksd-dwwdwd');
+    $response = $blobLease->release(BLOB_LEASE_MANAGER_REQUEST_ID);
 
     expect($response)
         ->lastModified->toBeInstanceOf(DateTimeImmutable::class)
-        ->etag->toBe('KCSNSAKDMA')
+        ->etag->toBe('ETAG_CODE')
         ->server->toBe('MS-AZURE')
-        ->requestId->toBe('osjdnw-29389dksd-dwwdwd')
-        ->version->toBe(VERSION)
-        ->leaseId->toBe('lalsncjwej-29389dksd-dwwdwd')
+        ->requestId->toBe(BLOB_LEASE_MANAGER_REQUEST_ID)
+        ->version->toBe(BLOB_LEASE_MANAGER_VERSION)
+        ->leaseId->toBe(BLOB_LEASE_MANAGER_LEASE_ID)
         ->date->toBeInstanceOf(DateTimeImmutable::class);
 
-    $request->assertPut(REQUEST_URL);
+    $request->assertPut(BLOB_LEASE_MANAGER_REQUEST_URL);
 });
 
 it('should break a lease', function () {
     ['request' => $request, 'blobLease' => $blobLease] = prepareForBlobLeaseManagerTest();
 
-    $response = $blobLease->break('lalsncjwej-29389dksd-dwwdwd');
+    $response = $blobLease->break(BLOB_LEASE_MANAGER_REQUEST_ID);
 
     expect($response)
         ->lastModified->toBeInstanceOf(DateTimeImmutable::class)
-        ->etag->toBe('KCSNSAKDMA')
+        ->etag->toBe('ETAG_CODE')
         ->server->toBe('MS-AZURE')
-        ->requestId->toBe('osjdnw-29389dksd-dwwdwd')
-        ->version->toBe(VERSION)
-        ->leaseId->toBe('lalsncjwej-29389dksd-dwwdwd')
+        ->requestId->toBe(BLOB_LEASE_MANAGER_REQUEST_ID)
+        ->version->toBe(BLOB_LEASE_MANAGER_VERSION)
+        ->leaseId->toBe(BLOB_LEASE_MANAGER_LEASE_ID)
         ->date->toBeInstanceOf(DateTimeImmutable::class);
 
-    $request->assertPut(REQUEST_URL);
+    $request->assertPut(BLOB_LEASE_MANAGER_REQUEST_URL);
 });
 
 it('should throw an exception when trying to renew a lease without a lease id', function () {
@@ -109,12 +111,12 @@ function prepareForBlobLeaseManagerTest(array $blobLeaseHeaders = []): array
 {
     $blobLeaseHeaders = array_merge([
         'Last-Modified'   => 'Wed, 15 Sep 2021 15:02:29 GMT',
-        'ETag'            => 'KCSNSAKDMA',
+        'ETag'            => 'ETAG_CODE',
         'Server'          => 'MS-AZURE',
         'Date'            => 'Wed, 15 Sep 2021 15:02:29 GMT',
-        'x-ms-request-id' => 'osjdnw-29389dksd-dwwdwd',
-        'x-ms-version'    => VERSION,
-        'x-ms-lease-id'   => 'lalsncjwej-29389dksd-dwwdwd',
+        'x-ms-request-id' => BLOB_LEASE_MANAGER_REQUEST_ID,
+        'x-ms-version'    => BLOB_LEASE_MANAGER_VERSION,
+        'x-ms-lease-id'   => BLOB_LEASE_MANAGER_LEASE_ID,
     ], $blobLeaseHeaders);
 
     $request = (new RequestFake())

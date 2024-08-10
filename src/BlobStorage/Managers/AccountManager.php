@@ -50,17 +50,17 @@ readonly class AccountManager implements Manager
          *  Date: ?string
          * } $response
          * */
-        return new AccountInformation($response);
+        return azure_app(AccountInformation::class, ['accountInformation' => $response]);
     }
 
     public function storageProperties(): StoragePropertyManager
     {
-        return new StoragePropertyManager($this->request);
+        return azure_app(StoragePropertyManager::class);
     }
 
     public function preflightBlobRequest(): PreflightBlobRequestManager
     {
-        return new PreflightBlobRequestManager($this->request);
+        return azure_app(PreflightBlobRequestManager::class);
     }
 
     /** @param array<string, scalar> $options */
@@ -82,13 +82,12 @@ readonly class AccountManager implements Manager
         /** @var array{GeoReplication: array{Status: string, LastSyncTime: string}} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
-        return new GeoReplication($parsed['GeoReplication']);
+        return azure_app(GeoReplication::class, ['geoReplication' => $parsed['GeoReplication']]);
     }
 
     /** @param array<string, scalar> $options */
     public function userDelegationKey(KeyInfo $keyInfo, array $options = []): UserDelegationKey
     {
-        # FIX: Needs other authentication (Microsoft Entra ID)
         try {
             $response = $this->request
                 ->withOptions($options)
@@ -101,9 +100,9 @@ readonly class AccountManager implements Manager
         }
         // @codeCoverageIgnoreEnd
 
-        /** @var array{UserDelegationKey: array{SignedOid: string, SignedTid: string, SignedStart: string, SignedExpiry: string, SignedService: string, SignedVersion: string, Value: string}} $parsed */
+        /** @var array{SignedOid: string, SignedTid: string, SignedStart: string, SignedExpiry: string, SignedService: string, SignedVersion: string, Value: string} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
-        return new UserDelegationKey($parsed['UserDelegationKey']);
+        return azure_app(UserDelegationKey::class, ['userDelegationKey' => $parsed]);
     }
 }

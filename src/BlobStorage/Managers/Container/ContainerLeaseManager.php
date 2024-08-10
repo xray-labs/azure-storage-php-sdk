@@ -34,7 +34,7 @@ class ContainerLeaseManager implements Manager
 
         array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
-        return (new ContainerLease($headers))
+        return azure_app(ContainerLease::class, ['containerLease' => $headers])
             ->setManager($this);
     }
 
@@ -48,7 +48,7 @@ class ContainerLeaseManager implements Manager
 
         array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
-        return (new ContainerLease($headers))
+        return azure_app(ContainerLease::class, ['containerLease' => $headers])
             ->setManager($this);
     }
 
@@ -63,7 +63,7 @@ class ContainerLeaseManager implements Manager
 
         array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
-        return (new ContainerLease($headers))
+        return azure_app(ContainerLease::class, ['containerLease' => $headers])
             ->setManager($this);
     }
 
@@ -77,7 +77,7 @@ class ContainerLeaseManager implements Manager
 
         array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
-        return (new ContainerLease($headers))
+        return azure_app(ContainerLease::class, ['containerLease' => $headers])
             ->setManager($this);
     }
 
@@ -91,7 +91,7 @@ class ContainerLeaseManager implements Manager
 
         array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
-        return (new ContainerLease($headers))
+        return azure_app(ContainerLease::class, ['containerLease' => $headers])
             ->setManager($this);
     }
 

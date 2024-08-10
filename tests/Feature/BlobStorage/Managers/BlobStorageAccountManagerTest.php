@@ -72,17 +72,15 @@ it('should get account blob service stats', function () {
 it('should get account user delegation key', function () {
     $body = <<<XML
     <?xml version="1.0"?>
-    <AccountInfo>
-        <UserDelegationKey>
-            <SignedOid>oid</SignedOid>
-            <SignedTid>tid</SignedTid>
-            <SignedStart>2020-01-01T00:00:00.0000000Z</SignedStart>
-            <SignedExpiry>2020-01-02T00:00:00.0000000Z</SignedExpiry>
-            <SignedService>service</SignedService>
-            <SignedVersion>version</SignedVersion>
-            <Value>value</Value>
-        </UserDelegationKey>
-    </AccountInfo>
+    <UserDelegationKey>
+        <SignedOid>oid</SignedOid>
+        <SignedTid>tid</SignedTid>
+        <SignedStart>2020-01-01T00:00:00.0000000Z</SignedStart>
+        <SignedExpiry>2020-01-02T00:00:00.0000000Z</SignedExpiry>
+        <SignedService>service</SignedService>
+        <SignedVersion>version</SignedVersion>
+        <Value>value</Value>
+    </UserDelegationKey>
     XML;
 
     $request = (new RequestFake())

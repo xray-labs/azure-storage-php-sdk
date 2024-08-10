@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use Xray\AzureStoragePhpSdk\Contracts\{Arrayable, Xmlable};
 use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
@@ -12,12 +13,12 @@ use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 /** @implements Arrayable<array{KeyInfo: array{Start: string, Expiry: string}}> */
 final readonly class KeyInfo implements Arrayable, Xmlable
 {
-    public DateTimeImmutable $start;
+    public DateTimeInterface $start;
 
-    public DateTimeImmutable $expiry;
+    public DateTimeInterface $expiry;
 
     /**
-     * @param array{Start?: string, Expiry?: string} $keyInfo
+     * @param array{Start?: string|DateTimeInterface, Expiry?: string|DateTimeInterface} $keyInfo
      *
      * @throws RequiredFieldException
      */
@@ -31,22 +32,27 @@ final readonly class KeyInfo implements Arrayable, Xmlable
         }
         // @codeCoverageIgnoreEnd
 
-        $this->start  = new DateTimeImmutable($keyInfo['Start']);
-        $this->expiry = new DateTimeImmutable($keyInfo['Expiry']);
+        $this->start = $keyInfo['Start'] instanceof DateTimeInterface
+            ? $keyInfo['Start']
+            : new DateTimeImmutable($keyInfo['Start']);
+
+        $this->expiry = $keyInfo['Expiry'] instanceof DateTimeInterface
+            ? $keyInfo['Expiry']
+            : new DateTimeImmutable($keyInfo['Expiry']);
     }
 
     public function toArray(): array
     {
         return [
             'KeyInfo' => [
-                'Start'  => $this->start->format(DateTimeImmutable::ATOM),
-                'Expiry' => $this->expiry->format(DateTimeImmutable::ATOM),
+                'Start'  => convert_to_ISO($this->start), // @phpstan-ignore-line
+                'Expiry' => convert_to_ISO($this->expiry), // @phpstan-ignore-line
             ],
         ];
     }
 
     public function toXml(): string
     {
-        return (new XmlConverter())->convert($this->toArray());
+        return azure_app(XmlConverter::class)->convert($this->toArray());
     }
 }

@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Psr\Http\Client\RequestExceptionInterface;
+use Xray\AzureStoragePhpSdk\Authentication\SharedAccessSignature\UserDelegationSas;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs};
-use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{BlobIncludeOption, BlobType, ExpirationOption};
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{AccessTokenPermission, BlobIncludeOption, BlobType, ExpirationOption};
 use Xray\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
@@ -21,8 +24,10 @@ use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestExcepti
  */
 readonly class BlobManager implements Manager
 {
-    public function __construct(protected Request $request, protected string $containerName)
-    {
+    public function __construct(
+        protected Request $request,
+        protected string $containerName,
+    ) {
         //
     }
 
@@ -57,7 +62,7 @@ readonly class BlobManager implements Manager
         /** @var array{Blobs?: array{Blob: BlobTypeStan|BlobTypeStan[]}} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
-        return new Blobs($this, $parsed['Blobs']['Blob'] ?? []);
+        return azure_app(Blobs::class, ['blobs' => $parsed['Blobs']['Blob'] ?? [], 'containerName' => $this->containerName]);
     }
 
     /**
@@ -68,7 +73,7 @@ readonly class BlobManager implements Manager
     public function findByTag(array $options = []): BlobTagQuery
     {
         /** @var BlobTagQuery<BlobManager, Blobs> */
-        return (new BlobTagQuery($this))
+        return azure_app(BlobTagQuery::class, ['manager' => $this])
             ->whenBuild(function (string $query) use ($options): Blobs {
                 try {
                     $response = $this->request
@@ -84,7 +89,7 @@ readonly class BlobManager implements Manager
                 /** @var array{Blobs?: array{Blob: BlobTypeStan|BlobTypeStan[]}} $parsed */
                 $parsed = $this->request->getConfig()->parser->parse($response);
 
-                return new Blobs($this, $parsed['Blobs']['Blob'] ?? []);
+                return azure_app(Blobs::class, ['blobs' => $parsed['Blobs']['Blob'] ?? [], 'containerName' => $this->containerName]);
             });
 
     }
@@ -111,7 +116,7 @@ readonly class BlobManager implements Manager
         $headers = (array) $headers;
         array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
-        return new File($blobName, $content, $headers);
+        return azure_app(File::class, ['name' => $blobName, 'content' => $content, 'options' => $headers]);
     }
 
     /** @param array<string, scalar> $options */
@@ -243,30 +248,54 @@ readonly class BlobManager implements Manager
         // @codeCoverageIgnoreEnd
     }
 
+    public function temporaryUrl(string $blobName, string|int|DateTimeInterface $expiresAt): string
+    {
+        /** @var DateTimeImmutable $expires */
+        $expires = match(true) {
+            $expiresAt instanceof DateTime => DateTimeImmutable::createFromMutable($expiresAt),
+            is_int($expiresAt)             => DateTimeImmutable::createFromFormat('U', (string)$expiresAt),
+            is_string($expiresAt)          => new DateTimeImmutable($expiresAt),
+            default                        => $expiresAt,
+        };
+
+        if ($expires <= new DateTimeImmutable()) {
+            throw InvalidArgumentException::create('Expiration time must be in the future');
+        }
+
+        $resource = "/{$this->containerName}/{$blobName}";
+
+        $token = azure_app(UserDelegationSas::class, ['request' => $this->request->withResource($resource)])
+            ->buildTokenUrl(AccessTokenPermission::READ, $expires);
+
+        $uri = $this->request->uri("{$this->containerName}/{$blobName}");
+
+        return $uri . $token;
+    }
+
     public function lease(string $blobName): BlobLeaseManager
     {
-        return new BlobLeaseManager($this->request, $this->containerName, $blobName);
+        return azure_app(BlobLeaseManager::class, ['containerName' => $this->containerName, 'blobName' => $blobName]);
     }
 
     public function pages(): BlobPageManager
     {
-        return (new BlobPageManager($this->request, $this->containerName))
+        return azure_app(BlobPageManager::class, ['containerName' => $this->containerName])
             ->setManager($this);
     }
 
     public function properties(string $blobName): BlobPropertyManager
     {
-        return new BlobPropertyManager($this->request, $this->containerName, $blobName);
+        return azure_app(BlobPropertyManager::class, ['containerName' => $this->containerName, 'blobName' => $blobName]);
     }
 
     public function metadata(string $blobName): BlobMetadataManager
     {
-        return new BlobMetadataManager($this->request, $this->containerName, $blobName);
+        return azure_app(BlobMetadataManager::class, ['containerName' => $this->containerName, 'blobName' => $blobName]);
     }
 
     public function tags(string $blobName): BlobTagManager
     {
-        return new BlobTagManager($this->request, $this->containerName, $blobName);
+        return azure_app(BlobTagManager::class, ['containerName' => $this->containerName, 'blobName' => $blobName]);
     }
 
     protected function validateExpirationTime(ExpirationOption $expirationOption, null|int|DateTime $expiryTime = null): void

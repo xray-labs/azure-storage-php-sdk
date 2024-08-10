@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Xray\AzureStoragePhpSdk\Authentication;
 
+use Xray\AzureStoragePhpSdk\Concerns\UseCurrentHttpDate;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 
 final class SharedKeyAuth implements Auth
 {
+    use UseCurrentHttpDate;
+
     public function __construct(protected string $account, protected string $key)
     {
         //
-    }
-
-    public function getDate(): string
-    {
-        return gmdate('D, d M Y H:i:s T');
     }
 
     public function getAccount(): string

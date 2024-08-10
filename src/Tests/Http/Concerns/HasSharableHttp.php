@@ -55,7 +55,7 @@ trait HasSharableHttp
 
     public function getHttpHeaders(): Headers
     {
-        return $this->httpHeaders ?? new Headers();
+        return $this->httpHeaders ?? azure_app(Headers::class);
     }
 
     public function withHttpHeaders(Headers $headers): static

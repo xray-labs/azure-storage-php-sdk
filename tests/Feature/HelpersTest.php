@@ -72,3 +72,11 @@ it('should convert datetime to RFC3339 micro format', function () {
 
     expect(convert_to_RFC3339_micro($datetime))->toBe("{$expected->format('Y-m-d\TH:i:s')}.{$microseconds}Z");
 });
+
+it('should convert to ISO format', function (string|DateTimeImmutable $datetime, $expected) {
+    expect(convert_to_ISO($datetime))
+        ->toBe($expected);
+})->with([
+    'String'            => ['2024-10-10 12:04:59', '2024-10-10T12:04:59Z'],
+    'DateTimeImmutable' => [(new DateTimeImmutable('2024-10-10 12:04:59', new DateTimeZone('UTC'))), '2024-10-10T12:04:59Z'],
+]);

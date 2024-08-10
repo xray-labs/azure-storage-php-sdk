@@ -65,7 +65,7 @@ final readonly class ContainerAccessLevel
 
     public function toXML(): string
     {
-        return (new XmlConverter())->convert([
+        return azure_app(XmlConverter::class)->convert([
             'SignedIdentifiers' => ['SignedIdentifier' => $this->toArray()],
         ]);
     }

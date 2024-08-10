@@ -49,13 +49,15 @@ class RequestFake implements Request
 
     public function __construct(?Auth $auth = null, ?Config $config = null)
     {
-        $this->auth   = $auth ?? new SharedKeyAuth('account', 'key');
-        $this->config = $config ?? new Config();
+        $this->auth   = $auth ?? azure_app(SharedKeyAuth::class, ['account' => 'account', 'key' => 'key']);
+        $this->config = $config ?? azure_app(Config::class);
     }
 
     public function withFakeResponse(ResponseFake $fakeResponse): static
     {
         $this->fakeResponse = $fakeResponse;
+
+        azure_app()->instance(Request::class, $this);
 
         return $this;
     }
@@ -114,7 +116,7 @@ class RequestFake implements Request
 
         $this->withVerb(HttpVerb::GET);
 
-        return $this->fakeResponse ?? new ResponseFake();
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function post(string $endpoint, string $body = ''): Response
@@ -127,7 +129,7 @@ class RequestFake implements Request
         $this->withVerb(HttpVerb::POST)
             ->withBody($body);
 
-        return $this->fakeResponse ?? new ResponseFake();
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function put(string $endpoint, string $body = ''): Response
@@ -140,7 +142,7 @@ class RequestFake implements Request
         $this->withVerb(HttpVerb::PUT)
             ->withBody($body);
 
-        return $this->fakeResponse ?? new ResponseFake();
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function delete(string $endpoint): Response
@@ -151,7 +153,7 @@ class RequestFake implements Request
 
         $this->withVerb(HttpVerb::DELETE);
 
-        return $this->fakeResponse ?? new ResponseFake();
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function options(string $endpoint): Response
@@ -162,7 +164,7 @@ class RequestFake implements Request
 
         $this->withVerb(HttpVerb::OPTIONS);
 
-        return $this->fakeResponse ?? new ResponseFake();
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function uri(?string $endpoint = null): string

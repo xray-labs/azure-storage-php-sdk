@@ -15,7 +15,8 @@ final class BlobStorageClient
 {
     public function __construct(protected RequestContract $request)
     {
-        //
+        azure_app()->instance(RequestContract::class, $this->request);
+        azure_app()->instance(Config::class, $this->request->getConfig());
     }
 
     /** @param array{version?: string, parser?: Parser, converter?: Converter} $config */
@@ -26,16 +27,16 @@ final class BlobStorageClient
 
     public function account(): AccountManager
     {
-        return new AccountManager($this->request);
+        return azure_app(AccountManager::class);
     }
 
     public function containers(): ContainerManager
     {
-        return new ContainerManager($this->request);
+        return azure_app(ContainerManager::class);
     }
 
     public function blobs(string $containerName): BlobManager
     {
-        return new BlobManager($this->request, $containerName);
+        return azure_app(BlobManager::class, ['containerName' => $containerName]);
     }
 }

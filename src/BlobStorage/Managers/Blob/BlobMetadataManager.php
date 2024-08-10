@@ -47,7 +47,7 @@ class BlobMetadataManager implements Manager
             ARRAY_FILTER_USE_KEY,
         );
 
-        return new BlobMetadata($metadata, (array) $headers);
+        return azure_app(BlobMetadata::class, ['metadata' => $metadata, 'options' => (array) $headers]);
     }
 
     /** @param array<string, scalar> $options */
