@@ -199,5 +199,6 @@ class Request implements RequestContract
         $this->body        = '';
 
         $this->withAuthentication();
+        azure_app()->flushScoped();
     }
 }

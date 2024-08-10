@@ -1,9 +1,31 @@
 <?php
 
-use Xray\AzureStoragePhpSdk\ApplicationContainer;
+use Xray\AzureStoragePhpSdk\Application\Application;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
 define('RFC3339_MICRO', 'Y-m-d\TH:i:s.u\Z');
+
+if (!function_exists('azure_app')) {
+    /**
+     * Get the available container instance.
+     *
+     * @template TClass
+     *
+     * @param string|class-string<TClass>|null $key
+     * @param array<string, mixed> $parameters
+     * @return ($key is class-string<TClass> ? TClass : ($key is null ? Application : mixed))
+     */
+    function azure_app(?string $key = null, array $parameters = []): mixed
+    {
+        $instance = Application::getInstance();
+
+        if (is_null($key)) {
+            return $instance;
+        }
+
+        return $instance->make($key, $parameters);
+    }
+}
 
 if (!function_exists('with')) {
     /**
@@ -89,25 +111,5 @@ if (!function_exists('convert_to_ISO')) {
         $dateTime = $dateTime->setTimezone(new DateTimeZone('UTC'));
 
         return str_replace('+00:00', 'Z', $dateTime->format('c'));
-    }
-}
-
-if (!function_exists('azure_app')) {
-    /**
-     * Get the available container instance.
-     *
-     * @template TClass
-     *
-     * @param  string|class-string<TClass>|null  $abstract
-     * @param  array<string, scalar|object|array<mixed>>  $parameters
-     * @return ($abstract is class-string<TClass> ? TClass : ($abstract is null ? ApplicationContainer : mixed))
-     */
-    function azure_app(?string $abstract = null, array $parameters = []): mixed
-    {
-        if (is_null($abstract)) {
-            return ApplicationContainer::getContainer();
-        }
-
-        return ApplicationContainer::getContainer()->make($abstract, $parameters);
     }
 }
