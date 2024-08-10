@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Mockery\MockInterface;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerLease;
-use Xray\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
+use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerLeaseManager;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 use function Xray\Tests\mock;
@@ -12,8 +12,8 @@ use function Xray\Tests\mock;
 uses()->group('entities', 'containers');
 
 it('should renew the container lease', function () {
-    /** @var ContainerManager $mock */
-    $mock = mock(ContainerManager::class);
+    /** @var ContainerLeaseManager $mock */
+    $mock = mock(ContainerLeaseManager::class);
 
     $containerLease = (new ContainerLease([
         'Last-Modified' => '2024-06-10T00:00:00.0000000Z',
@@ -22,10 +22,10 @@ it('should renew the container lease', function () {
         'Version'       => 'version',
         'Date'          => '2024-06-10T00:00:00.0000000Z',
         'x-ms-lease-id' => $leaseId = 'leaseId',
-    ]))->setManager($mock); // @phpstan-ignore-line
+    ]))->setManager($mock);
 
     /** @var MockInterface $mock */
-    $mock->shouldReceive('renew')
+    $mock->shouldReceive('renew') // @phpstan-ignore-line
         ->atLeast()
         ->once()
         ->with($leaseId)
@@ -36,8 +36,8 @@ it('should renew the container lease', function () {
 });
 
 it('should change/release/break the container lease', function (string $method, ?string $toLeaseId = null) {
-    /** @var ContainerManager $mock */
-    $mock = mock(ContainerManager::class);
+    /** @var ContainerLeaseManager $mock */
+    $mock = mock(ContainerLeaseManager::class);
 
     $containerLease = (new ContainerLease([
         'Last-Modified' => '2024-06-10T00:00:00.0000000Z',
@@ -46,12 +46,12 @@ it('should change/release/break the container lease', function (string $method, 
         'Version'       => 'version',
         'Date'          => '2024-06-10T00:00:00.0000000Z',
         'x-ms-lease-id' => $fromLeaseId = 'leaseId',
-    ]))->setManager($mock); // @phpstan-ignore-line
+    ]))->setManager($mock);
 
     $params = array_filter([$fromLeaseId, $toLeaseId]);
 
     /** @var MockInterface $mock */
-    $mock->shouldReceive($method)
+    $mock->shouldReceive($method) // @phpstan-ignore-line
         ->atLeast()
         ->once()
         ->with(...$params)

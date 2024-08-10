@@ -29,7 +29,7 @@ it('should get the file from the blob', function () {
     ]))->setManager($mock);
 
     /** @var MockInterface $mock */
-    $mock->shouldReceive('get')
+    $mock->shouldReceive('get') // @phpstan-ignore-line
         ->atLeast()
         ->once()
         ->with($name, $options = ['foo' => 'bar'])
@@ -41,7 +41,7 @@ it('should get the file from the blob', function () {
 });
 
 it('should get the blob\'s properties', function () {
-    $propertyMock = mock(BlobPropertyManager::class)
+    $propertyMock = mock(BlobPropertyManager::class) // @phpstan-ignore-line
         ->shouldReceive('get')
         ->atLeast()
         ->once()
@@ -50,7 +50,7 @@ it('should get the blob\'s properties', function () {
         ->getMock();
 
     /** @var BlobManager $mock */
-    $mock = mock(BlobManager::class)
+    $mock = mock(BlobManager::class) // @phpstan-ignore-line
         ->shouldReceive('properties')
         ->atLeast()
         ->once()
@@ -79,7 +79,7 @@ it('should delete the blob', function () {
     ]))->setManager($mock);
 
     /** @var MockInterface $mock */
-    $mock->shouldReceive('delete')
+    $mock->shouldReceive('delete') // @phpstan-ignore-line
         ->atLeast()
         ->once()
         ->with($name, $snapshot, $force = false)
@@ -100,7 +100,7 @@ it('should copy a blob to a new name', function () {
     ]))->setManager($mock);
 
     /** @var MockInterface $mock */
-    $mock->shouldReceive('copy')
+    $mock->shouldReceive('copy') // @phpstan-ignore-line
         ->atLeast()
         ->once()
         ->with($name, $destination = 'destination', $options = ['foo' => 'bar'], $snapshot)
@@ -120,7 +120,7 @@ it('should restore a deleted blob', function () {
     ]))->setManager($mock);
 
     /** @var MockInterface $mock */
-    $mock->shouldReceive('restore')
+    $mock->shouldReceive('restore') // @phpstan-ignore-line
         ->atLeast()
         ->once()
         ->with($name)
@@ -140,7 +140,7 @@ it('should create a snapshot of the blob', function () {
     ]))->setManager($mock);
 
     /** @var MockInterface $mock */
-    $mock->shouldReceive('createSnapshot')
+    $mock->shouldReceive('createSnapshot') // @phpstan-ignore-line
         ->atLeast()
         ->once()
         ->with($name)
@@ -152,7 +152,7 @@ it('should create a snapshot of the blob', function () {
 
 it('should get tags from the blob', function () {
     /** @var BlobManager $mock */
-    $mock = mock(BlobManager::class)
+    $mock = mock(BlobManager::class) // @phpstan-ignore-line
         ->shouldReceive('tags')
         ->with($name = 'name')
         ->andReturn(azure_app(BlobTagManager::class, ['containerName' => 'container', 'blobName' => $name]))
@@ -169,7 +169,7 @@ it('should get tags from the blob', function () {
 
 it('should lease a blob', function () {
     /** @var BlobManager $mock */
-    $mock = mock(BlobManager::class)
+    $mock = mock(BlobManager::class) // @phpstan-ignore-line
         ->shouldReceive('lease')
         ->with($name = 'name')
         ->andReturn(azure_app(BlobLeaseManager::class, ['containerName' => 'container', 'blobName' => $name]))
@@ -194,7 +194,7 @@ it('should set the expiry of the blob', function () {
     ]))->setManager($mock);
 
     /** @var MockInterface $mock */
-    $mock->shouldReceive('setExpiry')
+    $mock->shouldReceive('setExpiry') // @phpstan-ignore-line
         ->atLeast()
         ->once()
         ->with(
