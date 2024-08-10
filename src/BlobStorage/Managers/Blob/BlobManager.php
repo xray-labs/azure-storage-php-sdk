@@ -22,11 +22,11 @@ use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestExcepti
  * @phpstan-import-type BlobType from Blob as BlobTypeStan
  * @phpstan-import-type FileType from File
  */
-readonly class BlobManager implements Manager
+class BlobManager implements Manager
 {
     public function __construct(
-        protected Request $request,
-        protected string $containerName,
+        protected readonly Request $request,
+        protected readonly string $containerName,
     ) {
         //
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob;
 
 use DateTimeImmutable;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Contracts\Xmlable;
 use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
@@ -41,8 +42,8 @@ final readonly class BlobTag implements Xmlable
         $this->contentType   = $options['Content-Type'] ?? null;
         $this->vary          = $options['Vary'] ?? null;
         $this->server        = $options['Server'] ?? null;
-        $this->xMsRequestId  = $options['x-ms-request-id'] ?? null;
-        $this->xMsVersion    = $options['x-ms-version'] ?? null;
+        $this->xMsRequestId  = $options[Resource::REQUEST_ID] ?? null;
+        $this->xMsVersion    = $options[Resource::AUTH_VERSION] ?? null;
         $this->date          = isset($options['Date']) ? new DateTimeImmutable($options['Date']) : null;
 
         $this->tags = $this->mountTags($tags);
