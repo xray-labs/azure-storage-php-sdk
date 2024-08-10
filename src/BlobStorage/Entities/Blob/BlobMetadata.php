@@ -42,8 +42,8 @@ final readonly class BlobMetadata
         $this->eTag          = $options['ETag'] ?? null;
         $this->vary          = $options['Vary'] ?? null;
         $this->server        = $options['Server'] ?? null;
-        $this->xMsRequestId  = $options['x-ms-request-id'] ?? null;
-        $this->xMsVersion    = $options['x-ms-version'] ?? null;
+        $this->xMsRequestId  = $options[Resource::REQUEST_ID] ?? null;
+        $this->xMsVersion    = $options[Resource::AUTH_VERSION] ?? null;
         $this->date          = isset($options['Date']) ? new DateTimeImmutable($options['Date']) : null;
     }
 

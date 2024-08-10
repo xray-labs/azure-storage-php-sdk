@@ -17,31 +17,31 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Concerns\HasRequestShared;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 use Xray\AzureStoragePhpSdk\Contracts\{Manager, RequestShared};
-use Xray\AzureStoragePhpSdk\Exceptions\{RequestException};
+use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
 /**
  * @phpstan-import-type ContainerType from Container
  * @implements RequestShared<Request>
  */
-readonly class ContainerManager implements Manager, RequestShared
+class ContainerManager implements Manager, RequestShared
 {
     /** @use HasRequestShared<Request> */
     use HasRequestShared;
     use ValidateContainerName;
 
-    public function __construct(protected Request $request)
+    public function __construct(protected readonly Request $request)
     {
         //
     }
 
     public function accessLevel(): ContainerAccessLevelManager
     {
-        return new ContainerAccessLevelManager($this->request);
+        return azure_app(ContainerAccessLevelManager::class);
     }
 
     public function metadata(): ContainerMetadataManager
     {
-        return new ContainerMetadataManager($this->request);
+        return azure_app(ContainerMetadataManager::class);
     }
 
     /**
@@ -65,7 +65,7 @@ readonly class ContainerManager implements Manager, RequestShared
         array_walk($response, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         /** @var array<string> $response */
-        return new ContainerProperties($response);
+        return azure_app(ContainerProperties::class, ['containerProperty' => $response]);
     }
 
     /** @param array<string, scalar> $options */
@@ -86,14 +86,14 @@ readonly class ContainerManager implements Manager, RequestShared
         /** @var array{Containers?: array{Container: ContainerType|ContainerType[]}} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
-        return new Containers($this, $parsed['Containers']['Container'] ?? []);
+        return azure_app(Containers::class, ['containers' => $parsed['Containers']['Container'] ?? []]);
     }
 
     public function lease(string $name): ContainerLeaseManager
     {
         $this->validateContainerName($name);
 
-        return new ContainerLeaseManager($this->request, $name);
+        return azure_app(ContainerLeaseManager::class, ['container' => $name]);
     }
 
     public function create(string $name): bool

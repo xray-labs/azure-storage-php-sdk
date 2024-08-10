@@ -42,6 +42,6 @@ final class ContainerAccessLevels extends Collection
     */
     protected function mapContainerAccessLevel(array $level): ContainerAccessLevel
     {
-        return new ContainerAccessLevel($level);
+        return azure_app(ContainerAccessLevel::class, ['containerAccessLevel' => $level]);
     }
 }

@@ -47,7 +47,7 @@ readonly class ContainerAccessLevelManager implements Manager
         /** @var array<array<array<mixed>>> */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
-        return new ContainerAccessLevels($this, $parsed['SignedIdentifier'] ?? []);
+        return azure_app(ContainerAccessLevels::class, ['levels' => $parsed['SignedIdentifier'] ?? []]);
     }
 
     /**

@@ -32,7 +32,7 @@ final class Blobs extends Collection
     protected function generateBlobsList(array $blobs): array
     {
         return array_map(
-            fn (array $blob) => (new Blob($blob))->setManager($this->manager),
+            fn (array $blob) => (azure_app(Blob::class, ['blob' => $blob]))->setManager($this->manager),
             $blobs,
         );
     }

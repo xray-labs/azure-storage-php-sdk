@@ -42,7 +42,7 @@ class BlobPropertyManager implements Manager
         $headers = (array) $headers;
         array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
-        return new BlobProperty($headers);
+        return azure_app(BlobProperty::class, ['property' => $headers]);
     }
 
     /** @param array<string, scalar> $options */

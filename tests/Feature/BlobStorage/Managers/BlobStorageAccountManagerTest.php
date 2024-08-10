@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
-use Xray\AzureStoragePhpSdk\BlobStorage\Config;
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\{AccountInformation, GeoReplication, KeyInfo, UserDelegationKey};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestManager, StoragePropertyManager};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\AccountManager;
@@ -12,7 +10,7 @@ use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 uses()->group('blob-storage', 'managers', 'accounts');
 
 it('should get account\'s managers', function (string $method, string $class) {
-    $request = new RequestFake(new Config(new SharedKeyAuth('account', 'key')));
+    $request = new RequestFake();
 
     expect(new AccountManager($request))
         ->{$method}()->toBeInstanceOf($class);
@@ -22,7 +20,7 @@ it('should get account\'s managers', function (string $method, string $class) {
 ]);
 
 it('should get account information', function () {
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake(headers: [
             'Server'              => ['Server'],
             'x-ms-request-id'     => ['d5a5d3f6-0000-0000-0000-000000000000'],
@@ -58,7 +56,7 @@ it('should get account blob service stats', function () {
     </StorageServiceStats>
     XML;
 
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($body));
 
     expect((new AccountManager($request))->blobServiceStats(['some' => 'value']))
@@ -74,20 +72,18 @@ it('should get account blob service stats', function () {
 it('should get account user delegation key', function () {
     $body = <<<XML
     <?xml version="1.0"?>
-    <AccountInfo>
-        <UserDelegationKey>
-            <SignedOid>oid</SignedOid>
-            <SignedTid>tid</SignedTid>
-            <SignedStart>2020-01-01T00:00:00.0000000Z</SignedStart>
-            <SignedExpiry>2020-01-02T00:00:00.0000000Z</SignedExpiry>
-            <SignedService>service</SignedService>
-            <SignedVersion>version</SignedVersion>
-            <Value>value</Value>
-        </UserDelegationKey>
-    </AccountInfo>
+    <UserDelegationKey>
+        <SignedOid>oid</SignedOid>
+        <SignedTid>tid</SignedTid>
+        <SignedStart>2020-01-01T00:00:00.0000000Z</SignedStart>
+        <SignedExpiry>2020-01-02T00:00:00.0000000Z</SignedExpiry>
+        <SignedService>service</SignedService>
+        <SignedVersion>version</SignedVersion>
+        <Value>value</Value>
+    </UserDelegationKey>
     XML;
 
-    $request = (new RequestFake(new Config(new SharedKeyAuth('account', 'key'))))
+    $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($body));
 
     $keyInfo = new KeyInfo([

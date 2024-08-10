@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\Tests\Http;
 
 use Closure;
+use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Config;
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
+use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
-use Xray\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions};
+use Xray\AzureStoragePhpSdk\Http\Headers;
+use Xray\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions, HasSharableHttp};
 
 /**
  * @phpstan-type Method array{endpoint: string, body?: string}
@@ -16,6 +20,11 @@ class RequestFake implements Request
 {
     use HasHttpAssertions;
     use HasAuthAssertions;
+    use HasSharableHttp;
+
+    protected readonly Auth $auth;
+
+    protected readonly Config $config;
 
     /** @var array<string, scalar> */
     protected array $options = [];
@@ -38,14 +47,17 @@ class RequestFake implements Request
 
     protected ?ResponseFake $fakeResponse = null;
 
-    public function __construct(protected Config $config)
+    public function __construct(?Auth $auth = null, ?Config $config = null)
     {
-        //
+        $this->auth   = $auth ?? azure_app(SharedKeyAuth::class, ['account' => 'account', 'key' => 'key']);
+        $this->config = $config ?? azure_app(Config::class);
     }
 
     public function withFakeResponse(ResponseFake $fakeResponse): static
     {
         $this->fakeResponse = $fakeResponse;
+
+        azure_app()->instance(Request::class, $this);
 
         return $this;
     }
@@ -55,6 +67,11 @@ class RequestFake implements Request
         $this->usingAccountCallback = $callback;
 
         return $this;
+    }
+
+    public function getAuth(): Auth
+    {
+        return $this->auth;
     }
 
     public function getConfig(): Config
@@ -86,6 +103,7 @@ class RequestFake implements Request
     public function withHeaders(array $headers = []): static
     {
         $this->headers = array_merge($this->headers, $headers);
+        $this->withHttpHeaders(Headers::parse($this->headers));
 
         return $this;
     }
@@ -96,7 +114,9 @@ class RequestFake implements Request
             'endpoint' => $endpoint,
         ];
 
-        return $this->fakeResponse ?? new ResponseFake();
+        $this->withVerb(HttpVerb::GET);
+
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function post(string $endpoint, string $body = ''): Response
@@ -106,7 +126,10 @@ class RequestFake implements Request
             'body'     => $body,
         ];
 
-        return $this->fakeResponse ?? new ResponseFake();
+        $this->withVerb(HttpVerb::POST)
+            ->withBody($body);
+
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function put(string $endpoint, string $body = ''): Response
@@ -116,7 +139,10 @@ class RequestFake implements Request
             'body'     => $body,
         ];
 
-        return $this->fakeResponse ?? new ResponseFake();
+        $this->withVerb(HttpVerb::PUT)
+            ->withBody($body);
+
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function delete(string $endpoint): Response
@@ -125,7 +151,9 @@ class RequestFake implements Request
             'endpoint' => $endpoint,
         ];
 
-        return $this->fakeResponse ?? new ResponseFake();
+        $this->withVerb(HttpVerb::DELETE);
+
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function options(string $endpoint): Response
@@ -134,12 +162,14 @@ class RequestFake implements Request
             'endpoint' => $endpoint,
         ];
 
-        return $this->fakeResponse ?? new ResponseFake();
+        $this->withVerb(HttpVerb::OPTIONS);
+
+        return $this->fakeResponse ?? azure_app(ResponseFake::class);
     }
 
     public function uri(?string $endpoint = null): string
     {
-        $account = $this->config->auth->getAccount();
+        $account = $this->auth->getAccount();
 
         if (!is_null($endpoint)) {
             [$endpoint, $params] = array_pad(explode('?', $endpoint, 2), 2, '');

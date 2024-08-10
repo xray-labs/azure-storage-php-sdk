@@ -6,11 +6,14 @@ namespace Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob;
 
 use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Psr\Http\Client\RequestExceptionInterface;
-use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs, File};
-use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{BlobIncludeOption, BlobType, ExpirationOption};
+use Xray\AzureStoragePhpSdk\Authentication\SharedAccessSignature\UserDelegationSas;
+use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{Blob, Blobs};
+use Xray\AzureStoragePhpSdk\BlobStorage\Enums\{AccessTokenPermission, BlobIncludeOption, BlobType, ExpirationOption};
 use Xray\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 use Xray\AzureStoragePhpSdk\Contracts\Manager;
 use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
@@ -19,10 +22,12 @@ use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestExcepti
  * @phpstan-import-type BlobType from Blob as BlobTypeStan
  * @phpstan-import-type FileType from File
  */
-readonly class BlobManager implements Manager
+class BlobManager implements Manager
 {
-    public function __construct(protected Request $request, protected string $containerName)
-    {
+    public function __construct(
+        protected readonly Request $request,
+        protected readonly string $containerName,
+    ) {
         //
     }
 
@@ -57,7 +62,7 @@ readonly class BlobManager implements Manager
         /** @var array{Blobs?: array{Blob: BlobTypeStan|BlobTypeStan[]}} $parsed */
         $parsed = $this->request->getConfig()->parser->parse($response);
 
-        return new Blobs($this, $parsed['Blobs']['Blob'] ?? []);
+        return azure_app(Blobs::class, ['blobs' => $parsed['Blobs']['Blob'] ?? [], 'containerName' => $this->containerName]);
     }
 
     /**
@@ -68,21 +73,23 @@ readonly class BlobManager implements Manager
     public function findByTag(array $options = []): BlobTagQuery
     {
         /** @var BlobTagQuery<BlobManager, Blobs> */
-        return (new BlobTagQuery($this))
+        return azure_app(BlobTagQuery::class, ['manager' => $this])
             ->whenBuild(function (string $query) use ($options): Blobs {
                 try {
                     $response = $this->request
                         ->withOptions($options)
                         ->get("{$this->containerName}/?restype=container&comp=blobs&where={$query}")
                         ->getBody();
+                    // @codeCoverageIgnoreStart
                 } catch (RequestExceptionInterface $e) {
                     throw RequestException::createFromRequestException($e);
                 }
+                // @codeCoverageIgnoreEnd
 
                 /** @var array{Blobs?: array{Blob: BlobTypeStan|BlobTypeStan[]}} $parsed */
                 $parsed = $this->request->getConfig()->parser->parse($response);
 
-                return new Blobs($this, $parsed['Blobs']['Blob'] ?? []);
+                return azure_app(Blobs::class, ['blobs' => $parsed['Blobs']['Blob'] ?? [], 'containerName' => $this->containerName]);
             });
 
     }
@@ -109,7 +116,7 @@ readonly class BlobManager implements Manager
         $headers = (array) $headers;
         array_walk($headers, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
-        return new File($blobName, $content, $headers);
+        return azure_app(File::class, ['name' => $blobName, 'content' => $content, 'options' => $headers]);
     }
 
     /** @param array<string, scalar> $options */
@@ -120,13 +127,13 @@ readonly class BlobManager implements Manager
                 ->withOptions($options)
                 ->withHeaders([
                     Resource::BLOB_TYPE         => BlobType::BLOCK->value,
-                    Resource::BLOB_CONTENT_MD5  => $file->contentMD5,
-                    Resource::BLOB_CONTENT_TYPE => $file->contentType,
-                    Resource::CONTENT_MD5       => $file->contentMD5,
-                    Resource::CONTENT_TYPE      => $file->contentType,
-                    Resource::CONTENT_LENGTH    => $file->contentLength,
+                    Resource::BLOB_CONTENT_MD5  => $file->getContentMD5(),
+                    Resource::BLOB_CONTENT_TYPE => $file->getContentType(),
+                    Resource::CONTENT_MD5       => $file->getContentMD5(),
+                    Resource::CONTENT_TYPE      => $file->getContentType(),
+                    Resource::CONTENT_LENGTH    => $file->getContentLength(),
                 ])
-                ->put("{$this->containerName}/{$file->name}?resttype=blob", $file->content)
+                ->put("{$this->containerName}/{$file->getFilename()}?resttype=blob", $file->getContent())
                 ->isCreated();
 
             // @codeCoverageIgnoreStart
@@ -154,21 +161,23 @@ readonly class BlobManager implements Manager
                 ]))
                 ->put("{$this->containerName}/{$blobName}?resttype=blob&comp=expiry")
                 ->isOk();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /**
      * @param boolean $force If true, Delete the base blob and all of its snapshots.
      */
-    public function delete(string $blobName, null|DateTimeImmutable|string $snapshot = null, bool $force = false): bool
+    public function delete(string $blobName, null|DateTime|string $snapshot = null, bool $force = false): bool
     {
-        if ($snapshot instanceof DateTimeImmutable) {
+        if ($snapshot instanceof DateTime) {
             $snapshot = convert_to_RFC3339_micro($snapshot);
         }
 
-        $snapshotHeader = $snapshot ? sprintf('?snapshot=%s', urlencode($snapshot)) : '';
+        $snapshotHeader = $snapshot ? sprintf('&snapshot=%s', urlencode($snapshot)) : '';
 
         $deleteSnapshotHeader = $snapshot ? sprintf('&%s=only', Resource::DELETE_SNAPSHOTS) : '';
 
@@ -180,9 +189,11 @@ readonly class BlobManager implements Manager
             return $this->request
                 ->delete("{$this->containerName}/{$blobName}?resttype=blob{$snapshotHeader}{$deleteSnapshotHeader}")
                 ->isAccepted();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     public function restore(string $blobName): bool
@@ -191,9 +202,11 @@ readonly class BlobManager implements Manager
             return $this->request
                 ->put("{$this->containerName}/{$blobName}?comp=undelete&resttype=blob")
                 ->isOk();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     public function createSnapshot(string $blobName): bool
@@ -202,15 +215,17 @@ readonly class BlobManager implements Manager
             return $this->request
                 ->put("{$this->containerName}/{$blobName}?comp=snapshot&resttype=blob")
                 ->isCreated();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /** @param array<string, scalar> $options */
-    public function copy(string $sourceCopy, string $blobName, array $options = [], null|DateTimeImmutable|string $snapshot = null): bool
+    public function copy(string $sourceCopy, string $blobName, array $options = [], null|DateTime|string $snapshot = null): bool
     {
-        if ($snapshot instanceof DateTimeImmutable) {
+        if ($snapshot instanceof DateTime) {
             $snapshot = convert_to_RFC3339_micro($snapshot);
         }
 
@@ -226,35 +241,61 @@ readonly class BlobManager implements Manager
                 ])
                 ->put("{$this->containerName}/{$blobName}?resttype=blob")
                 ->isAccepted();
+            // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);
         }
+        // @codeCoverageIgnoreEnd
+    }
+
+    public function temporaryUrl(string $blobName, string|int|DateTimeInterface $expiresAt): string
+    {
+        /** @var DateTimeImmutable $expires */
+        $expires = match(true) {
+            $expiresAt instanceof DateTime => DateTimeImmutable::createFromMutable($expiresAt),
+            is_int($expiresAt)             => DateTimeImmutable::createFromFormat('U', (string)$expiresAt),
+            is_string($expiresAt)          => new DateTimeImmutable($expiresAt),
+            default                        => $expiresAt,
+        };
+
+        if ($expires <= new DateTimeImmutable()) {
+            throw InvalidArgumentException::create('Expiration time must be in the future');
+        }
+
+        $resource = "/{$this->containerName}/{$blobName}";
+
+        $token = azure_app(UserDelegationSas::class, ['request' => $this->request->withResource($resource)])
+            ->buildTokenUrl(AccessTokenPermission::READ, $expires);
+
+        $uri = $this->request->uri("{$this->containerName}/{$blobName}");
+
+        return $uri . $token;
     }
 
     public function lease(string $blobName): BlobLeaseManager
     {
-        return new BlobLeaseManager($this->request, $this->containerName, $blobName);
+        return azure_app(BlobLeaseManager::class, ['containerName' => $this->containerName, 'blobName' => $blobName]);
     }
 
     public function pages(): BlobPageManager
     {
-        return (new BlobPageManager($this->request, $this->containerName))
+        return azure_app(BlobPageManager::class, ['containerName' => $this->containerName])
             ->setManager($this);
     }
 
     public function properties(string $blobName): BlobPropertyManager
     {
-        return new BlobPropertyManager($this->request, $this->containerName, $blobName);
+        return azure_app(BlobPropertyManager::class, ['containerName' => $this->containerName, 'blobName' => $blobName]);
     }
 
     public function metadata(string $blobName): BlobMetadataManager
     {
-        return new BlobMetadataManager($this->request, $this->containerName, $blobName);
+        return azure_app(BlobMetadataManager::class, ['containerName' => $this->containerName, 'blobName' => $blobName]);
     }
 
     public function tags(string $blobName): BlobTagManager
     {
-        return new BlobTagManager($this->request, $this->containerName, $blobName);
+        return azure_app(BlobTagManager::class, ['containerName' => $this->containerName, 'blobName' => $blobName]);
     }
 
     protected function validateExpirationTime(ExpirationOption $expirationOption, null|int|DateTime $expiryTime = null): void

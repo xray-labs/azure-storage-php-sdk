@@ -178,7 +178,7 @@ final readonly class BlobProperty
         $this->resourceType                = $property['x-ms-resource-type'] ?? null;
         $this->expiryTime                  = isset($property['x-ms-expiry-time']) ? new DateTimeImmutable($property['x-ms-expiry-time']) : null;
         $this->acl                         = isset($property['x-ms-acl']) ? array_pad(explode(':', $property['x-ms-acl']), 4, '') : null;
-        $this->metadata                    = new BlobMetadata(array_filter((array) $property, fn (string $key) => str_starts_with($key, Resource::METADATA_PREFIX), ARRAY_FILTER_USE_KEY));
+        $this->metadata                    = azure_app(BlobMetadata::class, ['metadata' => array_filter((array) $property, fn (string $key) => str_starts_with($key, Resource::METADATA_PREFIX), ARRAY_FILTER_USE_KEY)]);
         $this->leaseId                     = $property['leaseId'] ?? null;
         $this->sequenceNumberAction        = $property['sequenceNumberAction'] ?? null;
         $this->origin                      = $property['Origin'] ?? null;

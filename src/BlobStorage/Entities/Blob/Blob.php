@@ -8,6 +8,7 @@ use DateTime;
 use DateTimeImmutable;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\ExpirationOption;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{BlobLeaseManager, BlobManager, BlobTagManager};
+use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\Concerns\HasManager;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
@@ -27,9 +28,7 @@ final class Blob
 
     public readonly ?string $snapshotOriginalRaw;
 
-    public readonly DateTimeImmutable $versionId;
-
-    public readonly ?string $versionIdOriginalRaw;
+    public readonly string $versionId;
 
     public readonly bool $isCurrentVersion;
 
@@ -47,16 +46,14 @@ final class Blob
             throw RequiredFieldException::missingField('Name'); // @codeCoverageIgnore
         }
 
-        $this->name                 = $name;
-        $this->snapshot             = isset($blob['Snapshot']) ? new DateTimeImmutable($blob['Snapshot']) : null;
-        $this->snapshotOriginalRaw  = $blob['Snapshot'] ?? null;
-        $this->versionId            = new DateTimeImmutable($blob['Version'] ?? 'now');
-        $this->versionIdOriginalRaw = $blob['Version'] ?? null;
-        $this->isCurrentVersion     = to_boolean($blob['IsCurrentVersion'] ?? true);
+        $this->name                = $name;
+        $this->snapshot            = isset($blob['Snapshot']) ? new DateTimeImmutable($blob['Snapshot']) : null;
+        $this->snapshotOriginalRaw = $blob['Snapshot'] ?? null;
+        $this->versionId           = $blob['Version'] ?? '';
+        $this->isCurrentVersion    = to_boolean($blob['IsCurrentVersion'] ?? true);
 
-        $this->properties = new Properties($blob['Properties'] ?? []);
-
-        $this->deleted = to_boolean($blob['Deleted'] ?? false);
+        $this->properties = azure_app(Properties::class, ['property' => $blob['Properties'] ?? []]);
+        $this->deleted    = to_boolean($blob['Deleted'] ?? false);
     }
 
     /** @param array<string, scalar> $options */

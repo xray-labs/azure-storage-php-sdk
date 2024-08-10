@@ -1,0 +1,62 @@
+{
+    "commit-msg": {
+        "enabled": false,
+        "actions": [
+            {
+                "action": "\\CaptainHook\\App\\Hook\\Message\\Action\\Beams",
+                "options": {
+                    "subjectLength": 50,
+                    "bodyLineLength": 72
+                }
+            }
+        ]
+    },
+    "pre-push": {
+        "enabled": true,
+        "actions": [
+            {
+                "action": "./vendor/bin/phpmd src/ text phpmd.xml"
+            },
+            {
+                "action": "./vendor/bin/phpcs --standard=phpcs.xml"
+            },
+            {
+                "action": "./vendor/bin/pint --test"
+            },
+            {
+                "action": "./vendor/bin/phpstan analyse"
+            },
+            {
+                "action": "./vendor/bin/pest --coverage --min=100 --parallel"
+            }
+        ]
+    },
+    "pre-commit": {
+        "enabled": false,
+        "actions": []
+    },
+    "prepare-commit-msg": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-commit": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-merge": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-checkout": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-rewrite": {
+        "enabled": false,
+        "actions": []
+    },
+    "post-change": {
+        "enabled": false,
+        "actions": []
+    }
+}
