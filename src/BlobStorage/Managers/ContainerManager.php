@@ -23,13 +23,13 @@ use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
  * @phpstan-import-type ContainerType from Container
  * @implements RequestShared<Request>
  */
-readonly class ContainerManager implements Manager, RequestShared
+class ContainerManager implements Manager, RequestShared
 {
     /** @use HasRequestShared<Request> */
     use HasRequestShared;
     use ValidateContainerName;
 
-    public function __construct(protected Request $request)
+    public function __construct(protected readonly Request $request)
     {
         //
     }

@@ -53,8 +53,7 @@ final class Blob
         $this->isCurrentVersion    = to_boolean($blob['IsCurrentVersion'] ?? true);
 
         $this->properties = azure_app(Properties::class, ['property' => $blob['Properties'] ?? []]);
-
-        $this->deleted = to_boolean($blob['Deleted'] ?? false);
+        $this->deleted    = to_boolean($blob['Deleted'] ?? false);
     }
 
     /** @param array<string, scalar> $options */
