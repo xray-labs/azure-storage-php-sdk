@@ -15,8 +15,8 @@ class BlobLeaseManager implements Manager
 {
     public function __construct(
         protected Request $request,
-        protected string $container,
-        protected string $blob
+        protected string $containerName,
+        protected string $blobName,
     ) {
         //
     }
@@ -42,7 +42,7 @@ class BlobLeaseManager implements Manager
             Resource::LEASE_ID     => $leaseId,
         ])->getHeaders();
 
-        return (new BlobLease($headers))
+        return azure_app(BlobLease::class, ['blobLease' => $headers])
             ->setManager($this);
     }
 
@@ -55,7 +55,7 @@ class BlobLeaseManager implements Manager
             Resource::LEASE_PROPOSED_ID => $toLeaseId,
         ])->getHeaders();
 
-        return (new BlobLease($headers))
+        return azure_app(BlobLease::class, ['blobLease' => $headers])
             ->setManager($this);
     }
 
@@ -67,7 +67,7 @@ class BlobLeaseManager implements Manager
             Resource::LEASE_ID     => $leaseId,
         ])->getHeaders();
 
-        return (new BlobLease($headers))
+        return azure_app(BlobLease::class, ['blobLease' => $headers])
             ->setManager($this);
     }
 
@@ -79,7 +79,7 @@ class BlobLeaseManager implements Manager
             Resource::LEASE_ID     => $leaseId,
         ]))->getHeaders();
 
-        return (new BlobLease($headers))
+        return azure_app(BlobLease::class, ['blobLease' => $headers])
             ->setManager($this);
     }
 
@@ -89,7 +89,7 @@ class BlobLeaseManager implements Manager
         try {
             return $this->request
                 ->withHeaders($headers)
-                ->put("{$this->container}/{$this->blob}?comp=lease&resttype=blob");
+                ->put("{$this->containerName}/{$this->blobName}?comp=lease&resttype=blob");
             // @codeCoverageIgnoreStart
         } catch (RequestExceptionInterface $e) {
             throw RequestException::createFromRequestException($e);

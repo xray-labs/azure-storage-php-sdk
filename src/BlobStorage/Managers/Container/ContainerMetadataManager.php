@@ -45,7 +45,7 @@ readonly class ContainerMetadataManager implements Manager
         array_walk($response, fn (string|array &$value) => $value = is_array($value) ? current($value) : $value); // @phpstan-ignore-line
 
         /** @var array<string> $response */
-        return new ContainerMetadata($response);
+        return azure_app(ContainerMetadata::class, ['containerMetadata' => $response]);
     }
 
     /**

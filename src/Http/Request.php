@@ -194,7 +194,7 @@ class Request implements RequestContract
         $this->headers     = [];
         $this->options     = [];
         $this->verb        = HttpVerb::GET;
-        $this->httpHeaders = new Headers();
+        $this->httpHeaders = azure_app(Headers::class);
         $this->resource    = '';
         $this->body        = '';
 
