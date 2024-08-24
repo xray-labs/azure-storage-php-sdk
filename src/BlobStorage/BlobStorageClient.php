@@ -25,6 +25,16 @@ final class BlobStorageClient
         return new static(new Request($auth, new Config($config)));
     }
 
+    public function getRequest(): RequestContract
+    {
+        return $this->request;
+    }
+
+    public function config(): Config
+    {
+        return $this->request->getConfig();
+    }
+
     public function account(): AccountManager
     {
         return azure_app(AccountManager::class);
