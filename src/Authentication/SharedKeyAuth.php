@@ -20,6 +20,7 @@ final class SharedKeyAuth implements Auth
     /** @param array{account: string, key: string} $config */
     public function __construct(array $config)
     {
+        // @phpstan-ignore-next-line
         if (!isset($config['account'], $config['key'])) {
             $missingParameters = array_diff(['account', 'key'], array_keys($config));
 

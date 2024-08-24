@@ -34,6 +34,7 @@ final class MicrosoftEntraId implements Auth
     /** @param array{account: string, directory: string, application: string, secret: string} $config */
     public function __construct(array $config)
     {
+        // @phpstan-ignore-next-line
         if (!isset($config['account'], $config['directory'], $config['application'], $config['secret'])) {
             $missingParameters = array_diff(['account', 'directory', 'application', 'secret'], array_keys($config));
 
