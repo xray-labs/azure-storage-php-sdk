@@ -30,7 +30,7 @@ final class BlobStorageClient
         return $this->request;
     }
 
-    public function config(): Config
+    public function getConfig(): Config
     {
         return $this->request->getConfig();
     }

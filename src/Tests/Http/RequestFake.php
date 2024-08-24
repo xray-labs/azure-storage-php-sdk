@@ -49,7 +49,7 @@ class RequestFake implements Request
 
     public function __construct(?Auth $auth = null, ?Config $config = null)
     {
-        $this->auth   = $auth ?? azure_app(SharedKeyAuth::class, ['account' => 'account', 'key' => 'key']);
+        $this->auth   = $auth ?? azure_app(SharedKeyAuth::class, ['config' => ['account' => 'account', 'key' => 'key']]);
         $this->config = $config ?? azure_app(Config::class);
     }
 

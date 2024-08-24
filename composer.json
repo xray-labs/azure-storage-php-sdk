@@ -39,12 +39,16 @@
     ],
     "autoload": {
         "psr-4": {
-            "Xray\\AzureStoragePhpSdk\\": "src/",
-            "Xray\\Tests\\": "tests/"
+            "Xray\\AzureStoragePhpSdk\\": "src/"
         },
         "files": [
             "src/helpers.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Xray\\Tests\\": "tests/"
+        }
     },
     "minimum-stability": "stable",
     "config": {

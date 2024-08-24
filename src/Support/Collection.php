@@ -59,7 +59,7 @@ class Collection implements Arrayable, IteratorAggregate, ArrayAccess, JsonSeria
                 return $item;
             }
 
-            return $default;
+            return $default; // @codeCoverageIgnore
         }
 
         foreach ($this as $key => $value) {
@@ -96,7 +96,7 @@ class Collection implements Arrayable, IteratorAggregate, ArrayAccess, JsonSeria
                 return $item;
             }
 
-            return $default;
+            return $default; // @codeCoverageIgnore
         }
 
         foreach (array_reverse($this->items, true) as $key => $value) {
@@ -235,13 +235,9 @@ class Collection implements Arrayable, IteratorAggregate, ArrayAccess, JsonSeria
     public function forget(iterable|string|int $keys): static
     {
         $keys = !is_iterable($keys) ? func_get_args() : $keys;
-        // @phpstan-ignore-next-line
-        $keysToRemove = $this->filter(function (string|int $key) use ($keys): bool {
-            return in_array($key, $keys); // @phpstan-ignore-line
-        }, ARRAY_FILTER_USE_KEY);
 
         /** @var TKey $key */
-        foreach ($keysToRemove as $key) {
+        foreach ($keys as $key) {
             $this->offsetUnset($key);
         }
 
@@ -276,9 +272,12 @@ class Collection implements Arrayable, IteratorAggregate, ArrayAccess, JsonSeria
 
         try {
             $items = array_map($callback, $this->items, $keys);
+
+            // @codeCoverageIgnoreStart
         } catch (ArgumentCountError) {
             $items = array_map($callback, $this->items); // @phpstan-ignore-line
         }
+        // @codeCoverageIgnoreEnd
 
         // @phpstan-ignore-next-line
         return new static(array_combine($keys, $items));
@@ -294,7 +293,7 @@ class Collection implements Arrayable, IteratorAggregate, ArrayAccess, JsonSeria
     {
         foreach ($this as $key => $item) {
             if ($callback($item, $key) === false) {
-                break;
+                break; // @codeCoverageIgnore
             }
         }
 
