@@ -11,11 +11,19 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\Concerns\UseCurrentHttpDate;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
-use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
+use Xray\AzureStoragePhpSdk\Exceptions\{RequestException, RequiredFieldException};
 
 final class MicrosoftEntraId implements Auth
 {
     use UseCurrentHttpDate;
+
+    protected string $account;
+
+    protected string $directoryId;
+
+    protected string $applicationId;
+
+    protected string $applicationSecret;
 
     protected ?ClientInterface $client = null;
 
@@ -23,13 +31,19 @@ final class MicrosoftEntraId implements Auth
 
     protected ?DateTime $tokenExpiresAt = null;
 
-    public function __construct(
-        protected string $account,
-        protected string $directoryId,
-        protected string $applicationId,
-        protected string $applicationSecret,
-    ) {
-        //
+    /** @param array{account: string, directory: string, application: string, secret: string} $config */
+    public function __construct(array $config)
+    {
+        if (!isset($config['account'], $config['directory'], $config['application'], $config['secret'])) {
+            $missingParameters = array_diff(['account', 'directory', 'application', 'secret'], array_keys($config));
+
+            throw RequiredFieldException::create('Missing required parameters: ' . implode(', ', $missingParameters));
+        }
+
+        $this->account           = $config['account'];
+        $this->directoryId       = $config['directory'];
+        $this->applicationId     = $config['application'];
+        $this->applicationSecret = $config['secret'];
     }
 
     public function withRequestClient(ClientInterface $client): self
