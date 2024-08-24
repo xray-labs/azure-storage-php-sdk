@@ -103,11 +103,18 @@ it('should get the first item', function () {
         (object)['id' => 3, 'text' => 'other'],
     ];
 
+    $findItem = function (int $id): callable {
+        return function (object $item) use ($id): bool {
+            /** @var object{id: int, text: string} $item */
+            return $item->id === $id;
+        };
+    };
+
     expect(new Collection($items))
         ->first()->text->toBe('test')
-        ->first(fn (object $item) => $item->id === 2)->text->toBe('something')
-        ->first(fn (object $item) => $item->id === 4)->toBeNull()
-        ->first(fn (object $item) => $item->id === 4, fn () => (object) ['text' => 'new'])->text->toBe('new')
+        ->first($findItem(2))->text->toBe('something')
+        ->first($findItem(4))->toBeNull()
+        ->first($findItem(4), fn () => (object) ['text' => 'new'])->text->toBe('new')
         ->and(new Collection())
         ->first()->toBeNull();
 });
@@ -119,11 +126,18 @@ it('should get the last item', function () {
         (object)['id' => 3, 'text' => 'other'],
     ];
 
+    $findItem = function (int $id): callable {
+        return function (object $item) use ($id): bool {
+            /** @var object{id: int, text: string} $item */
+            return $item->id === $id;
+        };
+    };
+
     expect(new Collection($items))
         ->last()->text->toBe('other')
-        ->last(fn (object $item) => $item->id === 2)->text->toBe('something')
-        ->last(fn (object $item) => $item->id === 4)->toBeNull()
-        ->last(fn (object $item) => $item->id === 4, fn () => (object) ['text' => 'new'])->text->toBe('new')
+        ->last($findItem(2))->text->toBe('something')
+        ->last($findItem(4))->toBeNull()
+        ->last($findItem(4), fn () => (object) ['text' => 'new'])->text->toBe('new')
         ->and(new Collection())
         ->last()->toBeNull();
 });
@@ -290,12 +304,14 @@ it('should get collection as array', function () {
     $collection = new Collection([
         'test',
         new class () implements Arrayable {
+            /** @return array<string> */
             public function toArray(): array
             {
                 return ['array'];
             }
         },
         new class () implements JsonSerializable {
+            /** @return array<string> */
             public function jsonSerialize(): array
             {
                 return ['json'];

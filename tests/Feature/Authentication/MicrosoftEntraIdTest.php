@@ -26,7 +26,7 @@ it('should fail if any required field is missing', function (string $field) {
 
     unset($config[$field]);
 
-    expect(fn () => new MicrosoftEntraId($config))
+    expect(fn () => new MicrosoftEntraId($config)) // @phpstan-ignore-line
         ->toThrow(RequiredFieldException::class, "Missing required parameters: {$field}");
 })->with([
     'Missing Account'     => ['account'],
