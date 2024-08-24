@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
 use DateTimeImmutable;
+use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 
 final readonly class ContainerProperties
 {
@@ -32,6 +33,8 @@ final readonly class ContainerProperties
 
     public bool $xMsDenyEncryptionScopeOverride;
 
+    public ?string $blobPublicAccess;
+
     public DateTimeImmutable $date;
 
     /** @param array<string> $containerProperty */
@@ -40,15 +43,16 @@ final readonly class ContainerProperties
         $this->lastModified                             = new DateTimeImmutable($containerProperty['Last-Modified'] ?? 'now');
         $this->eTag                                     = $containerProperty['ETag'] ?? '';
         $this->server                                   = $containerProperty['Server'] ?? '';
-        $this->xMsRequestId                             = $containerProperty['x-ms-request-id'] ?? '';
-        $this->xMsVersion                               = $containerProperty['x-ms-version'] ?? '';
-        $this->xMsLeaseStatus                           = $containerProperty['x-ms-lease-status'] ?? '';
-        $this->xMsLeaseState                            = $containerProperty['x-ms-lease-state'] ?? '';
+        $this->xMsRequestId                             = $containerProperty[Resource::REQUEST_ID] ?? '';
+        $this->xMsVersion                               = $containerProperty[Resource::AUTH_VERSION] ?? '';
+        $this->xMsLeaseStatus                           = $containerProperty[Resource::LEASE_STATUS] ?? '';
+        $this->xMsLeaseState                            = $containerProperty[Resource::LEASE_STATE] ?? '';
         $this->xMsHasImmutabilityPolicy                 = to_boolean($containerProperty['x-ms-has-immutability-policy'] ?? '');
         $this->xMsHasLegalHold                          = to_boolean($containerProperty['x-ms-has-legal-hold'] ?? '');
         $this->xMsImmutableStorageWithVersioningEnabled = to_boolean($containerProperty['x-ms-immutable-storage-with-versioning-enabled'] ?? '');
         $this->xMsDefaultEncryptionScopeOverride        = $containerProperty['x-ms-default-encryption-scope'] ?? '';
         $this->xMsDenyEncryptionScopeOverride           = to_boolean($containerProperty['x-ms-deny-encryption-scope-override'] ?? '');
         $this->date                                     = new DateTimeImmutable($containerProperty['Date'] ?? 'now');
+        $this->blobPublicAccess                         = $containerProperty[Resource::BLOB_PUBLIC_ACCESS] ?? null;
     }
 }

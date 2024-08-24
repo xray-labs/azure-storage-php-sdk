@@ -21,11 +21,14 @@ final class Resource
     public const string CONTENT_LENGTH    = 'Content-Length';
     public const string REQUEST_ID        = 'x-ms-request-id';
 
-    public const string LEASE_ID           = 'x-ms-lease-id';
+    public const string LEASE_ID = 'x-ms-lease-id';
+
     public const string LEASE_ACTION       = 'x-ms-lease-action';
     public const string LEASE_BREAK_PERIOD = 'x-ms-lease-break-period';
     public const string LEASE_DURATION     = 'x-ms-lease-duration';
     public const string LEASE_PROPOSED_ID  = 'x-ms-proposed-lease-id';
+    public const string LEASE_STATUS       = 'x-ms-lease-status';
+    public const string LEASE_STATE        = 'x-ms-lease-state';
 
     public const string DELETE_CONTAINER_NAME    = 'x-ms-deleted-container-name';
     public const string DELETE_CONTAINER_VERSION = 'x-ms-deleted-container-version';
@@ -38,6 +41,7 @@ final class Resource
     public const string PAGE_WRITE = 'x-ms-page-write';
     public const string RANGE      = 'x-ms-range';
 
+    public const string BLOB_PUBLIC_ACCESS       = 'x-ms-blob-public-access';
     public const string BLOB_CACHE_CONTROL       = 'x-ms-blob-cache-control';
     public const string BLOB_CONTENT_TYPE        = 'x-ms-blob-content-type';
     public const string BLOB_CONTENT_MD5         = 'x-ms-blob-content-md5';
