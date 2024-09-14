@@ -64,12 +64,9 @@ final class Resource
 
     public static function canonicalize(string $uri): string
     {
-        /** @var array<string, string> */
-        $parsed = parse_url($uri);
+        $parsed = static::parseUrl($uri);
 
-        parse_str($parsed['query'] ?? '', $queryParams);
-
-        ksort($queryParams);
+        ksort($parsed['query']);
 
         $result = '';
 
@@ -77,10 +74,33 @@ final class Resource
          * @var string $value
          * @var string $key
          */
-        foreach ($queryParams as $key => $value) {
+        foreach ($parsed['query'] as $key => $value) {
             $result .= mb_convert_case($key, MB_CASE_LOWER, 'UTF-8') . ':' . $value . "\n";
         }
 
         return $parsed['path'] . "\n" . rtrim($result, "\n");
+    }
+
+    /** @return array<string, string|array> */
+    protected static function parseUrl(string $uri): array
+    {
+        /** @var array<string, string> */
+        $parsed = parse_url($uri);
+
+        if (trim($parsed['query'] ?? '') === '') {
+            $parsed['query'] = [];
+
+            return $parsed;
+        }
+
+        $parsed['query'] = array_reduce(explode('&', $parsed['query']), function (array $carry, string $query): array {
+            $parts = explode('=', $query);
+
+            $carry[$parts[0]] = $parts[1];
+
+            return $carry;
+        }, []);
+
+        return $parsed;
     }
 }

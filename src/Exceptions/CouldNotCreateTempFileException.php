@@ -6,7 +6,7 @@ namespace Xray\AzureStoragePhpSdk\Exceptions;
 
 use Exception;
 
-class CouldNotCreateTempFileException extends Exception
+final class CouldNotCreateTempFileException extends Exception
 {
     protected function __construct(string $message)
     {
