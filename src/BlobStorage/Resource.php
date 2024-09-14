@@ -78,29 +78,28 @@ final class Resource
             $result .= mb_convert_case($key, MB_CASE_LOWER, 'UTF-8') . ':' . $value . "\n";
         }
 
-        return $parsed['path'] . "\n" . rtrim($result, "\n");
+        return "{$parsed['path']}\n" . rtrim($result, "\n");
     }
 
-    /** @return array<string, string|array> */
+    /** @return array{path: string, query: array<string, string>} */
     protected static function parseUrl(string $uri): array
     {
         /** @var array<string, string> */
         $parsed = parse_url($uri);
 
-        if (trim($parsed['query'] ?? '') === '') {
-            $parsed['query'] = [];
+        /** @var string $path */
+        $path = $parsed['path'] ?? '';
 
-            return $parsed;
-        }
+        $queryParams = trim($parsed['query'] ?? '') === ''
+            ? []
+            : array_reduce(explode('&', $parsed['query']), function (array $carry, string $query): array {
+                $parts = explode('=', $query);
 
-        $parsed['query'] = array_reduce(explode('&', $parsed['query']), function (array $carry, string $query): array {
-            $parts = explode('=', $query);
+                $carry[$parts[0]] = $parts[1];
 
-            $carry[$parts[0]] = $parts[1];
+                return $carry;
+            }, []);
 
-            return $carry;
-        }, []);
-
-        return $parsed;
+        return ['path' => $path, 'query' => $queryParams];
     }
 }

@@ -18,7 +18,7 @@ it('should create a query', function () {
         ->where('sequence', '>', '2')
         ->where('sequence', '<', '10');
 
-    expect((fn () => $this->wheres)->call($query))
+    expect((fn () => $this->wheres)->call($query)) // @phpstan-ignore-line
         ->toHaveCount(3)
         ->toEqual([
             ['tag' => 'tag', 'operator' => '=', 'value' => 'value'],
@@ -37,7 +37,7 @@ it('should set the whenBuild callback', function () {
             return (object) ['query' => $query];
         });
 
-    expect((fn () => $this->callback)->call($query))
+    expect((fn () => $this->callback)->call($query)) // @phpstan-ignore-line
         ->toBeInstanceOf(Closure::class);
 });
 
