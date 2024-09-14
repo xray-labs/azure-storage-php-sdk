@@ -37,4 +37,5 @@ it('should throw an exception if the container name is invalid', function (strin
     'With Capital Letters' => ['TEST'],
     'With Spaces'          => ['test test'],
     'With Special Chars'   => ['test*'],
+    'Empty String'         => [''],
 ]);
