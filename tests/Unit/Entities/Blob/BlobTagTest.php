@@ -5,7 +5,8 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\{BlobTag};
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
-uses()->group('entities', 'blobs');
+pest()->group('entities', 'blobs');
+covers(BlobTag::class);
 
 it('should mount the blob tags', function () {
     $blobTag = new BlobTag([

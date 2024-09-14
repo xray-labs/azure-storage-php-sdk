@@ -15,12 +15,13 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\{
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\BlobStorage\{Resource, SignatureResource};
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 use function Xray\Tests\mock;
 
-uses()->group('blob-storage', 'managers', 'blobs');
+pest()->group('blob-storage', 'managers', 'blobs');
+covers(BlobManager::class);
 
 it('should get the blob\'s managers', function (string $method, string $class) {
     $request = new RequestFake();

@@ -9,7 +9,8 @@ use Xray\AzureStoragePhpSdk\Contracts\Http\Response as HttpResponse;
 use Xray\AzureStoragePhpSdk\Http\{Headers, Request};
 use Xray\Tests\Fakes\ClientFake;
 
-uses()->group('http');
+pest()->group('http');
+covers(Request::class);
 
 it('should send get, delete, and options requests', function (string $method, HttpVerb $verb): void {
     $auth = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);
@@ -32,11 +33,11 @@ it('should send get, delete, and options requests', function (string $method, Ht
     );
 
     $getRequestOptions = fn () => (object)[
-        'options' => $this->options,
-        'headers' => $this->headers,
+        'options' => $this->options, // @phpstan-ignore-line
+        'headers' => $this->headers, // @phpstan-ignore-line
     ];
 
-    expect($getRequestOptions->call($request))
+    expect($getRequestOptions->call($request)) // @phpstan-ignore-line
         ->options->toBeEmpty()
         ->headers->toBeEmpty();
 })->with([
@@ -71,12 +72,12 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
     );
 
     $getRequestOptions = fn () => (object)[
-        'options'            => $this->options,
-        'headers'            => $this->headers,
-        'shouldAuthenticate' => $this->shouldAuthenticate,
+        'options'            => $this->options, // @phpstan-ignore-line
+        'headers'            => $this->headers, // @phpstan-ignore-line
+        'shouldAuthenticate' => $this->shouldAuthenticate, // @phpstan-ignore-line
     ];
 
-    expect($getRequestOptions->call($request))
+    expect($getRequestOptions->call($request)) // @phpstan-ignore-line
         ->options->toBeEmpty()
         ->headers->toBeEmpty()
         ->shouldAuthenticate->toBeTrue();

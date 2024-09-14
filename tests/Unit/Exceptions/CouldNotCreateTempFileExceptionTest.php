@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Exceptions\CouldNotCreateTempFileException;
 
-uses()->group('exceptions');
+pest()->group('exceptions');
+covers(CouldNotCreateTempFileException::class);
 
 it('should be an exception', function () {
     expect(CouldNotCreateTempFileException::class)

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
-uses()->group('exceptions');
+pest()->group('exceptions');
+covers(InvalidArgumentException::class);
 
 it('should be an exception', function () {
     expect(InvalidArgumentException::class)

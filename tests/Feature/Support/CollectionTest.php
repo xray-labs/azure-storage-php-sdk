@@ -5,7 +5,8 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\Contracts\Arrayable;
 use Xray\AzureStoragePhpSdk\Support\Collection;
 
-uses()->group('supports');
+pest()->group('supports');
+covers(Collection::class);
 
 it('should have the correct architecture', function () {
     expect(Collection::class)

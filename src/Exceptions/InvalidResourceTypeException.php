@@ -6,7 +6,7 @@ namespace Xray\AzureStoragePhpSdk\Exceptions;
 
 use Exception;
 
-class InvalidResourceTypeException extends Exception
+final class InvalidResourceTypeException extends Exception
 {
     public static function create(string $message): self
     {

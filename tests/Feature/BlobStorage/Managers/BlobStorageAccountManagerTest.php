@@ -5,9 +5,10 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\{AccountInformation, GeoReplication, KeyInfo, UserDelegationKey};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestManager, StoragePropertyManager};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\AccountManager;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'accounts');
+pest()->group('blob-storage', 'managers', 'accounts');
+covers(AccountManager::class);
 
 it('should get account\'s managers', function (string $method, string $class) {
     $request = new RequestFake();

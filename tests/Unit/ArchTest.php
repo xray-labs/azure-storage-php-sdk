@@ -2,6 +2,9 @@
 
 use Xray\AzureStoragePhpSdk\Contracts\Manager;
 
+arch()->preset()->php();
+arch()->preset()->security()->ignoring('md5');
+
 arch('it should not use dumping functions')
     ->expect(['dd', 'dump', 'die', 'exit', 'var_dump', 'var_export'])
     ->not->toBeUsed();

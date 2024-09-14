@@ -6,7 +6,7 @@ namespace Xray\AzureStoragePhpSdk\Exceptions;
 
 use Exception;
 
-class UnableToParseException extends Exception
+final class UnableToParseException extends Exception
 {
     protected function __construct(string $message)
     {

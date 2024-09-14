@@ -8,10 +8,11 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerLeaseManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'entities', 'containers');
+pest()->group('blob-storage', 'entities', 'containers');
+covers(Container::class);
 
 it('should throw an exception if the container\'s name isn\'t provided', function () {
     $container = new Container([

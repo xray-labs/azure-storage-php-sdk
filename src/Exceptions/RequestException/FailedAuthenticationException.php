@@ -6,7 +6,7 @@ namespace Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
 use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 
-class FailedAuthenticationException extends RequestException
+final class FailedAuthenticationException extends RequestException
 {
     //
 }

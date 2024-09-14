@@ -9,9 +9,10 @@ use Xray\AzureStoragePhpSdk\BlobStorage\SignatureResource;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\SharedAccessSignature;
 use Xray\AzureStoragePhpSdk\Exceptions\Authentication\InvalidAuthenticationMethodException;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidResourceTypeException;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 
-uses()->group('authentications', 'shared-access-signatures');
+pest()->group('authentications', 'shared-access-signatures');
+covers(UserDelegationSas::class);
 
 it('should implements SharedAccessSignature interface', function () {
     expect(UserDelegationSas::class)

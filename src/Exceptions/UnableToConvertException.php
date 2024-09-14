@@ -6,7 +6,7 @@ namespace Xray\AzureStoragePhpSdk\Exceptions;
 
 use Exception;
 
-class UnableToConvertException extends Exception
+final class UnableToConvertException extends Exception
 {
     protected function __construct(string $message)
     {
