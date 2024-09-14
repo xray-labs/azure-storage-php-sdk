@@ -369,8 +369,12 @@ it('should get a temporary URL', function () {
     </UserDelegationKey>
     XML;
 
-    $request = (new RequestFake(new MicrosoftEntraId('account', 'directory', 'application', 'secret')))
-        ->withFakeResponse(new ResponseFake($body));
+    $request = (new RequestFake(new MicrosoftEntraId([
+        'account'     => 'account',
+        'directory'   => 'directory',
+        'application' => 'application',
+        'secret'      => 'secret',
+    ])))->withFakeResponse(new ResponseFake($body));
 
     $container = 'container';
     $blob      = 'blob.txt';

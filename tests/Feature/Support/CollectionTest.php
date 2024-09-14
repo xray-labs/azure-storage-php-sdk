@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Xray\AzureStoragePhpSdk\Contracts\Arrayable;
 use Xray\AzureStoragePhpSdk\Support\Collection;
 
 uses()->group('supports');
@@ -93,4 +94,231 @@ it('should be able to iterate over', function () {
     }
 
     expect($iterations)->toBe(3);
+});
+
+it('should get the first item', function () {
+    $items = [
+        (object)['id' => 1, 'text' => 'test'],
+        (object)['id' => 2, 'text' => 'something'],
+        (object)['id' => 3, 'text' => 'other'],
+    ];
+
+    $findItem = function (int $id): callable {
+        return function (object $item) use ($id): bool {
+            /** @var object{id: int, text: string} $item */
+            return $item->id === $id;
+        };
+    };
+
+    expect(new Collection($items))
+        ->first()->text->toBe('test')
+        ->first($findItem(2))->text->toBe('something')
+        ->first($findItem(4))->toBeNull()
+        ->first($findItem(4), fn () => (object) ['text' => 'new'])->text->toBe('new')
+        ->and(new Collection())
+        ->first()->toBeNull();
+});
+
+it('should get the last item', function () {
+    $items = [
+        (object)['id' => 1, 'text' => 'test'],
+        (object)['id' => 2, 'text' => 'something'],
+        (object)['id' => 3, 'text' => 'other'],
+    ];
+
+    $findItem = function (int $id): callable {
+        return function (object $item) use ($id): bool {
+            /** @var object{id: int, text: string} $item */
+            return $item->id === $id;
+        };
+    };
+
+    expect(new Collection($items))
+        ->last()->text->toBe('other')
+        ->last($findItem(2))->text->toBe('something')
+        ->last($findItem(4))->toBeNull()
+        ->last($findItem(4), fn () => (object) ['text' => 'new'])->text->toBe('new')
+        ->and(new Collection())
+        ->last()->toBeNull();
+});
+
+it('should be able to get an item out of the collection', function () {
+    $items = [
+        (object)['id' => 1, 'text' => 'test'],
+        (object)['id' => 2, 'text' => 'something'],
+        (object)['id' => 3, 'text' => 'other'],
+    ];
+
+    expect(new Collection($items))
+        ->get(1)->text->toBe('something')
+        ->get(3)->toBeNull()
+        ->get(4, fn () => 'test')->toBe('test');
+});
+
+it('should get the collection\'s keys', function () {
+    $items = [
+        (object)['id' => 1, 'text' => 'test'],
+        (object)['id' => 2, 'text' => 'something'],
+        (object)['id' => 3, 'text' => 'other'],
+    ];
+
+    expect(new Collection($items))
+        ->keys()->all()->toBe([0, 1, 2]);
+});
+
+it('should push items into the collection', function () {
+    $items = [
+        (object)['id' => 1, 'text' => 'test'],
+    ];
+
+    $collection = (new Collection($items))
+        ->push((object)['id' => 2, 'text' => 'something']);
+
+    expect($collection)
+        ->first()->id->toBe(1)
+        ->last()->id->toBe(2);
+});
+
+it('should merge items into the collection', function () {
+    $items = [
+        (object)['id' => 1, 'text' => 'test'],
+    ];
+
+    $collection = (new Collection($items))
+        ->merge([(object)['id' => 3, 'text' => 'something']]);
+
+    expect($collection)
+        ->first()->id->toBe(1)
+        ->last()->id->toBe(3);
+});
+
+it('should concat items to the collection', function () {
+    $items = [
+        (object)['id' => 1, 'text' => 'test'],
+    ];
+
+    $collection = (new Collection($items))
+        ->concat([(object)['id' => 4, 'text' => 'something']]);
+
+    expect($collection)
+        ->first()->id->toBe(1)
+        ->last()->id->toBe(4);
+});
+
+it('should put a new value into a collection key', function () {
+    $collection = new Collection([
+        (object)['id' => 1, 'text' => 'test'],
+    ]);
+
+    $collection->put(0, (object)['id' => 2, 'text' => 'something']);
+
+    expect($collection)
+        ->first()->id->toBe(2);
+});
+
+it('should forget a value from the collection', function () {
+    $collection = new Collection([
+        (object)['id' => 1, 'text' => 'test'],
+        (object)['id' => 2, 'text' => 'something'],
+        (object)['id' => 3, 'text' => 'other'],
+    ]);
+
+    $collection->forget(1);
+
+    expect($collection)
+        ->count()->toBe(2);
+
+    $collection->forget([0, 2]);
+
+    expect($collection)
+        ->isEmpty()->toBeTrue();
+});
+
+it('should pull an item out of the collection', function () {
+    $collection = new Collection([
+        (object)['id' => 1, 'text' => 'test'],
+        (object)['id' => 2, 'text' => 'something'],
+        (object)['id' => 3, 'text' => 'other'],
+    ]);
+
+    expect($collection->pull(1))
+        ->id->toBe(2);
+
+    expect($collection)
+        ->count()->toBe(2);
+});
+
+it('should map the collection', function () {
+    $collection = new Collection([
+        (object)['id' => 1, 'text' => 'test'],
+        (object)['id' => 2, 'text' => 'something'],
+        (object)['id' => 3, 'text' => 'other'],
+    ]);
+
+    $result = $collection->map(fn (object $item) => $item->text);
+
+    expect($result)
+        ->all()
+        ->toBe(['test', 'something', 'other']);
+});
+
+it('should loop over the collection', function () {
+    $collection = new Collection([
+        (object)['id' => 1, 'text' => 'test'],
+        (object)['id' => 2, 'text' => 'something'],
+        (object)['id' => 3, 'text' => 'other'],
+    ]);
+
+    $iterations = 0;
+
+    $collection->each(function (object $item, int $index) use (&$iterations) {
+        $iterations++;
+
+        expect($item)
+            ->id->toBe($index + 1);
+    });
+
+    expect($iterations)->toBe(3);
+});
+
+it('should filter the collection', function () {
+    $collection = new Collection([
+        (object)['id' => 1, 'text' => 'test'],
+        (object)['id' => 2, 'text' => 'something'],
+        (object)['id' => 3, 'text' => 'other'],
+    ]);
+
+    expect($collection->filter(fn (object $item) => $item->id > 1))
+        ->count()->toBe(2)
+        ->first()->id->toBe(2)
+        ->last()->id->toBe(3);
+
+    $collection = new Collection(['test', '', null, 0]);
+
+    expect($collection->filter())
+        ->count()->toBe(1)
+        ->first()->toBe('test');
+});
+
+it('should get collection as array', function () {
+    $collection = new Collection([
+        'test',
+        new class () implements Arrayable {
+            /** @return array<string> */
+            public function toArray(): array
+            {
+                return ['array'];
+            }
+        },
+        new class () implements JsonSerializable {
+            /** @return array<string> */
+            public function jsonSerialize(): array
+            {
+                return ['json'];
+            }
+        },
+    ]);
+
+    expect($collection->toArray())
+        ->toBe(['test', ['array'], ['json']]);
 });

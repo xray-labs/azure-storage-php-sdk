@@ -8,9 +8,9 @@ use Exception;
 
 final class RequiredFieldException extends Exception
 {
-    protected function __construct(string $message)
+    public static function create(string $message): static
     {
-        parent::__construct($message);
+        return new static($message);
     }
 
     public static function missingField(string $field): static

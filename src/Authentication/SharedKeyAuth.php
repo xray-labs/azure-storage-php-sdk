@@ -7,14 +7,28 @@ namespace Xray\AzureStoragePhpSdk\Authentication;
 use Xray\AzureStoragePhpSdk\Concerns\UseCurrentHttpDate;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
+use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 final class SharedKeyAuth implements Auth
 {
     use UseCurrentHttpDate;
 
-    public function __construct(protected string $account, protected string $key)
+    protected string $account;
+
+    protected string $key;
+
+    /** @param array{account: string, key: string} $config */
+    public function __construct(array $config)
     {
-        //
+        // @phpstan-ignore-next-line
+        if (!isset($config['account'], $config['key'])) {
+            $missingParameters = array_diff(['account', 'key'], array_keys($config));
+
+            throw RequiredFieldException::create('Missing required parameters: ' . implode(', ', $missingParameters));
+        }
+
+        $this->account = $config['account'];
+        $this->key     = $config['key'];
     }
 
     public function getAccount(): string
