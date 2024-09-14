@@ -3,7 +3,8 @@
 use Xray\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateMetadataKey;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
-uses()->group('blob-storage', 'concerns');
+pest()->group('blob-storage', 'concerns');
+covers(ValidateMetadataKey::class);
 
 it('should not throw an exception if the key is valid', function () {
     $class = new class () {

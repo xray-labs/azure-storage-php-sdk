@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Exceptions\UnableToParseException;
 
-uses()->group('exceptions');
+pest()->group('exceptions');
+covers(UnableToParseException::class);
 
 it('should be an exception', function () {
     expect(UnableToParseException::class)

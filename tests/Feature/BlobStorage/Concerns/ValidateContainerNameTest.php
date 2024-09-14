@@ -3,7 +3,8 @@
 use Xray\AzureStoragePhpSdk\BlobStorage\Concerns\ValidateContainerName;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
-uses()->group('blob-storage', 'concerns');
+pest()->group('blob-storage', 'concerns');
+covers(ValidateContainerName::class);
 
 it('should not throw an exception if the container name is valid', function () {
     $class = new class () {

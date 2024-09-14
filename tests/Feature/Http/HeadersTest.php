@@ -6,7 +6,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Headers;
 
-uses()->group('http');
+pest()->group('http');
+covers(Headers::class);
 
 it('should throw an exception if header is missing', function (): void {
     expect(new Headers())

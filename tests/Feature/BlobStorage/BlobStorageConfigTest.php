@@ -6,7 +6,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\{Config, Resource};
 use Xray\AzureStoragePhpSdk\Contracts\Converter;
 use Xray\AzureStoragePhpSdk\Parsers\XmlParser;
 
-uses()->group('blob-storage');
+pest()->group('blob-storage');
+covers(Config::class);
 
 it('should set default config value if none of the optional ones are provided', function () {
     expect(new Config())

@@ -6,7 +6,8 @@ use Xray\AzureStoragePhpSdk\Contracts\Converter;
 use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
 use Xray\AzureStoragePhpSdk\Exceptions\UnableToConvertException;
 
-uses()->group('converters');
+pest()->group('converters');
+covers(XmlConverter::class);
 
 it('should implement Converter interface', function () {
     expect(XmlConverter::class)

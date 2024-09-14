@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobMetadata;
 
-uses()->group('entities', 'blobs');
+pest()->group('entities', 'blobs');
+covers(BlobMetadata::class);
 
 it('should get the metadata property', function (string $property, string $value) {
     $metadata = new BlobMetadata([

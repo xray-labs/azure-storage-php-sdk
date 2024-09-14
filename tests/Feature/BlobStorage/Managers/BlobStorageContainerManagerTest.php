@@ -12,7 +12,8 @@ use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'containers');
+pest()->group('blob-storage', 'managers', 'containers');
+covers(ContainerManager::class);
 
 it('should get container\'s managers', function (string $method, string $class) {
     $request = new RequestFake();

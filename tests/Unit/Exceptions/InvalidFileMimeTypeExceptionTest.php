@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidFileMimeTypeException;
 
-uses()->group('exceptions');
+pest()->group('exceptions');
+covers(InvalidFileMimeTypeException::class);
 
 it('can create an InvalidFileMimeTypeException instance', function () {
     $exception = InvalidFileMimeTypeException::create();

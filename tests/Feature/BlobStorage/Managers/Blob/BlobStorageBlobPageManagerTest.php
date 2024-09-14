@@ -10,7 +10,8 @@ use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'blobs');
+pest()->group('blob-storage', 'managers', 'blobs');
+covers(BlobPageManager::class);
 
 it('should throw an exception if the page is out of boundary', function () {
     $request = new RequestFake();

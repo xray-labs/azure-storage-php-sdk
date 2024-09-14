@@ -5,7 +5,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobLeaseManager;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'blob');
+pest()->group('blob-storage', 'managers', 'blob');
+covers(BlobLeaseManager::class);
 
 const BLOB_LEASE_MANAGER_REQUEST_URL = 'container/blob?comp=lease&resttype=blob';
 const BLOB_LEASE_MANAGER_VERSION     = '2020-06-12';

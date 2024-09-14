@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
-uses()->group('exceptions');
+pest()->group('exceptions');
+covers(RequiredFieldException::class);
 
 it('should be an exception', function () {
     expect(RequiredFieldException::class)

@@ -7,7 +7,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\{PreflightBlobRequestMa
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\AccountManager;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'accounts');
+pest()->group('blob-storage', 'managers', 'accounts');
+covers(AccountManager::class);
 
 it('should get account\'s managers', function (string $method, string $class) {
     $request = new RequestFake();

@@ -7,7 +7,8 @@ use GuzzleHttp\Psr7\{Request, Response};
 use Xray\AzureStoragePhpSdk\Exceptions\RequestException;
 use Xray\AzureStoragePhpSdk\Exceptions\RequestException\FailedAuthenticationException;
 
-uses()->group('exceptions');
+pest()->group('exceptions');
+covers(RequestException::class);
 
 it('should be an exception', function () {
     expect(RequestException::class)

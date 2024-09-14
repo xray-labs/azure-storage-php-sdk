@@ -9,7 +9,8 @@ use Xray\AzureStoragePhpSdk\Contracts\Http\Response as HttpResponse;
 use Xray\AzureStoragePhpSdk\Http\{Headers, Request};
 use Xray\Tests\Fakes\ClientFake;
 
-uses()->group('http');
+pest()->group('http');
+covers(Request::class);
 
 it('should send get, delete, and options requests', function (string $method, HttpVerb $verb): void {
     $auth = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);

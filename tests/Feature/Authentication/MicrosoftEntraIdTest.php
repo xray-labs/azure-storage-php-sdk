@@ -9,7 +9,8 @@ use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 use Xray\Tests\Fakes\ClientFake;
 
-uses()->group('authentications');
+pest()->group('authentications');
+covers(MicrosoftEntraId::class);
 
 it('should implements Auth interface', function () {
     expect(MicrosoftEntraId::class)

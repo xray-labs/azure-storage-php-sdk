@@ -8,7 +8,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'containers');
+pest()->group('blob-storage', 'managers', 'containers');
+covers(ContainerMetadataManager::class);
 
 it('should get the container\'s metadata', function () {
     $request = (new RequestFake())

@@ -8,7 +8,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManag
 use Xray\AzureStoragePhpSdk\BlobStorage\{BlobStorageClient, Config};
 use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 
-uses()->group('blob-storage');
+pest()->group('blob-storage');
+covers(BlobStorageClient::class);
 
 it('should be able to get blob storage managers', function (string $method, string $class, array $parameters = []) {
     $request = new RequestFake();

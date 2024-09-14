@@ -11,7 +11,8 @@ use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 use function Xray\Tests\mock;
 
-uses()->group('entities', 'blobs');
+pest()->group('entities', 'blobs');
+covers(Blob::class);
 
 it('should throw an exception if the blob name isn\'t provided', function () {
     $blob = new Blob([]);

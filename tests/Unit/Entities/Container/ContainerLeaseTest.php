@@ -9,7 +9,8 @@ use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
 use function Xray\Tests\mock;
 
-uses()->group('entities', 'containers');
+pest()->group('entities', 'containers');
+covers(ContainerLease::class);
 
 it('should renew the container lease', function () {
     /** @var ContainerLeaseManager $mock */

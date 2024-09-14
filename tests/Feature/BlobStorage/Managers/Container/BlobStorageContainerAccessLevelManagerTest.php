@@ -7,7 +7,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerAccessLevelM
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'containers');
+pest()->group('blob-storage', 'managers', 'containers');
+covers(ContainerAccessLevelManager::class);
 
 it('should list all container access levels', function () {
     $body = <<<XML

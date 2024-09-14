@@ -7,7 +7,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\PreflightBlobRequestMan
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 
-uses()->group('blob-storage', 'managers', 'account');
+pest()->group('blob-storage', 'managers', 'account');
+covers(PreflightBlobRequestManager::class);
 
 it('should send a request to the preflight blob', function (string $method, HttpVerb $verb) {
     $request = new RequestFake();

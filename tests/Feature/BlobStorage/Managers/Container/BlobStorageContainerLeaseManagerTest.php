@@ -7,7 +7,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerLeaseManager
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'containers');
+pest()->group('blob-storage', 'managers', 'containers');
+covers(ContainerLeaseManager::class);
 
 it('should acquire a new lease', function () {
     $request = (new RequestFake())

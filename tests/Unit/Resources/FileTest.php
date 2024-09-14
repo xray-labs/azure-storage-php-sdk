@@ -5,7 +5,8 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
-uses()->group('resources');
+pest()->group('resources');
+covers(File::class);
 
 it('should not be able to create a file without a name', function () {
     $file = new File('', 'content');

@@ -5,7 +5,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery as QueriesBlobTagQu
 use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequiredFieldException};
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake};
 
-uses()->group('blob-storage', 'queries');
+pest()->group('blob-storage', 'queries');
+covers(QueriesBlobTagQuery::class);
 
 it('should create a query', function () {
     $request = (new RequestFake());

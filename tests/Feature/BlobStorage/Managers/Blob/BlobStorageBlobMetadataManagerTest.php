@@ -7,7 +7,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobMetadataManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'blobs');
+pest()->group('blob-storage', 'managers', 'blobs');
+covers(BlobMetadataManager::class);
 
 it('should get the blob\'s metadata', function () {
     $request = (new RequestFake())
