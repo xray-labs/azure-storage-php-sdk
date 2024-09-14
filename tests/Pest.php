@@ -16,7 +16,7 @@ use Mockery;
 |
 */
 
-uses(TestCase::class)->in('Feature', 'Unit');
+pest()->extends(TestCase::class)->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------
