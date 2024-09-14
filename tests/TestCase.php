@@ -4,7 +4,7 @@ namespace Xray\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
-use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
+use Xray\AzureStoragePhpSdk\Fakes\Http\RequestFake;
 
 abstract class TestCase extends BaseTestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xray\AzureStoragePhpSdk\Tests\Http;
+namespace Xray\AzureStoragePhpSdk\Fakes\Http;
 
 use Closure;
 use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
@@ -10,8 +10,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Config;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Contracts\Http\{Request, Response};
+use Xray\AzureStoragePhpSdk\Fakes\Http\Concerns\{HasAuthAssertions, HasHttpAssertions, HasSharableHttp};
 use Xray\AzureStoragePhpSdk\Http\Headers;
-use Xray\AzureStoragePhpSdk\Tests\Http\Concerns\{HasAuthAssertions, HasHttpAssertions, HasSharableHttp};
 
 /**
  * @phpstan-type Method array{endpoint: string, body?: string}

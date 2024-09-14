@@ -6,7 +6,7 @@ use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
 use Xray\AzureStoragePhpSdk\BlobStorage\{BlobStorageClient, Config};
-use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
+use Xray\AzureStoragePhpSdk\Fakes\Http\RequestFake;
 
 pest()->group('blob-storage');
 covers(BlobStorageClient::class);

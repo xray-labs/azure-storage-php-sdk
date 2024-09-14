@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xray\AzureStoragePhpSdk\Tests\Http\Concerns;
+namespace Xray\AzureStoragePhpSdk\Fakes\Http\Concerns;
 
 use PHPUnit\Framework\Assert;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\PreflightBlobRequestManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
-use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
+use Xray\AzureStoragePhpSdk\Fakes\Http\RequestFake;
 
 pest()->group('blob-storage', 'managers', 'account');
 covers(PreflightBlobRequestManager::class);

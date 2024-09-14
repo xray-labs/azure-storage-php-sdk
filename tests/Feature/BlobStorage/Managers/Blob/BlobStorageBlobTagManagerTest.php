@@ -5,8 +5,8 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobTag;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobTagManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 pest()->group('blob-storage', 'managers', 'blobs');
 covers(BlobTagManager::class);

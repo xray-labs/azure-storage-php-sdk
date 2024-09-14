@@ -7,8 +7,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\Fakes\Http\RequestFake;
 use Xray\AzureStoragePhpSdk\Http\Headers;
-use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 
 pest()->group('authentications');
 covers(SharedKeyAuth::class);

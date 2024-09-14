@@ -3,7 +3,7 @@
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Queries\BlobTagQuery as QueriesBlobTagQuery;
 use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequiredFieldException};
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake};
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake};
 
 pest()->group('blob-storage', 'queries');
 covers(QueriesBlobTagQuery::class);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Xray\AzureStoragePhpSdk\BlobStorage;
 
+use Xray\AzureStoragePhpSdk\BlobStorage\Concerns\HasFakeRequest;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\{AccountManager, ContainerManager};
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
@@ -13,6 +14,8 @@ use Xray\AzureStoragePhpSdk\Http\Request;
 
 final class BlobStorageClient
 {
+    use HasFakeRequest;
+
     public function __construct(protected RequestContract $request)
     {
         azure_app()->instance(RequestContract::class, $this->request);

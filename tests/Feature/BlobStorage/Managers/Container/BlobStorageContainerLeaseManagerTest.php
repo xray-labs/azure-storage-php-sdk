@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container\ContainerLease;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\ContainerLeaseManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 
 pest()->group('blob-storage', 'managers', 'containers');
 covers(ContainerLeaseManager::class);

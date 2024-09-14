@@ -9,8 +9,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Container\{ContainerAccessLevel
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\ContainerManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 pest()->group('blob-storage', 'managers', 'containers');
 covers(ContainerManager::class);

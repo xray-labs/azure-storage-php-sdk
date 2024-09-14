@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xray\AzureStoragePhpSdk\Tests\Http;
+namespace Xray\AzureStoragePhpSdk\Fakes\Http;
 
 use Xray\AzureStoragePhpSdk\Contracts\Http\Response;
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;

@@ -3,7 +3,7 @@
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobLease;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobLeaseManager;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 
 pest()->group('blob-storage', 'managers', 'blob');
 covers(BlobLeaseManager::class);

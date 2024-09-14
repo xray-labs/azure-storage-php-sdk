@@ -6,8 +6,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\Cor
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProperty\{BlobProperty, DeleteRetentionPolicy, HourMetrics, Logging, MinuteMetrics, StaticWebsite};
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Account\StoragePropertyManager;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
 
 pest()->group('blob-storage', 'managers', 'account');
 covers(StoragePropertyManager::class);

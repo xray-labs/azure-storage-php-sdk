@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Concerns\HasRequestShared;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
-use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
+use Xray\AzureStoragePhpSdk\Fakes\Http\RequestFake;
 
 pest()->group('concerns', 'traits');
 covers(HasRequestShared::class);
