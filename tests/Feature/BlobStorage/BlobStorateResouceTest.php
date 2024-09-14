@@ -7,9 +7,12 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 pest()->group('blob-storage');
 covers(Resource::class);
 
-it('should canonicalize resource correctly', function () {
-    $uri = 'https://account.blob.core.windows.net/container/?RestType=service&Comp=properties';
+it('should canonicalize resource correctly', function (string $query, string $expected) {
+    $uri = "https://account.blob.core.windows.net/container/?{$query}";
 
     expect(Resource::canonicalize($uri))
-        ->toBe("/container/\ncomp:properties\nresttype:service");
-});
+        ->toBe("/container/\n{$expected}");
+})->with([
+    'With Query Params'    => ['RestType=service&Comp=properties', "comp:properties\nresttype:service"],
+    'Without Query Params' => ['', ''],
+]);

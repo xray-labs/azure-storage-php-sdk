@@ -49,6 +49,16 @@ it('should set header methods in headers class', function (string $method, strin
     'Range'               => ['setRange', 'bytes=0-100', 'Range'],
 ]);
 
+it('should check if headers has the given header', function () {
+    $headers = Headers::parse([
+        'Content-Encoding' => 'utf-8',
+    ]);
+
+    expect($headers)
+        ->has('Content-Encoding')->toBeTrue()
+        ->has('Content-Language')->toBeFalse();
+});
+
 it('should add additional headers', function () {
     $headers = (new Headers())
         ->withAdditionalHeaders(['foo' => 'bar'])

@@ -60,3 +60,10 @@ it('should get file information', function (string $method, string|bool|int|Date
     'Encrypted'      => ['getServerEncrypted', true],
     'Date'           => ['getDate', fn () => new DateTimeImmutable('2021-10-05T00:00:00.0000000Z')],
 ]);
+
+it('should detect the content type based on the content', function () {
+    $file = new File('name', 'content');
+
+    expect($file->getContentType())
+        ->toBe('text/plain');
+});
