@@ -13,7 +13,7 @@ trait ValidateContainerName
     {
         $replaced = preg_replace('/[^a-z0-9-]/', '', $name);
 
-        if ($replaced !== $name) {
+        if (trim($name) === '' || $replaced !== $name) {
             throw InvalidArgumentException::create("Invalid container name: {$name}");
         }
     }

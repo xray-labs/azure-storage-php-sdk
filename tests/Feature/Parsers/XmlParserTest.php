@@ -6,7 +6,8 @@ use Xray\AzureStoragePhpSdk\Contracts\Parser;
 use Xray\AzureStoragePhpSdk\Exceptions\UnableToParseException;
 use Xray\AzureStoragePhpSdk\Parsers\XmlParser;
 
-uses()->group('parsers');
+pest()->group('parsers');
+covers(XmlParser::class);
 
 it('should implement Parser interface', function () {
     expect(XmlParser::class)

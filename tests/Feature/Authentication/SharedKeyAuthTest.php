@@ -6,25 +6,42 @@ use Xray\AzureStoragePhpSdk\Authentication\SharedKeyAuth;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
+use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\Fakes\Http\RequestFake;
 use Xray\AzureStoragePhpSdk\Http\Headers;
-use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
 
-uses()->group('authentications');
+pest()->group('authentications');
+covers(SharedKeyAuth::class);
 
 it('should implements Auth interface', function () {
     expect(SharedKeyAuth::class)
         ->toImplement(Auth::class);
 });
 
+it('should fail if any required field is missing', function (string $field) {
+    $config = [
+        'account' => 'account',
+        'key'     => 'key',
+    ];
+
+    unset($config[$field]);
+
+    expect(fn () => new SharedKeyAuth($config)) // @phpstan-ignore-line
+        ->toThrow(RequiredFieldException::class, "Missing required parameters: {$field}");
+})->with([
+    'Missing Account' => ['account'],
+    'Missing Key'     => ['key'],
+]);
+
 it('should get date formatted correctly', function () {
-    $auth = new SharedKeyAuth('account', 'key');
+    $auth = new SharedKeyAuth(['account' => 'account', 'key' => 'key']);
 
     expect($auth->getDate())
         ->toBe(gmdate('D, d M Y H:i:s T'));
 });
 
 it('should get the authentication account', function () {
-    $auth = new SharedKeyAuth('account', 'key');
+    $auth = new SharedKeyAuth(['account' => 'account', 'key' => 'key']);
 
     expect($auth->getAccount())
         ->toBe('account');
@@ -33,7 +50,7 @@ it('should get the authentication account', function () {
 it('should get correctly the authentication signature for all http methods', function (HttpVerb $verb) {
     $decodedKey = 'my-decoded-account-key';
 
-    $auth = new SharedKeyAuth($account = 'account', base64_encode($decodedKey));
+    $auth = new SharedKeyAuth(['account' => $account = 'account', 'key' => base64_encode($decodedKey)]);
 
     $request = (new RequestFake())
         ->withVerb($verb);
@@ -57,7 +74,7 @@ it('should get correctly the authentication signature for all http methods', fun
 it('should get correctly the authentication signature for all headers', function (string $headerMethod, int|string $headerValue) {
     $decodedKey = 'my-decoded-account-key';
 
-    $auth = new SharedKeyAuth($account = 'account', base64_encode($decodedKey));
+    $auth = new SharedKeyAuth(['account' => $account = 'account', 'key' => base64_encode($decodedKey)]);
 
     $request = (new RequestFake())
         ->withVerb(HttpVerb::GET)
@@ -86,7 +103,7 @@ it('should get correctly the authentication signature for all headers', function
 it('should get correctly the authentication signature for all canonical headers', function (string $headerMethod, string $headerValue) {
     $decodedKey = 'my-decoded-account-key';
 
-    $auth = new SharedKeyAuth($account = 'account', base64_encode($decodedKey));
+    $auth = new SharedKeyAuth(['account' => $account = 'account', 'key' => base64_encode($decodedKey)]);
 
     $request = (new RequestFake())
         ->withVerb(HttpVerb::GET)

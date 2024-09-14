@@ -7,7 +7,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Response;
 
-uses()->group('http');
+pest()->group('http');
+covers(Response::class);
 
 it('should create from guzzle response', function (): void {
     expect(Response::createFromGuzzleResponse(new GuzzleResponse()))

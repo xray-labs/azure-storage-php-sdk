@@ -5,7 +5,8 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
-uses()->group('resources');
+pest()->group('resources');
+covers(File::class);
 
 it('should not be able to create a file without a name', function () {
     $file = new File('', 'content');
@@ -59,3 +60,10 @@ it('should get file information', function (string $method, string|bool|int|Date
     'Encrypted'      => ['getServerEncrypted', true],
     'Date'           => ['getDate', fn () => new DateTimeImmutable('2021-10-05T00:00:00.0000000Z')],
 ]);
+
+it('should detect the content type based on the content', function () {
+    $file = new File('name', 'content');
+
+    expect($file->getContentType())
+        ->toBe('text/plain');
+});

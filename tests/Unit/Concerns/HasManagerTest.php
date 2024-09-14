@@ -6,7 +6,8 @@ use Xray\AzureStoragePhpSdk\Concerns\HasManager;
 use Xray\AzureStoragePhpSdk\Contracts\Manager;
 use Xray\AzureStoragePhpSdk\Exceptions\ManagerNotSetException;
 
-uses()->group('concerns', 'traits');
+pest()->group('concerns', 'traits');
+covers(HasManager::class);
 
 it('should throw an exception if the manager is not set', function () {
     $class = new class () {

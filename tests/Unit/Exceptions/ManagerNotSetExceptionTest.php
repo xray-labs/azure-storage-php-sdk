@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Exceptions\ManagerNotSetException;
 
-uses()->group('exceptions');
+pest()->group('exceptions');
+covers(ManagerNotSetException::class);
 
 it('should be an exception', function () {
     expect(ManagerNotSetException::class)

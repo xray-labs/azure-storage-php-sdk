@@ -5,7 +5,8 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\Application\Application;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
-uses()->group('applications');
+pest()->group('applications');
+covers(Application::class);
 
 afterEach(fn () => Application::getInstance()->flush());
 

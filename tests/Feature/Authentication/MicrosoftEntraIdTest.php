@@ -5,25 +5,56 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\Authentication\MicrosoftEntraId;
 use Xray\AzureStoragePhpSdk\BlobStorage\Enums\HttpVerb;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\Auth;
-use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
+use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
+use Xray\AzureStoragePhpSdk\Fakes\Http\RequestFake;
 use Xray\Tests\Fakes\ClientFake;
 
-uses()->group('authentications');
+pest()->group('authentications');
+covers(MicrosoftEntraId::class);
 
 it('should implements Auth interface', function () {
     expect(MicrosoftEntraId::class)
         ->toImplement(Auth::class);
 });
 
+it('should fail if any required field is missing', function (string $field) {
+    $config = [
+        'account'     => 'account',
+        'directory'   => 'directory',
+        'application' => 'application',
+        'secret'      => 'secret',
+    ];
+
+    unset($config[$field]);
+
+    expect(fn () => new MicrosoftEntraId($config)) // @phpstan-ignore-line
+        ->toThrow(RequiredFieldException::class, "Missing required parameters: {$field}");
+})->with([
+    'Missing Account'     => ['account'],
+    'Missing Directory'   => ['directory'],
+    'Missing Application' => ['application'],
+    'Missing Secret'      => ['secret'],
+]);
+
 it('should get date formatted correctly', function () {
-    $auth = new MicrosoftEntraId('account', 'directory', 'application', 'secret');
+    $auth = new MicrosoftEntraId([
+        'account'     => 'account',
+        'directory'   => 'directory',
+        'application' => 'application',
+        'secret'      => 'secret',
+    ]);
 
     expect($auth->getDate())
         ->toBe(gmdate('D, d M Y H:i:s T'));
 });
 
 it('should get the authentication account', function () {
-    $auth = new MicrosoftEntraId('account', 'directory', 'application', 'secret');
+    $auth = new MicrosoftEntraId([
+        'account'     => 'account',
+        'directory'   => 'directory',
+        'application' => 'application',
+        'secret'      => 'secret',
+    ]);
 
     expect($auth->getAccount())
         ->toBe('account');
@@ -40,8 +71,12 @@ it('should get correctly the authentication signature from a login request', fun
     $client = (new ClientFake())
         ->withResponseFake($body);
 
-    $auth = (new MicrosoftEntraId('account', 'directory', $application = 'application', $secret = 'secret'))
-        ->withRequestClient($client);
+    $auth = (new MicrosoftEntraId([
+        'account'     => 'account',
+        'directory'   => 'directory',
+        'application' => $application = 'application',
+        'secret'      => $secret      = 'secret',
+    ]))->withRequestClient($client);
 
     expect($auth->getAuthentication(new RequestFake()))
         ->toBe("{$tokeType} {$token}");

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Exceptions\UnableToConvertException;
 
-uses()->group('exceptions');
+pest()->group('exceptions');
+covers(UnableToConvertException::class);
 
 it('should be an exception', function () {
     expect(UnableToConvertException::class)

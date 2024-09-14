@@ -9,9 +9,10 @@ use Xray\AzureStoragePhpSdk\BlobStorage\SignatureResource;
 use Xray\AzureStoragePhpSdk\Contracts\Authentication\SharedAccessSignature;
 use Xray\AzureStoragePhpSdk\Exceptions\Authentication\InvalidAuthenticationMethodException;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidResourceTypeException;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 
-uses()->group('authentications', 'shared-access-signatures');
+pest()->group('authentications', 'shared-access-signatures');
+covers(UserDelegationSas::class);
 
 it('should implements SharedAccessSignature interface', function () {
     expect(UserDelegationSas::class)
@@ -19,7 +20,7 @@ it('should implements SharedAccessSignature interface', function () {
 });
 
 it('should throw an exception if the authentication method is not supported', function () {
-    $request = new RequestFake(new SharedKeyAuth('account', 'key'));
+    $request = new RequestFake(new SharedKeyAuth(['account' => 'account', 'key' => 'key']));
 
     (new UserDelegationSas($request))
         ->buildTokenUrl(AccessTokenPermission::READ, new DateTimeImmutable());
@@ -39,8 +40,12 @@ it('should throw an exception if the signed service is not supported', function 
     </UserDelegationKey>
     XML;
 
-    $request = (new RequestFake(new MicrosoftEntraId('account', 'directory', 'application', 'secret')))
-        ->withFakeResponse(new ResponseFake($body));
+    $request = (new RequestFake(new MicrosoftEntraId([
+        'account'     => 'account',
+        'directory'   => 'directory',
+        'application' => 'application',
+        'secret'      => 'secret',
+    ])))->withFakeResponse(new ResponseFake($body));
 
     (new UserDelegationSas($request))
         ->buildTokenUrl(AccessTokenPermission::READ, new DateTimeImmutable());
@@ -75,7 +80,12 @@ it('should build the query param token correctly', function () {
     $container    = 'container';
     $blob         = 'blob.txt';
 
-    $request = (new RequestFake(new MicrosoftEntraId($account = 'account', 'directory', 'application', 'secret')))
+    $request = (new RequestFake(new MicrosoftEntraId([
+        'account'     => $account = 'account',
+        'directory'   => 'directory',
+        'application' => 'application',
+        'secret'      => 'secret',
+    ])))
         ->withFakeResponse(new ResponseFake($body))
         ->withResource("/{$container}/{$blob}");
 

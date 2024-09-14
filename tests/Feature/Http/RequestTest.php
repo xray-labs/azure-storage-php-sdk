@@ -9,10 +9,11 @@ use Xray\AzureStoragePhpSdk\Contracts\Http\Response as HttpResponse;
 use Xray\AzureStoragePhpSdk\Http\{Headers, Request};
 use Xray\Tests\Fakes\ClientFake;
 
-uses()->group('http');
+pest()->group('http');
+covers(Request::class);
 
 it('should send get, delete, and options requests', function (string $method, HttpVerb $verb): void {
-    $auth = new SharedKeyAuth('my_account', 'bar');
+    $auth = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);
 
     $request = (new Request($auth, client: $client = new ClientFake()))
         ->withAuthentication()
@@ -32,11 +33,11 @@ it('should send get, delete, and options requests', function (string $method, Ht
     );
 
     $getRequestOptions = fn () => (object)[
-        'options' => $this->options,
-        'headers' => $this->headers,
+        'options' => $this->options, // @phpstan-ignore-line
+        'headers' => $this->headers, // @phpstan-ignore-line
     ];
 
-    expect($getRequestOptions->call($request))
+    expect($getRequestOptions->call($request)) // @phpstan-ignore-line
         ->options->toBeEmpty()
         ->headers->toBeEmpty();
 })->with([
@@ -46,7 +47,7 @@ it('should send get, delete, and options requests', function (string $method, Ht
 ]);
 
 it('should send post and put requests', function (string $method, HttpVerb $verb): void {
-    $auth = new SharedKeyAuth('my_account', 'bar');
+    $auth = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);
 
     $request = (new Request($auth, client: $client = new ClientFake()))
         ->withoutAuthentication()
@@ -71,12 +72,12 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
     );
 
     $getRequestOptions = fn () => (object)[
-        'options'            => $this->options,
-        'headers'            => $this->headers,
-        'shouldAuthenticate' => $this->shouldAuthenticate,
+        'options'            => $this->options, // @phpstan-ignore-line
+        'headers'            => $this->headers, // @phpstan-ignore-line
+        'shouldAuthenticate' => $this->shouldAuthenticate, // @phpstan-ignore-line
     ];
 
-    expect($getRequestOptions->call($request))
+    expect($getRequestOptions->call($request)) // @phpstan-ignore-line
         ->options->toBeEmpty()
         ->headers->toBeEmpty()
         ->shouldAuthenticate->toBeTrue();
@@ -86,7 +87,7 @@ it('should send post and put requests', function (string $method, HttpVerb $verb
 ]);
 
 it('should get request config', function (): void {
-    $auth   = new SharedKeyAuth('my_account', 'bar');
+    $auth   = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);
     $config = new Config();
 
     expect((new Request($auth, $config, new ClientFake()))->getConfig())
@@ -94,14 +95,14 @@ it('should get request config', function (): void {
 });
 
 it('should get request auth', function (): void {
-    $auth = new SharedKeyAuth('my_account', 'bar');
+    $auth = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);
 
     expect((new Request($auth, client: new ClientFake()))->getAuth())
         ->toBe($auth);
 });
 
 it('should get the http verb from request', function (HttpVerb $verb) {
-    $auth = new SharedKeyAuth('my_account', 'bar');
+    $auth = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);
 
     $request = (new Request($auth, client: new ClientFake()))
         ->withVerb($verb);
@@ -112,7 +113,7 @@ it('should get the http verb from request', function (HttpVerb $verb) {
 })->with(fn () => HttpVerb::cases());
 
 it('should get the resource from request', function (): void {
-    $auth = new SharedKeyAuth('my_account', 'bar');
+    $auth = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);
 
     $request = (new Request($auth, client: new ClientFake()))
         ->withResource('endpoint');
@@ -122,7 +123,7 @@ it('should get the resource from request', function (): void {
 });
 
 it('should get the headers from request', function (): void {
-    $auth = new SharedKeyAuth('my_account', 'bar');
+    $auth = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);
 
     $request = (new Request($auth, client: new ClientFake()))
         ->withHttpHeaders(new Headers());
@@ -132,7 +133,7 @@ it('should get the headers from request', function (): void {
 });
 
 it('should get the body from request', function (): void {
-    $auth = new SharedKeyAuth('my_account', 'bar');
+    $auth = new SharedKeyAuth(['account' => 'my_account', 'key' => 'bar']);
 
     $request = (new Request($auth, client: new ClientFake()))
         ->withBody('body');

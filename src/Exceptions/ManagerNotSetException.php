@@ -6,7 +6,7 @@ namespace Xray\AzureStoragePhpSdk\Exceptions;
 
 use Exception;
 
-class ManagerNotSetException extends Exception
+final class ManagerNotSetException extends Exception
 {
     protected function __construct(string $message)
     {

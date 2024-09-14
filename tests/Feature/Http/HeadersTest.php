@@ -6,7 +6,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Http\Headers;
 
-uses()->group('http');
+pest()->group('http');
+covers(Headers::class);
 
 it('should throw an exception if header is missing', function (): void {
     expect(new Headers())
@@ -47,6 +48,16 @@ it('should set header methods in headers class', function (string $method, strin
     'If-Unmodified-Since' => ['setIfUnmodifiedSince', 'Sun, 16 Jun 2024 00:00:00 GMT', 'If-Unmodified-Since'],
     'Range'               => ['setRange', 'bytes=0-100', 'Range'],
 ]);
+
+it('should check if headers has the given header', function () {
+    $headers = Headers::parse([
+        'Content-Encoding' => 'utf-8',
+    ]);
+
+    expect($headers)
+        ->has('Content-Encoding')->toBeTrue()
+        ->has('Content-Language')->toBeFalse();
+});
 
 it('should add additional headers', function () {
     $headers = (new Headers())

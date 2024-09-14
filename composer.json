@@ -25,7 +25,7 @@
     "require-dev": {
         "laravel/pint": "^1.16",
         "phpstan/phpstan": "^1.11",
-        "pestphp/pest": "^2.34",
+        "pestphp/pest": "^3.0",
         "symfony/var-dumper": "^7.0",
         "phpmd/phpmd": "^2.15",
         "squizlabs/php_codesniffer": "^3.10",
@@ -39,12 +39,16 @@
     ],
     "autoload": {
         "psr-4": {
-            "Xray\\AzureStoragePhpSdk\\": "src/",
-            "Xray\\Tests\\": "tests/"
+            "Xray\\AzureStoragePhpSdk\\": "src/"
         },
         "files": [
             "src/helpers.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Xray\\Tests\\": "tests/"
+        }
     },
     "minimum-stability": "stable",
     "config": {

@@ -21,11 +21,14 @@ final class Resource
     public const string CONTENT_LENGTH    = 'Content-Length';
     public const string REQUEST_ID        = 'x-ms-request-id';
 
-    public const string LEASE_ID           = 'x-ms-lease-id';
+    public const string LEASE_ID = 'x-ms-lease-id';
+
     public const string LEASE_ACTION       = 'x-ms-lease-action';
     public const string LEASE_BREAK_PERIOD = 'x-ms-lease-break-period';
     public const string LEASE_DURATION     = 'x-ms-lease-duration';
     public const string LEASE_PROPOSED_ID  = 'x-ms-proposed-lease-id';
+    public const string LEASE_STATUS       = 'x-ms-lease-status';
+    public const string LEASE_STATE        = 'x-ms-lease-state';
 
     public const string DELETE_CONTAINER_NAME    = 'x-ms-deleted-container-name';
     public const string DELETE_CONTAINER_VERSION = 'x-ms-deleted-container-version';
@@ -38,6 +41,7 @@ final class Resource
     public const string PAGE_WRITE = 'x-ms-page-write';
     public const string RANGE      = 'x-ms-range';
 
+    public const string BLOB_PUBLIC_ACCESS       = 'x-ms-blob-public-access';
     public const string BLOB_CACHE_CONTROL       = 'x-ms-blob-cache-control';
     public const string BLOB_CONTENT_TYPE        = 'x-ms-blob-content-type';
     public const string BLOB_CONTENT_MD5         = 'x-ms-blob-content-md5';
@@ -60,12 +64,9 @@ final class Resource
 
     public static function canonicalize(string $uri): string
     {
-        /** @var array<string, string> */
-        $parsed = parse_url($uri);
+        $parsed = static::parseUrl($uri);
 
-        parse_str($parsed['query'] ?? '', $queryParams);
-
-        ksort($queryParams);
+        ksort($parsed['query']);
 
         $result = '';
 
@@ -73,10 +74,32 @@ final class Resource
          * @var string $value
          * @var string $key
          */
-        foreach ($queryParams as $key => $value) {
+        foreach ($parsed['query'] as $key => $value) {
             $result .= mb_convert_case($key, MB_CASE_LOWER, 'UTF-8') . ':' . $value . "\n";
         }
 
-        return $parsed['path'] . "\n" . rtrim($result, "\n");
+        return "{$parsed['path']}\n" . rtrim($result, "\n");
+    }
+
+    /** @return array{path: string, query: array<string, string>} */
+    protected static function parseUrl(string $uri): array
+    {
+        /** @var array<string, string> */
+        $parsed = parse_url($uri);
+
+        /** @var string $path */
+        $path = $parsed['path'] ?? '';
+
+        $queryParams = trim($parsed['query'] ?? '') === ''
+            ? []
+            : array_reduce(explode('&', $parsed['query']), function (array $carry, string $query): array {
+                $parts = explode('=', $query);
+
+                $carry[$parts[0]] = $parts[1];
+
+                return $carry;
+            }, []);
+
+        return ['path' => $path, 'query' => $queryParams];
     }
 }

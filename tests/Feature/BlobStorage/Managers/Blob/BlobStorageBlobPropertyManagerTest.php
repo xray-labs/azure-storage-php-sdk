@@ -5,9 +5,10 @@ declare(strict_types=1);
 use Xray\AzureStoragePhpSdk\BlobStorage\Entities\Blob\BlobProperty;
 use Xray\AzureStoragePhpSdk\BlobStorage\Managers\Blob\BlobPropertyManager;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
-use Xray\AzureStoragePhpSdk\Tests\Http\{RequestFake, ResponseFake};
+use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 
-uses()->group('blob-storage', 'managers', 'blobs');
+pest()->group('blob-storage', 'managers', 'blobs');
+covers(BlobPropertyManager::class);
 
 it('should get the blob\'s properties', function () {
     $request = (new RequestFake())

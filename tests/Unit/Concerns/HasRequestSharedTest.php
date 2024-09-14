@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 use Xray\AzureStoragePhpSdk\Concerns\HasRequestShared;
 use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
-use Xray\AzureStoragePhpSdk\Tests\Http\RequestFake;
+use Xray\AzureStoragePhpSdk\Fakes\Http\RequestFake;
 
-uses()->group('concerns', 'traits');
+pest()->group('concerns', 'traits');
+covers(HasRequestShared::class);
 
 it('should have a request shared property', function () {
     $request = new RequestFake();
