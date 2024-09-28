@@ -6,6 +6,8 @@ namespace Xray\AzureStoragePhpSdk\Concerns;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
+use function Xray\AzureStoragePhpSdk\Support\{is_running_in_console, with};
+
 trait HasStreamingResponse
 {
     public static function stream(File $file, ?int $expires = null): string

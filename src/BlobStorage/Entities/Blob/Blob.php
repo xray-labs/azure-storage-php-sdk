@@ -12,6 +12,9 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Resources\File;
 use Xray\AzureStoragePhpSdk\Concerns\HasManager;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
+use function Xray\AzureStoragePhpSdk\Support\to_boolean;
+
+
 /**
  * @phpstan-import-type PropertiesType from Properties
  *

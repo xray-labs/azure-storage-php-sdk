@@ -12,6 +12,8 @@ use Xray\AzureStoragePhpSdk\Exceptions\{
     InvalidFileMimeTypeException,
 };
 
+use function Xray\AzureStoragePhpSdk\Support\to_boolean;
+
 /**
  * @phpstan-type FileType array{Content-Length?: string, Content-Type?: string, Content-MD5?: string, Last-Modified?: string, Accept-Ranges?: string, ETag?: string, Vary?: string, Server?: string, x-ms-request-id?: string, x-ms-version?: string, x-ms-creation-time?: string, x-ms-lease-status?: string, x-ms-lease-state?: string, x-ms-blob-type?: string, x-ms-server-encrypted?: bool, Date?: string}
  */

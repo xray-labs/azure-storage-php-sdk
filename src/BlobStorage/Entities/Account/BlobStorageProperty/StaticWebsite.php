@@ -6,6 +6,8 @@ namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProper
 
 use Xray\AzureStoragePhpSdk\Contracts\Arrayable;
 
+use function Xray\AzureStoragePhpSdk\Support\to_boolean;
+
 /**
  * @phpstan-type StaticWebsiteType array{Enabled?: bool, IndexDocument?: string, DefaultIndexDocumentPath?: string, ErrorDocument404Path?: string}
  *
