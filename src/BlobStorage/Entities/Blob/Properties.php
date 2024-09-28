@@ -8,7 +8,6 @@ use DateTimeImmutable;
 
 use function Xray\AzureStoragePhpSdk\Support\to_boolean;
 
-
 /**
  * @phpstan-type PropertiesType array{Creation-Time?: string, Last-Modified?: string, Etag?: string, LeaseStatus?: string, LeaseState?: string, Owner?: string, Group?: string, Permissions?: string, Acl?: string, ResourceType?: string, Placeholder?: string, Content-Length?: string, Content-Type?: string, Content-Encoding?: string, Content-Language?: string, Content-MD5?: string, Cache-Control?: string, x-ms-blob-sequence-number?: string, BlobType?: string, AccessTier?: string, LeaseDuration?: string, CopyId?: string, CopyStatus?: string, CopySource?: string, CopyProgress?: string, CopyCompletionTime?: string, CopyStatusDescription?: string, ServerEncrypted?: string, CustomerProvidedKeySha256?: string, EncryptionContext?: string, EncryptionScope?: string, IncrementalCopy?: string, AccessTierInferred?: string, AccessTierChangeTime?: string, TagCount?: string, RehydratePriority?: string, ExpiryTime?: string, DeletedTime?: string, RemainingRetentionDays?: string}
  * @suppressWarnings(PHPMD.TooManyFields)
