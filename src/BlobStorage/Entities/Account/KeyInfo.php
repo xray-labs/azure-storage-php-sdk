@@ -10,6 +10,8 @@ use Xray\AzureStoragePhpSdk\Contracts\{Arrayable, Xmlable};
 use Xray\AzureStoragePhpSdk\Converter\XmlConverter;
 use Xray\AzureStoragePhpSdk\Exceptions\RequiredFieldException;
 
+use function Xray\AzureStoragePhpSdk\Support\convert_to_ISO;
+
 /** @implements Arrayable<array{KeyInfo: array{Start: string, Expiry: string}}> */
 final readonly class KeyInfo implements Arrayable, Xmlable
 {

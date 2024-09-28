@@ -18,6 +18,7 @@ use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 use Xray\AzureStoragePhpSdk\Fakes\Http\{RequestFake, ResponseFake};
 use Xray\AzureStoragePhpSdk\Http\Response as BaseResponse;
 
+use function Xray\AzureStoragePhpSdk\Support\convert_to_ISO;
 use function Xray\Tests\mock;
 
 pest()->group('blob-storage', 'managers', 'blobs');

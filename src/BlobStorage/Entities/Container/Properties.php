@@ -6,6 +6,8 @@ namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 
 use DateTimeImmutable;
 
+use function Xray\AzureStoragePhpSdk\Support\to_boolean;
+
 /**
  * @phpstan-type PropertiesType array{Last-Modified?: string, Etag?: string, LeaseStatus?: string, LeaseState?: string, DefaultEncryptionScope?: string, DenyEncryptionScopeOverride?: bool, HasImmutabilityPolicy?: bool, HasLegalHold?: bool, ImmutableStorageWithVersioningEnabled?: bool, DeletedTime?: string, RemainingRetentionDays?: int}
  */

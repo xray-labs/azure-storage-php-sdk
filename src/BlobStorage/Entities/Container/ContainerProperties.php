@@ -7,6 +7,8 @@ namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Container;
 use DateTimeImmutable;
 use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 
+use function Xray\AzureStoragePhpSdk\Support\to_boolean;
+
 final readonly class ContainerProperties
 {
     public DateTimeImmutable $lastModified;
