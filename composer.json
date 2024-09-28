@@ -42,7 +42,8 @@
             "Xray\\AzureStoragePhpSdk\\": "src/"
         },
         "files": [
-            "src/helpers.php"
+            "src/helpers.php",
+            "src/Support/functions.php"
         ]
     },
     "autoload-dev": {
