@@ -144,7 +144,10 @@ it('should list all blobs', function () {
     $request = (new RequestFake())
         ->withFakeResponse(new ResponseFake($body));
 
-    $result = (new BlobManager($request, $container = 'container'))->list(['option' => 'value'], includes: ['metadata', 'snapshots']);
+    $result = (new BlobManager($request, $container = 'container'))->list(
+        ['option' => 'value'],
+        ['includes' => ['metadata', 'snapshots'], 'prefix' => 'test'],
+    );
 
     expect($result)
         ->toBeInstanceOf(Blobs::class)
@@ -166,14 +169,14 @@ it('should list all blobs', function () {
         ->leaseState->toBe('available')
         ->serverEncrypted->toBe(true);
 
-    $request->assertGet("{$container}/?restype=container&comp=list&include=metadata,snapshots")
+    $request->assertGet("{$container}/?restype=container&comp=list&include=metadata,snapshots&prefix=test/")
         ->assertSentWithOptions(['option' => 'value']);
 });
 
 it('should an exception if the BlobIncludeOption is invalid', function () {
     $blobManager = new BlobManager(new RequestFake(), 'container');
 
-    $blobManager->list(includes: ['invalid']);
+    $blobManager->list(queryParams: ['includes' => ['invalid']]);
 })->throws(InvalidArgumentException::class);
 
 it('should find by tag', function () {

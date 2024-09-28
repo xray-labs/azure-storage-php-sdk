@@ -35,24 +35,38 @@ class BlobManager implements Manager
 
     /**
      * @param array<string, scalar> $options
-     * @param string[] $includes
+     * @param array{includes?: string[], prefix?: string} $queryParams
      */
-    public function list(array $options = [], array $includes = []): Blobs
+    public function list(array $options = [], array $queryParams = []): Blobs
     {
+        /** @var string[] $includes */
+        $includes = $queryParams['includes'] ?? [];
+
         if (array_diff($includes, $availableOptions = BlobIncludeOption::toArray()) !== []) {
             throw InvalidArgumentException::create(sprintf("Invalid include option. \nValid options: %s", implode(', ', $availableOptions)));
         }
 
-        $include = '';
+        $parameters = [];
 
         if (!empty($includes)) {
-            $include = sprintf('&include=%s', implode(',', $includes));
+            $parameters[] = sprintf('include=%s', implode(',', $includes));
         }
+
+        /** @var string $prefix */
+        $prefix = rtrim($queryParams['prefix'] ?? '', '/') . '/';
+
+        if (trim($prefix) !== '/') {
+            $parameters[] = "prefix={$prefix}";
+        }
+
+        $queryString = count($parameters) >= 1
+            ? ('&' . implode('&', $parameters))
+            : '';
 
         try {
             $response = $this->request
                 ->withOptions($options)
-                ->get("{$this->containerName}/?restype=container&comp=list{$include}")
+                ->get("{$this->containerName}/?restype=container&comp=list{$queryString}")
                 ->getBody();
 
             // @codeCoverageIgnoreStart
