@@ -6,6 +6,8 @@ namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProper
 
 use Xray\AzureStoragePhpSdk\Contracts\Arrayable;
 
+use function Xray\AzureStoragePhpSdk\Support\to_boolean;
+
 /**
  * @phpstan-type DeleteRetentionPolicyType array{Enabled?: bool, AllowPermanentDelete?: bool, Days?: int}
  *

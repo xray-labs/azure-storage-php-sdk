@@ -8,6 +8,8 @@ use Xray\AzureStoragePhpSdk\BlobStorage\Resource;
 use Xray\AzureStoragePhpSdk\Contracts\{Arrayable, Stringable};
 use Xray\AzureStoragePhpSdk\Exceptions\InvalidArgumentException;
 
+use function Xray\AzureStoragePhpSdk\Support\str_camel_to_header;
+
 /**
  * @property-read ?string $contentEncoding
  * @property-read ?string $contentLanguage

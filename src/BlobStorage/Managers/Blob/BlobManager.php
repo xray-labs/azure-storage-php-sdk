@@ -18,6 +18,8 @@ use Xray\AzureStoragePhpSdk\Contracts\Http\Request;
 use Xray\AzureStoragePhpSdk\Contracts\Manager;
 use Xray\AzureStoragePhpSdk\Exceptions\{InvalidArgumentException, RequestException};
 
+use function Xray\AzureStoragePhpSdk\Support\{convert_to_RFC1123, convert_to_RFC3339_micro};
+
 /**
  * @phpstan-import-type BlobType from Blob as BlobTypeStan
  * @phpstan-import-type FileType from File

@@ -6,6 +6,8 @@ namespace Xray\AzureStoragePhpSdk\BlobStorage\Entities\Account\BlobStorageProper
 
 use Xray\AzureStoragePhpSdk\Contracts\Arrayable;
 
+use function Xray\AzureStoragePhpSdk\Support\to_boolean;
+
 /**
  * @phpstan-type RetentionPolicyType array{Days?: int, Enabled: bool}
  * @phpstan-type MinuteMetricsType array{Version: ?string, Enabled?: bool, IncludeAPIs?: bool, RetentionPolicy?: RetentionPolicyType}
